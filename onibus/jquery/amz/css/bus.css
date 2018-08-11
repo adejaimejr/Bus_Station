@@ -1,0 +1,179 @@
+#onibus-ida-frente {
+    width: 200px;
+    height: 145px;
+    float:left;
+    background-image: url(../images/onibus-frente.png);
+    background-repeat:no-repeat;
+    background-position:center;
+}
+#onibus-ida-bg {
+    width: 200px;
+    height: auto;
+    float:left;
+    background-image: url(../images/onibus-bg.png);
+    background-repeat: repeat-y;
+    background-position:center;
+	text-align:center;
+}
+#onibus-ida-traseira {
+    width: 200px;
+    height: 65px;
+    float:left;
+    background-image: url(../images/onibus-traseira.png);
+    background-repeat:no-repeat;
+    background-position:center;
+    margin-bottom:15px;
+}
+#onibus-frente {
+    width: 200px;
+    height: 145px;
+    float:left;
+    background-image: url(../images/onibus-frente.png);
+    background-repeat:no-repeat;
+    background-position:center;
+}
+#onibus-bg {
+    width: 200px;
+    height: auto;
+    float:left;
+    background-image: url(../images/onibus-bg.png);
+    background-repeat: repeat-y;
+    background-position:center;
+}
+#onibus-traseira {
+    width: 200px;
+    height: 65px;
+    float:left;
+    margin-bottom:15px;
+    background-image: url(../images/onibus-traseira.png);
+    background-repeat:no-repeat;
+    background-position:center;
+}
+#bus_mapa {
+    width: 900px;
+    height: 221px;
+    background-image:  url("/astorbr-li/imgs/bus.gif");
+    background-repeat: no-repeat;
+    background-position:center;
+    float:left;
+    margin-bottom: 35px;
+}
+td.ocupada {
+    height: 34px;
+    width: 36px;
+    background-image:url(../images/poltrona-ocupada.png);
+    background-repeat: no-repeat;
+    cursor: pointer;
+    font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    font-weight: bold;
+    color: #FFF;
+    text-indent: 9px;
+}
+
+td.selecionada {
+    height: 34px;
+    width: 36px;
+    background-image:url(../images/poltrona-selecionada.png);
+    background-repeat: no-repeat;
+    cursor: pointer;
+    font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    font-weight: bold;
+    color: #FFF;
+    text-indent: 9px;
+}
+
+td.livre {
+    height: 34px;
+    width: 36px;
+    background-image:url(../images/poltrona-livre.png);
+    background-repeat: no-repeat;
+    cursor:pointer;
+    font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    font-weight: bold;
+    color: #fff;
+    text-indent: 9px;
+}
+
+td.vazia {
+    width: 10px;
+    background-repeat: no-repeat;
+    cursor:pointer;
+    font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    font-weight: bold;
+    color: #fff;
+    text-indent: 9px;
+}
+
+#buss table tr td {
+    padding: 0px;
+    margin: 0px;
+    width: 550px;
+    float:left;
+}
+
+#buss table {
+    margin-top: 15px;
+    margin-left: 30px;
+    width: 550px;
+    float:left;
+    text-align:center;
+}
+
+#buss table tr td {
+    height: 40px;
+    float:left;
+}
+#tabela_servicio{
+    height: 40px;
+    width:900px;
+    font-weight:bold;
+    float:left;
+    margin-bottom: 25px;
+}
+
+
+.onibus-title-rota {
+  text-align: right;
+  padding-top: 88px;
+  position: absolute;
+  width: 185px;
+  font-size: 1rem;
+  margin-top: 0;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: .5rem;
+  font-family: inherit;
+  font-weight: 500;
+  line-height: 1.2;
+  color: inherit;
+}
+
+.onibus-title-data {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  color: rgba(0, 0, 0, 0.7);
+  letter-spacing: 1px;
+  text-align: right;
+  padding-top: 106px;
+  border-top-width: 60px;
+  position: absolute;
+  width: 185px;
+  font-weight:bold;
+}
+
+.onibus-title-hora {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  color: rgba(0, 0, 0, 0.7);
+  letter-spacing: 1px;
+  text-align: right;
+  padding-top: 118px;
+  border-top-width: 60px;
+  position: absolute;
+  width: 185px;
+  font-weight: bold;
+}

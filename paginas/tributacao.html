@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Bus Station</title>
+    <meta charset="utf-8">
+    <meta content="ie=edge" http-equiv="x-ua-compatible">
+    <meta content="template language" name="keywords">
+    <meta content="Tamerlan Soziev" name="author">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <!-- Inicio favicon "> -->
+    <link rel="apple-touch-icon" sizes="57x57" href="../img/bus_station-ico/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="../img/bus_station-ico/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="../img/bus_station-ico/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="../img/bus_station-ico/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="../img/bus_station-ico/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="../img/bus_station-ico/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="../img/bus_station-ico/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="../img/bus_station-ico/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="../img/bus_station-ico/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="../img/bus_station-ico/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../img/bus_station-ico/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="../img/bus_station-ico/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../img/bus_station-ico/favicon-16x16.png">
+    <link rel="manifest" href="../img/bus_station-ico/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="img/bus_station-ico/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+    <!-- ! favicon "> -->
+    <link href="../css/fonts-google-api.css" rel="stylesheet" type="text/css">
+    <link href="../bower_components/select2/dist/css/select2.min.css" rel="stylesheet">
+    <link href="../bower_components/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+    <link href="../bower_components/dropzone/dist/dropzone.css" rel="stylesheet">
+    <link href="../bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+    <link href="../bower_components/fullcalendar/dist/fullcalendar.min.css" rel="stylesheet">
+    <link href="../bower_components/perfect-scrollbar/css/perfect-scrollbar.min.css" rel="stylesheet">
+    <link href="../bower_components/slick-carousel/slick/slick.css" rel="stylesheet">
+    <link href="../css/main.css?version=4.4.0" rel="stylesheet">
+    <link href="../icon_fonts_assets/simple-line-icons/css/simple-line-icons.css" rel="stylesheet" type="text/css">
+    <link href="../icon_fonts_assets/fonte-pro/css/all.css" rel="stylesheet" type="text/css">
+    <link href="../css/icon-google.css"rel="stylesheet">
+
+        <link rel="stylesheet" type="text/css" href="../dataTables/tributacao/css/comum/dataTables.min.css">
+        <link rel="stylesheet" type="text/css" href="../dataTables/tributacao/css/generator-base.css">
+        <link rel="stylesheet" type="text/css" href="../dataTables/tributacao/css/editor.bootstrap4.min.css">
+        <link rel="stylesheet" type="text/css" href="../dataTables/tributacao/css/comum/buttons.dataTables.min.css">
+
+        <script type="text/javascript" charset="utf-8" src="../dataTables/tributacao/js/comum/datatables-add.min.js"></script>
+        <script type="text/javascript" charset="utf-8" src="../dataTables/tributacao/js/dataTables.editor.min.js"></script>
+        <script type="text/javascript" charset="utf-8" src="../dataTables/tributacao/js/editor.bootstrap4.min.js"></script>
+        <!--   ARQUIVO DA TABELA   -->
+        <script type="text/javascript" charset="utf-8" src="../dataTables/tributacao/js/table.tbTributacao.js"></script>
+
+
+        <script src="../dataTables/tributacao/js/comum/jszip.min.js"></script>
+        <script src="../dataTables/tributacao/js/comum/pdfmake.min.js"></script>
+        <script src="../dataTables/tributacao/js/comum/vfs_fonts.js"></script>
+        <script src="../dataTables/tributacao/js/comum/buttons.html5.min.js"></script>
+        <script src="../dataTables/tributacao/js/comum/buttons.print.min.js"></script>
+        <!--   MASK CAMPOS   -->
+        <script type="text/javascript" src="../Mask-Plugin/dist/jquery.mask.min.js"></script>
+
+  </head>
+
+  <body class="with-content-panel menu-position-side menu-side-left" style="overflow-y: hidden;overflow-x: hidden;">
+      <div class="all-wrapper with-side-panel solid-bg-all" style="width:  1240px;min-width: 1240px;max-width:  1240px;">
+        <div class="layout-w">
+          <!--------------------
+          START - Mobile Menu
+          -------------------->
+          <div class="menu-mobile menu-activated-on-click color-scheme-dark">
+            <div class="mm-logo-buttons-w">
+              <a class="mm-logo" href="../index.html"><img src="../img/logo.png"><span>Bus Station</span></a>
+              <div class="mm-buttons">
+                <div class="mobile-menu-trigger">
+                  <div class="os-icon os-icon-hamburger-menu-1"></div>
+                </div>
+              </div>
+            </div>
+            <div class="menu-and-user">
+              <div class="logged-user-w">
+                <div class="avatar-w">
+                  <img alt="" src="../img/avatar1.jpg">
+                </div>
+                <div class="logged-user-info-w">
+                  <div class="logged-user-name">
+                    Maria Gomez
+                  </div>
+                  <div class="logged-user-role">
+                    Administrator
+                  </div>
+                </div>
+              </div>
+              <!--------------------
+              START - Mobile Menu List
+              -------------------->
+              <ul class="main-menu">
+                <li class="selected" id="mbMenuDashboard">
+                  <a href="../index.html">
+                    <div class="icon-w">
+                      <div class="os-icon os-icon-layout"></div>
+                    </div>
+                    <span>Dashboard</span></a>
+                </li>
+                <li class="selected" id="mbMenuEmpresa">
+                  <a href="empresa.html">
+                    <div class="icon-w">
+                      <div class="far fa-building"></div>
+                    </div>
+                    <span>Empresa</span></a>
+                </li>
+                <li class="has-sub-menu" id="mbMenuUsuario">
+                  <a href="#">
+                    <div class="icon-w">
+                      <div class="icon-people"></div>
+                    </div>
+                    <span>Usuários</span></a>
+                  <ul class="sub-menu">
+                    <li>
+                      <a href="usuarios.html"><i class="fas fa-user-plus"></i>&nbsp Usuários</a>
+                    </li>
+                    <li>
+                      <a href="permissoes-usuarios.html"><i class="material-icons" style="font-size: 16px;">lock</i>&nbsp Permissão de Acesso</a>
+                    </li>
+                  </ul>
+                </li>
+                <li class="selected" id="mbMenuTributacao">
+                  <a href="tributacao.html">
+                    <div class="icon-w">
+                      <div class="far fa-university"></div>
+                    </div>
+                    <span>Tributação</span></a>
+                </li>
+                <li class="has-sub-menu" id="mbMnOnibus">
+                  <a href="#">
+                    <div class="icon-w">
+                      <div class="fas fa-bus"></div>
+                    </div>
+                    <span>Ônibus</span></a>
+                  <ul class="sub-menu">
+                    <li id="mbMenuOnibus">
+                      <a href="onibus.html"><i class="fas fa-bus"></i>&nbsp Ônibus</a>
+                    </li>
+                    <li id="mbMenuRotas">
+                      <a href="rotas.html"><i class="icon-map"></i>&nbsp Rotas</a>
+                    </li>
+                    <li id="mbMenuTarifas">
+                      <a href="tarifas.html"><i class="fas fa-usd-circle"></i>&nbsp Tarifas</a>
+                    </li>
+                    <li id="mbMenuMotorista">
+                      <a href="motorista.html"><i class="far fa-address-card"></i>&nbsp Motorista</a>
+                    </li>
+                  </ul>
+                </li>
+                <li class="selected" id="mbMenuPassageiro">
+                  <a href="passageiros.html">
+                    <div class="icon-w">
+                      <i class="far fa-male"></i>
+                    </div>
+                    <span>Passageiros</span></a>
+                </li>
+                <li class="selected" id="mbMenuPagamento">
+                  <a href="forma-pagamento.html">
+                    <div class="icon-w">
+                      <div class="icon-wallet"></div>
+                    </div>
+                    <span>Forma de Pagamento</span></a>
+                </li>
+                <li class="selected" id="mbMenuPassagem">
+                  <a href="emitir-passagem.html">
+                    <div class="icon-w">
+                      <i class="far fa-ticket"></i>
+                    </div>
+                    <span>Emitir Passagem</span></a>
+                </li>
+                <li class="selected" id="mbMenuRelatorios">
+                  <a href="relatorios.html">
+                    <div class="icon-w">
+                      <i class="os-icon os-icon-layers"></i>
+                    </div>
+                    <span>Relatórios</span></a>
+                </li>
+                <li class="selected">
+                  <a href="logout.php">
+                    <div class="icon-w">
+                      <i class="fas fa-power-off"></i>
+                    </div>
+                    <span>Sair</span></a>
+                </li>
+              </ul>
+              <!--------------------
+              END - Mobile Menu List
+              -------------------->
+            </div>
+          </div>
+          <!--------------------
+          END - Mobile Menu
+          --------------------><!--------------------
+          START - Main Menu
+          -------------------->
+          <div class="menu-w selected-menu-color-light menu-activated-on-click color-scheme-dark color-style-bright sub-menu-color-light menu-position-side menu-side-left menu-layout-compact sub-menu-style-inside" style="min-height: 820px;max-height:  820px;">
+            <div class="logo-w">
+              <a class="logo" href="../index.html"> <img src="../img/logo-Bus-Station.png" alt="" style=" width: 165px; padding-left: 2-; padding-left: 45px;">
+              <!--                <div class="logo-element"></div>
+                <div class="logo-label">
+                  Bus Station
+                </div>  -->
+              </a>
+            </div>
+            <div class="logged-user-w avatar-inline">
+              <div class="logged-user-i">
+                <div class="avatar-w">
+                  <img alt="" src="../img/avatar1.jpg">
+                </div>
+                <div class="logged-user-info-w">
+                  <div class="logged-user-name">
+                    Maria Gomez
+                  </div>
+                  <div class="logged-user-role">
+                    Administrator
+                  </div>
+                </div>
+                <!--------------------
+                Inicio - Botao opcoes do usuario
+                -------------------->
+                <div class="top-icon top-settings os-dropdown-trigger os-dropdown-position-right">
+                  <a class="clear" href="#" style="color: #f7f5f5;"><i class="os-icon os-icon-ui-46"></i></a>
+                  <!--------------------
+                  <div class="os-dropdown">
+                    <div class="icon-w">
+                      <i class="os-icon os-icon-ui-46"></i>
+                    </div>
+                    <ul>
+                      <li>
+                          <a href="users_profile_small.html"><i class="os-icon os-icon-ui-49"></i><span>Profile Settings</span></a>
+                      </li>
+                      <li>
+                        <a href="users_profile_small.html"><i class="os-icon os-icon-grid-10"></i><span>Billing Info</span></a>
+                      </li>
+                      <li>
+                        <a href="users_profile_small.html"><i class="os-icon os-icon-ui-44"></i><span>My Invoices</span></a>
+                      </li>
+                      <li>
+                        <a href="users_profile_small.html"><i class="os-icon os-icon-ui-15"></i><span>Cancel Account</span></a>
+                      </li>
+                    </ul>
+                  </div>
+                  -------------------->
+                </div>
+                <!--------------------
+                Fim - Botao opcoes do usuario
+                -------------------->
+              </div>
+            </div>
+            <!--------------------
+            ###### Busca
+            <div class="element-search autosuggest-search-activator">
+              <input placeholder="Comece a digitar para pesquisar..." type="text">
+            </div>
+            -------------------->
+            <h1 class="menu-page-header">
+              Page Header
+            </h1>
+            <ul class="main-menu">
+              <li class="sub-header" id="menuPrincipal">
+                <span>Principal</span>
+              </li>
+              <li class="selected" id="menuDashboard">
+                <a href="../index.html">
+                  <div class="icon-w">
+                    <div class="os-icon os-icon-layout"></div>
+                  </div>
+                  <span>Dashboard</span></a>
+                </li><li class="sub-header" id="menuCadastros">
+                <span>Cadastros</span>
+              </li>
+              <li class="selected" id="menuEmpresa">
+                  <a href="empresa.html">
+                    <div class="icon-w">
+                      <div class="far fa-building"></div>
+                    </div>
+                    <span>Empresa</span></a>
+                  </li>
+                  <li class="has-sub-menu" id="menuUsuario">
+                    <a href="#">
+                      <div class="icon-w">
+                        <div class="icon-people"></div>
+                      </div>
+                      <span>Usuários</span></a>
+                    <div class="sub-menu-w">
+                      <div class="sub-menu-icon">
+                        <i class="os-icon os-icon-users"></i>
+                      </div>
+                      <div class="sub-menu-i">
+                        <ul class="sub-menu">
+                          <li>
+                            <a href="usuarios.html"><i class="fas fa-user-plus"></i>&nbsp Usuários</a>
+                          </li>
+                          <li>
+                            <a href="permissoes-usuarios.html"><i class="material-icons" style="font-size: 16px;">lock</i>&nbsp Permissão de Acesso</a>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="selected" id="menuTributacao">
+                      <a href="tributacao.html">
+                        <div class="icon-w">
+                          <div class="far fa-university"></div>
+                        </div>
+                        <span>Tributação</span></a>
+                  </li>
+                  <li class="has-sub-menu" id="mnOnibus">
+                    <a href="#">
+                      <div class="icon-w">
+                        <div class="fas fa-bus"></div>
+                      </div>
+                      <span>Ônibus</span></a>
+                    <div class="sub-menu-w">
+                        <div class="sub-menu-i">
+                        <ul class="sub-menu">
+                          <li id="menuOnibus">
+                            <a href="onibus.html"><i class="fas fa-bus"></i>&nbsp Ônibus</a>
+                          </li>
+                          <li id="menuRotas">
+                            <a href="rotas.html"><i class="icon-map"></i>&nbsp Rotas</a>
+                          </li>
+                          <li id="menuTarifas">
+                            <a href="tarifas.html"><i class="fas fa-usd-circle"></i>&nbsp Tarifas</a>
+                          </li>
+                          <li id="menuMotorista">
+                            <a href="motorista.html"><i class="far fa-address-card"></i>&nbsp Motorista</a>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="selected" id="menuPassageiro">
+                      <a href="passageiros.html">
+                        <div class="icon-w">
+                          <i class="far fa-male"></i>
+                        </div>
+                        <span>Passageiros</span></a>
+                  </li>
+                  <li class="selected" id="menuPagamento">
+                      <a href="forma-pagamento.html">
+                        <div class="icon-w">
+                          <div class="icon-wallet"></div>
+                        </div>
+                        <span>Forma de Pagamento</span></a>
+                  </li>
+              <li class="sub-header" id="menuVendas">
+                <span>Vendas</span>
+              </li>
+              <li class="selected" id="menuPassagem">
+                  <a href="emitir-passagem.html">
+                    <div class="icon-w">
+                      <i class="far fa-ticket"></i>
+                    </div>
+                    <span>Emitir Passagem</span></a>
+              </li>
+              <li class="selected" id="menuRelatorios">
+                  <a href="relatorios.html">
+                    <div class="icon-w">
+                      <i class="os-icon os-icon-layers"></i>
+                    </div>
+                    <span>Relatórios</span></a>
+              </li>
+              <li class="selected">
+                  <a href="logout.php">
+                    <div class="icon-w">
+                      <i class="fas fa-power-off"></i>
+                    </div>
+                    <span>Sair</span></a>
+              </li>
+            </li>
+            </ul>
+          </div>
+          <!--------------------
+          END - Main Menu
+          -------------------->
+          <div class="content-w">
+            <!--------------------
+            START - Top Bar
+            -------------------->
+            <div class="top-bar d-none color-scheme-light">
+              <!--------------------
+              START - Top Menu Controls
+              -------------------->
+              <div class="top-menu-controls">
+                <div class="element-search autosuggest-search-activator">
+                  <input placeholder="Start typing to search..." type="text">
+                </div>
+              </div>
+              <!--------------------
+              END - Top Menu Controls
+              -------------------->
+            </div>
+            <!--------------------
+            END - Top Bar
+            --------------------><!--------------------
+            Inicio - Arvore Diretorio
+            -------------------->
+            <ul class="breadcrumb" style="margin-bottom: 0px;">
+              <li class="breadcrumb-item">
+                <a href="../index.html">Home</a>
+              </li>
+              <li class="breadcrumb-item" id="dashboard">
+                <a href="../index.html">Cadastros</a>
+              </li>
+              <li class="breadcrumb-item">
+                <span>Cadastro de tributação</span>
+              </li>
+            </ul>
+
+
+
+            <!--------------------
+            Fim - Arvore Diretorio
+            ----------------------->
+            <div class="content-i">
+              <div class="content-box">
+                <div class="row">
+                  <div class="col-sm-12">
+                    <img src="../img/tributacao.png"/>
+                    <div class="element-wrapper">
+                      <h6 class="element-header" style="padding-bottom: 20px;margin-bottom: 20px;">
+                      </h6>
+                      <div class="element-box-tp">
+                        <!--------------------
+                        START - Controls Above Table
+                        -------------------->
+
+                        <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="tbTributacao" width="100%">
+                          <thead>
+                            <tr>
+                              <th>Tributa&ccedil;&atilde;o</th>
+                              <th>Aliquota ICMS</th>
+                              <th>outros Impostos</th>
+                            </tr>
+                          </thead>
+                        </table>
+
+                      </div>
+                      <!--------------------
+                      FIM - Controls Above Table
+                      -------------------->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          </div>
+        <div class="display-type"></div>
+      </div>
+
+
+      <script async="" src="https://www.google-analytics.com/analytics.js"></script>
+      <script src="../bower_components/jquery/dist/jquery.min.js"></script>
+      <script src="../bower_components/popper.js/dist/umd/popper.min.js"></script>
+      <script src="../bower_components/moment/moment.js"></script>
+      <script src="../bower_components/chart.js/dist/Chart.min.js"></script>
+      <script src="../bower_components/select2/dist/js/select2.full.min.js"></script>
+      <script src="../bower_components/jquery-bar-rating/dist/jquery.barrating.min.js"></script>
+      <script src="../bower_components/ckeditor/ckeditor.js"></script>
+      <script src="../bower_components/bootstrap-validator/dist/validator.min.js"></script>
+      <script src="../bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
+      <script src="../bower_components/ion.rangeSlider/js/ion.rangeSlider.min.js"></script>
+      <script src="../bower_components/dropzone/dist/dropzone.js"></script>
+      <script src="../bower_components/editable-table/mindmup-editabletable.js"></script>
+      <script src="../bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+      <script src="../bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+      <script src="../bower_components/fullcalendar/dist/fullcalendar.min.js"></script>
+      <script src="../bower_components/perfect-scrollbar/js/perfect-scrollbar.jquery.min.js"></script>
+      <script src="../bower_components/tether/dist/js/tether.min.js"></script>
+      <script src="../bower_components/slick-carousel/slick/slick.min.js"></script>
+      <script src="../bower_components/bootstrap/js/dist/util.js"></script>
+      <script src="../bower_components/bootstrap/js/dist/alert.js"></script>
+      <script src="../bower_components/bootstrap/js/dist/button.js"></script>
+      <script src="../bower_components/bootstrap/js/dist/carousel.js"></script>
+      <script src="../bower_components/bootstrap/js/dist/collapse.js"></script>
+      <script src="../bower_components/bootstrap/js/dist/dropdown.js"></script>
+      <script src="../bower_components/bootstrap/js/dist/modal.js"></script>
+      <script src="../bower_components/bootstrap/js/dist/tab.js"></script>
+      <script src="../bower_components/bootstrap/js/dist/tooltip.js"></script>
+      <script src="../bower_components/bootstrap/js/dist/popover.js"></script>
+      <script src="../js/demo_customizer.js?version=4.4.0"></script>
+      <script src="../js/main.js?version=4.4.0"></script>
+      <script src="../ux/tools.js"></script>
+
+      <!-- verifica o perfil -->
+      <script>
+        applyPerfils(false);
+      </script>
+
+      <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-XXXXXXX-9', 'auto');
+        ga('send', 'pageview');
+      </script>
+
+  </body>
+
+</html>

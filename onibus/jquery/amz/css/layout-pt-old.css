@@ -1,0 +1,8 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Condensed:400,300,500,700);
+th, td { margin: 0; padding: 0; border: 0; outline: 0; font-size: 100%; vertical-align: baseline; background: transparent; }
+
+/*escolha de passagem e poltrona - */
+/*#current-trips, #payment-info { margin: 45px auto; float: left; width: 749px; }*/
+#current-trips, #payment-info { margin: 5px auto; float: left; width: 352px; }
+#current-trips .available-trips { float: left; width: 352px; margin-right: 17px; }
+#current-trips .available-trips:only-child  {float:none; margin:0 auto;}
