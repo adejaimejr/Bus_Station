@@ -1008,3 +1008,6 @@
 2018-08-12 00:35:38.866855 - index.php - Info - mysql setting
 2018-08-12 00:35:38.883946 - index.php - Info - >>> {"result":true,"filial":true,"usuario":true,"passageiro":true,"onibus":true,"rotas":true,"motorista":true,"tarifas":true,"pagamento":true,"passagem":true,"dashboard":true,"tributacao":true,"relatorios":true}
 2018-08-12 00:35:38.903704 - index.php - Info - --- out
+2018-08-13 19:29:33.643645 - login.php - Info - --- loading config.ini
+2018-08-13 19:29:33.645845 - login.php - Info - --- loading params
+2018-08-13 19:29:33.646624 - login.php - Info - --- mysql connecting
