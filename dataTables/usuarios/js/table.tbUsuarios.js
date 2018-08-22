@@ -220,7 +220,7 @@ $(document).ready(function() {
 			alert("Sessão expirada. Por favor, logue novamente.");
 			document.location.href = "../login.html";
 		}
-	});	
+	});
 } );
 
 }(jQuery));

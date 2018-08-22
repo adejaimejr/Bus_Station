@@ -28,6 +28,7 @@
     $tbMotorista = false;
     $tbTarifas = false;
     $tbPagamento = false;
+    $tbViagem = false;
     $tbPassagem = false;
     $tbDashboard = false;
     $tbTributacao = false;
@@ -50,7 +51,7 @@
         $perfil = getSessionVar("perfil");
 
         $select = 'select tbFilial, tbUsuario, tbPassageiro, tbOnibus, tbRotas, tbMotorista, ' .
-            ' tbTarifas, tbPagamento, tbPassagem, tbDashboard, tbTributacao, tbRelatorios ' .
+            ' tbTarifas, tbPagamento, tbViagem, tbPassagem, tbDashboard, tbTributacao, tbRelatorios ' .
             ' from tbUsuarios ' .
             ' inner join tbPerfil on (tbPerfil.id = tbUsuarios.perfil)' .
             ' where tbUsuarios.id="'.$userId.'"';
@@ -72,6 +73,7 @@
         $tbMotorista = $logDataset["tbMotorista"] == "1";
         $tbTarifas = $logDataset["tbTarifas"] == "1";
         $tbPagamento = $logDataset["tbPagamento"] == "1";
+        $tbViagem = $logDataset["tbViagem"] == "1";
         $tbPassagem = $logDataset["tbPassagem"] == "1";
         $tbDashboard = $logDataset["tbDashboard"] == "1";
         $tbTributacao = $logDataset["tbTributacao"] == "1";
@@ -94,6 +96,7 @@
         'motorista' => $tbMotorista,
         'tarifas' => $tbTarifas,
         'pagamento' => $tbPagamento,
+        'viagem' => $tbViagem,
         'passagem' => $tbPassagem,
         'dashboard' => $tbDashboard,
         'tributacao' => $tbTributacao,

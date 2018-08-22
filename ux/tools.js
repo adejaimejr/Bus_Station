@@ -71,6 +71,10 @@ function sendMessage(url, params, success, failure){
                 $("#mbMenuPagamento").hide();
                 $("#menuPagamento").hide();
             }
+            if(!perfil.viagem){
+                $("#mbMenuViagem").hide();
+                $("#menuViagem").hide();
+            }
             if(!perfil.passagem){
                 $("#mbMenuPassagem").hide();
                 $("#menuPassagem").hide();

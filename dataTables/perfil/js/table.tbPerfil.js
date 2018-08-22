@@ -91,6 +91,15 @@ $(document).ready(function() {
 				]
 			},
 			{
+				label: "Viagem:",
+				name: "tbPerfil.tbViagem",
+				type: "select",
+				options: [
+					{ label: "SIM", value: 1 },
+				        { label: "NAO",    value: 0 }
+				]
+			},
+			{
 				label: "Passageiro:",
 				name: "tbPerfil.tbPassageiro",
 				type: "select",
