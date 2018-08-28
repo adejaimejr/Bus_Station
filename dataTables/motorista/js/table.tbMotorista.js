@@ -6,6 +6,34 @@
 
 (function($){
 
+	//MASCARAMENTO CPF
+		var cpfMaskBehavior = function (val) {
+			return '000.000.000-00';
+	},
+	cpfOptions = {
+					onKeyPress: function(val, e, field, options) {
+					field.mask(cpfMaskBehavior.apply({}, arguments), options);
+			}
+	};
+	//MASCARAMENTO TELEFONE
+		var mobileMaskBehavior = function (val) {
+			return '(00) 0000-00009';
+	},
+	celularOptions = {
+					onKeyPress: function(val, e, field, options) {
+					field.mask(mobileMaskBehavior.apply({}, arguments), options);
+			}
+	};
+	//MASCARAMENTO cnh
+		var cnhMaskBehavior = function (val) {
+	    return '00000000000';
+	},
+	cnhOptions = {
+	        onKeyPress: function(val, e, field, options) {
+	        field.mask(cnhMaskBehavior.apply({}, arguments), options);
+	    }
+	};
+
 $(document).ready(function() {
 	var editor = new $.fn.dataTable.Editor( {
 		ajax: '../dataTables/motorista/php/table.tbMotorista.php',
@@ -130,7 +158,7 @@ $(document).ready(function() {
 			},
 			{
 				data: "tbMotorista.cpf"
-			},
+			}/*,
 			{
 				data: "tbMotorista.nascimento",
 				//Visualizar data
@@ -140,7 +168,7 @@ $(document).ready(function() {
             dateSplit[2] +'-'+ dateSplit[1] +'-'+ dateSplit[0] :
             data;
 					}
-			},
+			}*/,
 			{
 				data: "tbMotorista.email"
 			},
@@ -176,6 +204,23 @@ $(document).ready(function() {
 	table.buttons().container()
 		.appendTo( $('.col-md-6:eq(0)', table.table().container() ) );
 
+		//MASCARAMENTO CPF
+		editor.one(`open`, function(e, mode, action) {
+				editor.field(`tbMotorista.cpf`).input().addClass(`cpf-number`);
+				$(`.cpf-number`).mask(cpfMaskBehavior, cpfOptions);
+		});
+		//MASCARAMENTO TELEFONE
+		editor.one(`open`, function(e, mode, action) {
+				editor.field(`tbMotorista.telefone`).input().addClass(`mobile-number`);
+				$(`.mobile-number`).mask(mobileMaskBehavior, celularOptions);
+		});
+
+		//MASCARAMENTO cnh
+		editor.one(`open`, function(e, mode, action) {
+				editor.field(`tbMotorista.cnh`).input().addClass(`cnh-number`);
+				$(`.cnh-number`).mask(cnhMaskBehavior, cnhOptions);
+		});
+
 	editor.on("onSubmitError", function(e, xhr, err, thrown, data){
 		console.log("onSubmitError");
 		if(xhr.status == 302){
@@ -190,7 +235,7 @@ $(document).ready(function() {
 			alert("Sessão expirada. Por favor, logue novamente.");
 			document.location.href = "../login.html";
 		}
-	});						
+	});
 
 } );
 

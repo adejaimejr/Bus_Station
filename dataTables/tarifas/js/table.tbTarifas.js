@@ -9,14 +9,54 @@
 
 	//MASCARAMENTO
 
-	//MASCARAMENTO Dinheiro R$
-		var dinheiroMaskBehavior = function (val) {
-	    return '999.999.999.999.990,00';
+	//MASCARAMENTO tarifa normal
+		var tarifanormalMaskBehavior = function (val) {
+			return '9990,00';
 	},
-	dinheiroOptions = {
-	        onKeyPress: function(val, e, field, options) {
-	        field.mask(dinheiroMaskBehavior.apply({}, arguments), options);
-	    }
+	tarifanormalOptions = {
+					onKeyPress: function(val, e, field, options) {
+					field.mask(tarifanormalMaskBehavior.apply({}, arguments), options);
+			}
+	};
+
+	//MASCARAMENTO tarifa promocional
+		var tarifapromocionalMaskBehavior = function (val) {
+			return '9990,00';
+	},
+	tarifapromocionalOptions = {
+					onKeyPress: function(val, e, field, options) {
+					field.mask(tarifapromocionalMaskBehavior.apply({}, arguments), options);
+			}
+	};
+
+	//MASCARAMENTO tarifa meia passagem
+		var tarifameiapassagemMaskBehavior = function (val) {
+			return '9990,00';
+	},
+	tarifameiapassagemOptions = {
+					onKeyPress: function(val, e, field, options) {
+					field.mask(tarifameiapassagemMaskBehavior.apply({}, arguments), options);
+			}
+	};
+
+		//MASCARAMENTO tarifa pedagio
+			var tarifapedagioMaskBehavior = function (val) {
+				return '9990,00';
+		},
+		tarifapedagioOptions = {
+						onKeyPress: function(val, e, field, options) {
+						field.mask(tarifapedagioMaskBehavior.apply({}, arguments), options);
+				}
+		};
+
+	//MASCARAMENTO tarifa seguro
+		var tarifaseguroMaskBehavior = function (val) {
+			return '9990,00';
+	},
+	tarifaseguroOptions = {
+					onKeyPress: function(val, e, field, options) {
+					field.mask(tarifaseguroMaskBehavior.apply({}, arguments), options);
+			}
 	};
 
 $(document).ready(function() {
@@ -134,19 +174,24 @@ $(document).ready(function() {
 				data: "tbTarifas.nome"
 			},
 			{
-				data: "tbTarifas.normal"
+				data: "tbTarifas.normal",
+				render: $.fn.dataTable.render.number( '.', ',', 2, 'R$ ', '' )
 			},
 			{
-				data: "tbTarifas.promocional"
+				data: "tbTarifas.promocional",
+				render: $.fn.dataTable.render.number( '.', ',', 2, 'R$ ', '' )
 			},
 			{
-				data: "tbTarifas.meiapassagem"
+				data: "tbTarifas.meiapassagem",
+				render: $.fn.dataTable.render.number( '.', ',', 2, 'R$ ', '' )
 			},
 			{
-				data: "tbTarifas.pedagio"
+				data: "tbTarifas.pedagio",
+				render: $.fn.dataTable.render.number( '.', ',', 2, 'R$ ', '' )
 			},
 			{
-				data: "tbTarifas.seguro"
+				data: "tbTarifas.seguro",
+				render: $.fn.dataTable.render.number( '.', ',', 2, 'R$ ', '' )
 			}
 		]
 	} );
@@ -164,12 +209,37 @@ $(document).ready(function() {
 	table.buttons().container()
 		.appendTo( $('.col-md-6:eq(0)', table.table().container() ) );
 
-	//MASCARAMENTO Dinheiro R$
+	//MASCARAMENTO Dinheiro Tarifa Normal
 	editor.one(`open`, function(e, mode, action) {
-			editor.field(`tbTarifas.normal`).input().addClass(`dinheiro-number`);
-			$(`.dinheiro-number`).mask(dinheiroMaskBehavior, {reverse: true}, dinheiroOptions);
+			editor.field(`tbTarifas.normal`).input().addClass(`tarifanormal-number`);
+			$(`.tarifanormal-number`).mask(tarifanormalMaskBehavior, {reverse: true}, tarifanormalOptions);
 	});
-	
+
+	//MASCARAMENTO Dinheiro Tarifa Promocional
+	editor.one(`open`, function(e, mode, action) {
+			editor.field(`tbTarifas.promocional`).input().addClass(`tarifapromocional-number`);
+			$(`.tarifapromocional-number`).mask(tarifapromocionalMaskBehavior, {reverse: true}, tarifapromocionalOptions);
+	});
+
+	//MASCARAMENTO Dinheiro Tarifa meia passagem
+	editor.one(`open`, function(e, mode, action) {
+			editor.field(`tbTarifas.meiapassagem`).input().addClass(`tarifameiapassagem-number`);
+			$(`.tarifameiapassagem-number`).mask(tarifameiapassagemMaskBehavior, {reverse: true}, tarifameiapassagemOptions);
+	});
+
+	//MASCARAMENTO Dinheiro Tarifa pedagio
+	editor.one(`open`, function(e, mode, action) {
+			editor.field(`tbTarifas.pedagio`).input().addClass(`tarifapedagio-number`);
+			$(`.tarifapedagio-number`).mask(tarifapedagioMaskBehavior, {reverse: true}, tarifapedagioOptions);
+	});
+
+		//MASCARAMENTO Dinheiro Tarifa seguro
+		editor.one(`open`, function(e, mode, action) {
+				editor.field(`tbTarifas.seguro`).input().addClass(`tarifaseguro-number`);
+				$(`.tarifaseguro-number`).mask(tarifaseguroMaskBehavior, {reverse: true}, tarifaseguroOptions);
+		});
+
+
 	editor.on("onSubmitError", function(e, xhr, err, thrown, data){
 		console.log("onSubmitError");
 		if(xhr.status == 302){
@@ -184,7 +254,7 @@ $(document).ready(function() {
 			alert("Sessão expirada. Por favor, logue novamente.");
 			document.location.href = "../login.html";
 		}
-	});	
+	});
 } );
 
 }(jQuery));

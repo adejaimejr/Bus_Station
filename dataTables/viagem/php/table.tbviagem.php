@@ -8,6 +8,15 @@
 // DataTables PHP library and database connection
 include( "lib/DataTables.php" );
 
+/*** Controle de sessão ***/
+include("../../../session.php");
+include("../../../utils.php");
+
+if (!isSessionOK()) {
+	return false;
+}
+/**************************/
+
 // Alias Editor classes so they are easy to use
 use
 	DataTables\Editor,

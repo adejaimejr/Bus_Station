@@ -13,7 +13,7 @@ include("../../../session.php");
 include("../../../utils.php");
 
 if (!isSessionOK()) {
-	return false;    
+	return false;
 }
 /**************************/
 
@@ -46,12 +46,120 @@ $db->sql( "CREATE TABLE IF NOT EXISTS `tbTarifas` (
 // Build our Editor instance and process the data coming from _POST
 Editor::inst( $db, 'tbTarifas', 'id' )
 	->fields(
-		Field::inst( 'tbTarifas.nome' ),
-		Field::inst( 'tbTarifas.normal' ),
-		Field::inst( 'tbTarifas.promocional' ),
-		Field::inst( 'tbTarifas.meiapassagem' ),
-		Field::inst( 'tbTarifas.pedagio' ),
+		Field::inst( 'tbTarifas.nome' )
+					->validator( Validate::minLen(
+										10,
+										ValidateOptions::inst()
+										->message( 'Minimo de 10 caracteres' )
+										) )
+					->validator( Validate::maxLen(
+										40,
+										ValidateOptions::inst()
+										->message( 'Máximo de 40 caracteres' )
+										) )
+/*					->validator( Validate::unique(
+										ValidateOptions::inst()
+										->message( 'Já existe' )
+										) ) */
+					->validator( Validate::notEmpty(
+										ValidateOptions::inst()
+										->message( '*Obrigatório' )
+										) ),
+		Field::inst( 'tbTarifas.normal' )
+					->validator( Validate::minLen(
+										4,
+										ValidateOptions::inst()
+										->message( 'Ex: R$180,00' )
+										) )
+					->validator( Validate::maxLen(
+										10,
+										ValidateOptions::inst()
+										->message( 'Ex: R$180,00' )
+										) )
+				/*	->validator( Validate::unique(
+										ValidateOptions::inst()
+										->message( 'Já existe' )
+										) )  */
+					->validator( Validate::notEmpty(
+										ValidateOptions::inst()
+										->message( '*Obrigatório' )
+										) ),
+		Field::inst( 'tbTarifas.promocional' )
+					->validator( Validate::minLen(
+										4,
+										ValidateOptions::inst()
+										->message( 'Ex: R$180,00' )
+										) )
+					->validator( Validate::maxLen(
+										10,
+										ValidateOptions::inst()
+										->message( 'Ex: R$180,00' )
+										) )
+				/*	->validator( Validate::unique(
+										ValidateOptions::inst()
+										->message( 'Já existe' )
+										) )  */
+					->validator( Validate::notEmpty(
+										ValidateOptions::inst()
+										->message( '*Obrigatório' )
+										) ),
+		Field::inst( 'tbTarifas.meiapassagem' )
+					->validator( Validate::minLen(
+										4,
+										ValidateOptions::inst()
+										->message( 'Ex: R$180,00' )
+										) )
+					->validator( Validate::maxLen(
+										10,
+										ValidateOptions::inst()
+										->message( 'Ex: R$180,00' )
+										) )
+				/*	->validator( Validate::unique(
+										ValidateOptions::inst()
+										->message( 'Já existe' )
+										) )  */
+					->validator( Validate::notEmpty(
+										ValidateOptions::inst()
+										->message( '*Obrigatório' )
+										) ),
+		Field::inst( 'tbTarifas.pedagio' )
+					->validator( Validate::minLen(
+										4,
+										ValidateOptions::inst()
+										->message( 'Ex: R$180,00' )
+										) )
+					->validator( Validate::maxLen(
+										10,
+										ValidateOptions::inst()
+										->message( 'Ex: R$180,00' )
+										) )
+				/*	->validator( Validate::unique(
+										ValidateOptions::inst()
+										->message( 'Já existe' )
+										) )  */
+					->validator( Validate::notEmpty(
+										ValidateOptions::inst()
+										->message( '*Obrigatório' )
+										) ),
 		Field::inst( 'tbTarifas.seguro' )
+					->validator( Validate::minLen(
+										4,
+										ValidateOptions::inst()
+										->message( 'Ex: R$180,00' )
+										) )
+					->validator( Validate::maxLen(
+										10,
+										ValidateOptions::inst()
+										->message( 'Ex: R$180,00' )
+										) )
+				/*	->validator( Validate::unique(
+										ValidateOptions::inst()
+										->message( 'Já existe' )
+										) )  */
+					->validator( Validate::notEmpty(
+										ValidateOptions::inst()
+										->message( '*Obrigatório' )
+										) )
 	)
 	->process( $_POST )
 	->json();
