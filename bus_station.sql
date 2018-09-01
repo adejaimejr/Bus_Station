@@ -307,73 +307,87 @@ INSERT INTO `tbusuarios` (`id`, `nome`, `cpf`, `nascimento`, `email`, `telefone`
 
 CREATE TABLE `tbviagem` (
   `id` int(10) NOT NULL,
-  `data_saida` date DEFAULT NULL,
-  `data_chegada` date DEFAULT NULL,
-  `hora_chegada` time DEFAULT NULL,
-  `hora_saida` time DEFAULT NULL,
-  `destino_rotas` tinyint(4) DEFAULT NULL,
-  `origem_rotas` tinyint(4) DEFAULT NULL,
-  `normal_tarifa` decimal(9,2) DEFAULT NULL,
-  `promocional_tarifa` decimal(9,2) DEFAULT NULL,
-  `meiapassagem_tarifa` decimal(9,2) DEFAULT NULL,
-  `pedagio_tarifa` decimal(9,2) DEFAULT NULL,
-  `seguro_tarifa` decimal(9,2) DEFAULT NULL,
-  `poltronas_01` tinyint(4) DEFAULT NULL,
-  `poltronas_02` tinyint(4) DEFAULT NULL,
-  `poltronas_03` tinyint(4) DEFAULT NULL,
-  `poltronas_04` tinyint(4) DEFAULT NULL,
-  `poltronas_05` tinyint(4) DEFAULT NULL,
-  `poltronas_06` tinyint(4) DEFAULT NULL,
-  `poltronas_07` tinyint(4) DEFAULT NULL,
-  `poltronas_08` tinyint(4) DEFAULT NULL,
-  `poltronas_09` tinyint(4) DEFAULT NULL,
-  `poltronas_10` tinyint(4) DEFAULT NULL,
-  `poltronas_11` tinyint(4) DEFAULT NULL,
-  `poltronas_12` tinyint(4) DEFAULT NULL,
-  `poltronas_13` tinyint(4) DEFAULT NULL,
-  `poltronas_14` tinyint(4) DEFAULT NULL,
-  `poltronas_15` tinyint(4) DEFAULT NULL,
-  `poltronas_16` tinyint(4) DEFAULT NULL,
-  `poltronas_17` tinyint(4) DEFAULT NULL,
-  `poltronas_18` tinyint(4) DEFAULT NULL,
-  `poltronas_19` tinyint(4) DEFAULT NULL,
-  `poltronas_20` tinyint(4) DEFAULT NULL,
-  `poltronas_21` tinyint(4) DEFAULT NULL,
-  `poltronas_22` tinyint(4) DEFAULT NULL,
-  `poltronas_23` tinyint(4) DEFAULT NULL,
-  `poltronas_24` tinyint(4) DEFAULT NULL,
-  `poltronas_25` tinyint(4) DEFAULT NULL,
-  `poltronas_26` tinyint(4) DEFAULT NULL,
-  `poltronas_27` tinyint(4) DEFAULT NULL,
-  `poltronas_28` tinyint(4) DEFAULT NULL,
-  `poltronas_29` tinyint(4) DEFAULT NULL,
-  `poltronas_30` tinyint(4) DEFAULT NULL,
-  `poltronas_31` tinyint(4) DEFAULT NULL,
-  `poltronas_32` tinyint(4) DEFAULT NULL,
-  `poltronas_33` tinyint(4) DEFAULT NULL,
-  `poltronas_34` tinyint(4) DEFAULT NULL,
-  `poltronas_35` tinyint(4) DEFAULT NULL,
-  `poltronas_36` tinyint(4) DEFAULT NULL,
-  `poltronas_37` tinyint(4) DEFAULT NULL,
-  `poltronas_38` tinyint(4) DEFAULT NULL,
-  `poltronas_39` tinyint(4) DEFAULT NULL,
-  `poltronas_40` tinyint(4) DEFAULT NULL,
-  `poltronas_41` tinyint(4) DEFAULT NULL,
-  `poltronas_42` tinyint(4) DEFAULT NULL,
-  `poltronas_43` tinyint(4) DEFAULT NULL,
-  `poltronas_44` tinyint(4) DEFAULT NULL,
-  `poltronas_45` tinyint(4) DEFAULT NULL,
-  `poltronas_46` tinyint(4) DEFAULT NULL,
-  `poltronas_47` tinyint(4) DEFAULT NULL,
-  `poltronas_48` tinyint(4) DEFAULT NULL,
-  `poltronas_49` tinyint(4) DEFAULT NULL,
-  `poltronas_50` tinyint(4) DEFAULT NULL,
-  `poltronas_51` tinyint(4) DEFAULT NULL,
-  `poltronas_52` tinyint(4) DEFAULT NULL,
-  `poltronas_53` tinyint(4) DEFAULT NULL,
-  `poltronas_54` tinyint(4) DEFAULT NULL,
-  `poltronas_55` tinyint(4) DEFAULT NULL,
-  `poltronas_56` tinyint(4) DEFAULT NULL
+  `rota` int(10) NOT NULL,
+  `onibus` int(10) NOT NULL,
+  `tarifa` int(10) NOT NULL,
+  `motorista` int(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+--
+-- Estrutura da tabela `tbpoltronas`
+--
+
+CREATE TABLE `tbpoltronas` (
+  `id` int(10) NOT NULL,
+  `onibus` int(10) NOT NULL,
+  `disponivel` tinyint(1) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `tbviagens_rotas`
+--
+
+CREATE TABLE `tbviagens_rotas` (
+  `id` int(10) NOT NULL,
+  `origem` varchar(20) DEFAULT NULL,
+  `uforigem` varchar(2) DEFAULT NULL,
+  `codorigem` bigint(7) DEFAULT NULL,
+  `destino` varchar(20) DEFAULT NULL,
+  `ufdestino` varchar(2) DEFAULT NULL,
+  `coddestino` bigint(7) DEFAULT NULL,
+  `distancia` int(4) DEFAULT NULL,
+  `horariopartida` time DEFAULT NULL,
+  `horariochegada` time DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Estrutura da tabela `tbviagens_onibus`
+--
+
+CREATE TABLE `tbviagens_onibus` (
+  `id` int(10) NOT NULL,
+  `placa` varchar(8) DEFAULT NULL,
+  `classe` varchar(20) DEFAULT NULL,
+  `poltronas` tinyint(4) DEFAULT NULL,
+  `anofabricacao` int(4) DEFAULT NULL,
+  `chassi` varchar(17) DEFAULT NULL,
+  `renavam` varchar(13) DEFAULT NULL,
+  `marca` varchar(20) DEFAULT NULL,
+  `modelo` varchar(20) DEFAULT NULL,
+  `vencimentoipva` date DEFAULT NULL,
+  `quilometragem` bigint(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Estrutura da tabela `tbviagens_tarifas`
+--
+
+CREATE TABLE `tbviagens_tarifas` (
+  `id` int(10) NOT NULL,
+  `nome` varchar(40) DEFAULT NULL,
+  `normal` decimal(9,2) DEFAULT NULL,
+  `promocional` decimal(9,2) DEFAULT NULL,
+  `meiapassagem` decimal(9,2) DEFAULT NULL,
+  `pedagio` decimal(9,2) DEFAULT NULL,
+  `seguro` decimal(9,2) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Estrutura da tabela `tbviagens_motorista`
+--
+
+CREATE TABLE `tbviagens_motorista` (
+  `id` int(10) NOT NULL,
+  `nome` varchar(40) DEFAULT NULL,
+  `cpf` varchar(14) DEFAULT NULL,
+  `nascimento` date DEFAULT NULL,
+  `email` varchar(40) DEFAULT NULL,
+  `telefone` varchar(15) DEFAULT NULL,
+  `cnh` varchar(11) DEFAULT NULL,
+  `validadecnh` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
