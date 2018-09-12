@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.2
+-- version 4.7.4
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: 28-Ago-2018 às 19:07
--- Versão do servidor: 10.1.34-MariaDB
--- PHP Version: 7.2.7
+-- Generation Time: 12-Set-2018 às 09:16
+-- Versão do servidor: 10.1.29-MariaDB
+-- PHP Version: 7.2.0
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -204,12 +204,24 @@ INSERT INTO `tbperfil` (`id`, `nome`, `tbDashboard`, `tbFilial`, `tbTributacao`,
 -- --------------------------------------------------------
 
 --
+-- Estrutura da tabela `tbpoltronas`
+--
+
+CREATE TABLE `tbpoltronas` (
+  `id` int(10) NOT NULL,
+  `onibus` int(10) NOT NULL,
+  `disponivel` tinyint(1) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Estrutura da tabela `tbrotas`
 --
 
 CREATE TABLE `tbrotas` (
   `id` int(10) NOT NULL,
-  `origem` varchar(20) DEFAULT NULL,
+  `origem` int(10) DEFAULT NULL,
   `uforigem` varchar(2) DEFAULT NULL,
   `codorigem` bigint(7) DEFAULT NULL,
   `destino` varchar(20) DEFAULT NULL,
@@ -225,10 +237,10 @@ CREATE TABLE `tbrotas` (
 --
 
 INSERT INTO `tbrotas` (`id`, `origem`, `uforigem`, `codorigem`, `destino`, `ufdestino`, `coddestino`, `distancia`, `horariopartida`, `horariochegada`) VALUES
-(1, '1', '1', 1, '2', '2', 2, 750, '08:23:00', '20:00:00'),
-(2, '2', '2', 2, '1', '1', 1, 750, '08:00:00', '20:00:00'),
-(3, '1', '1', 1, '2', '2', 2, 750, '20:00:00', '08:00:00'),
-(4, '2', '2', 2, '1', '1', 1, 750, '20:00:00', '08:00:00');
+(1, 1, '1', 1, '2', '2', 2, 750, '08:23:00', '20:00:00'),
+(2, 2, '2', 2, '1', '1', 1, 750, '08:00:00', '20:00:00'),
+(3, 1, '1', 1, '2', '2', 2, 750, '20:00:00', '08:00:00'),
+(4, 2, '2', 2, '1', '1', 1, 750, '20:00:00', '08:00:00');
 
 -- --------------------------------------------------------
 
@@ -313,15 +325,48 @@ CREATE TABLE `tbviagem` (
   `motorista` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
 --
--- Estrutura da tabela `tbpoltronas`
+-- Extraindo dados da tabela `tbviagem`
 --
 
-CREATE TABLE `tbpoltronas` (
+INSERT INTO `tbviagem` (`id`, `rota`, `onibus`, `tarifa`, `motorista`) VALUES
+(86, 53, 10, 10, 10);
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `tbviagens_motorista`
+--
+
+CREATE TABLE `tbviagens_motorista` (
   `id` int(10) NOT NULL,
-  `onibus` int(10) NOT NULL,
-  `disponivel` tinyint(1) DEFAULT NULL
+  `nome` varchar(40) DEFAULT NULL,
+  `cpf` varchar(14) DEFAULT NULL,
+  `nascimento` date DEFAULT NULL,
+  `email` varchar(40) DEFAULT NULL,
+  `telefone` varchar(15) DEFAULT NULL,
+  `cnh` varchar(11) DEFAULT NULL,
+  `validadecnh` date DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `tbviagens_onibus`
+--
+
+CREATE TABLE `tbviagens_onibus` (
+  `id` int(10) NOT NULL,
+  `placa` varchar(8) DEFAULT NULL,
+  `classe` varchar(20) DEFAULT NULL,
+  `poltronas` tinyint(4) DEFAULT NULL,
+  `anofabricacao` int(4) DEFAULT NULL,
+  `chassi` varchar(17) DEFAULT NULL,
+  `renavam` varchar(13) DEFAULT NULL,
+  `marca` varchar(20) DEFAULT NULL,
+  `modelo` varchar(20) DEFAULT NULL,
+  `vencimentoipva` date DEFAULT NULL,
+  `quilometragem` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -343,23 +388,7 @@ CREATE TABLE `tbviagens_rotas` (
   `horariochegada` time DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Estrutura da tabela `tbviagens_onibus`
---
-
-CREATE TABLE `tbviagens_onibus` (
-  `id` int(10) NOT NULL,
-  `placa` varchar(8) DEFAULT NULL,
-  `classe` varchar(20) DEFAULT NULL,
-  `poltronas` tinyint(4) DEFAULT NULL,
-  `anofabricacao` int(4) DEFAULT NULL,
-  `chassi` varchar(17) DEFAULT NULL,
-  `renavam` varchar(13) DEFAULT NULL,
-  `marca` varchar(20) DEFAULT NULL,
-  `modelo` varchar(20) DEFAULT NULL,
-  `vencimentoipva` date DEFAULT NULL,
-  `quilometragem` bigint(20) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+-- --------------------------------------------------------
 
 --
 -- Estrutura da tabela `tbviagens_tarifas`
@@ -373,21 +402,6 @@ CREATE TABLE `tbviagens_tarifas` (
   `meiapassagem` decimal(9,2) DEFAULT NULL,
   `pedagio` decimal(9,2) DEFAULT NULL,
   `seguro` decimal(9,2) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Estrutura da tabela `tbviagens_motorista`
---
-
-CREATE TABLE `tbviagens_motorista` (
-  `id` int(10) NOT NULL,
-  `nome` varchar(40) DEFAULT NULL,
-  `cpf` varchar(14) DEFAULT NULL,
-  `nascimento` date DEFAULT NULL,
-  `email` varchar(40) DEFAULT NULL,
-  `telefone` varchar(15) DEFAULT NULL,
-  `cnh` varchar(11) DEFAULT NULL,
-  `validadecnh` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -440,7 +454,8 @@ ALTER TABLE `tbperfil`
 -- Indexes for table `tbrotas`
 --
 ALTER TABLE `tbrotas`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `origem` (`origem`);
 
 --
 -- Indexes for table `tbtarifas`
@@ -464,6 +479,30 @@ ALTER TABLE `tbusuarios`
 -- Indexes for table `tbviagem`
 --
 ALTER TABLE `tbviagem`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `tbviagens_motorista`
+--
+ALTER TABLE `tbviagens_motorista`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `tbviagens_onibus`
+--
+ALTER TABLE `tbviagens_onibus`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `tbviagens_rotas`
+--
+ALTER TABLE `tbviagens_rotas`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `tbviagens_tarifas`
+--
+ALTER TABLE `tbviagens_tarifas`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -540,7 +579,41 @@ ALTER TABLE `tbusuarios`
 -- AUTO_INCREMENT for table `tbviagem`
 --
 ALTER TABLE `tbviagem`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=87;
+
+--
+-- AUTO_INCREMENT for table `tbviagens_motorista`
+--
+ALTER TABLE `tbviagens_motorista`
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT for table `tbviagens_onibus`
+--
+ALTER TABLE `tbviagens_onibus`
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT for table `tbviagens_rotas`
+--
+ALTER TABLE `tbviagens_rotas`
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
+
+--
+-- AUTO_INCREMENT for table `tbviagens_tarifas`
+--
+ALTER TABLE `tbviagens_tarifas`
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Limitadores para a tabela `tbrotas`
+--
+ALTER TABLE `tbrotas`
+  ADD CONSTRAINT `tbrotas_ibfk_1` FOREIGN KEY (`origem`) REFERENCES `location` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
