@@ -115,3 +115,36 @@ function sendMessage(url, params, success, failure){
 
       });
   }
+
+function getPoltronas(isRoot, rota, success, failure){
+    sendMessage((isRoot ? "" : "../") + "getPoltronas.php", {rota: rota}, success, failure);
+}
+
+function applyPoltronas(isRoot, rota){
+  getPoltronas(isRoot, rota, function(resp){
+      if(resp.result){
+          var poltronas = resp.poltronas;
+          poltronas.forEach(poltrona => {
+              var el = null;
+              if(poltrona.numero < 10){
+                el = document.getElementById("ida_0" + poltrona.numero);
+              } else {
+                el = document.getElementById("ida_" + poltrona.numero);
+              }
+              if(el){
+                  if(poltrona.disponivel){
+                    el.className = "livre";
+                  } else {
+                    el.className = "ocupada";
+                  }
+              } else {
+                  console.log("poltrona: " + poltrona.numero + " não encontrada ");
+              }
+          });
+      } else {
+          alert("Não foi possivel verificar as poltronas");
+          window.location = "login.html";
+      }
+    }, function(){
+    });
+}

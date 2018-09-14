@@ -119,10 +119,22 @@ Editor::inst( $db, 'tbviagem', 'id' )
 
 		$rows = $db->sql("select max(id) as id from tbviagens_onibus")->fetchAll();
 
-		$newRota = $rows[0]["id"];
+		$newOnibus = $rows[0]["id"];
 
-		$db->sql("update tbviagem set onibus = ".$newRota." where id = ".$id);
+		$db->sql("update tbviagem set onibus = ".$newOnibus." where id = ".$id);
 	
+		// poltronas
+		$db->sql( "insert tbviagens_poltronas " .
+			"(numero, onibus, disponivel) " .
+			"select numero, ".$newOnibus.", disponivel " .
+			"from tbpoltronas where onibus = ".$onibus );
+
+		// passagens
+		$db->sql( "insert tbviagens_passagens " .
+			"(viagem, poltrona, disponivel) " .
+			"select ".$id.", id, disponivel " .
+			"from tbviagens_poltronas where onibus = ".$newOnibus );
+
 		// tarifas
 		$db->sql( "insert tbviagens_tarifas " .
 			"(nome, normal, promocional, meiapassagem, pedagio, seguro) " .
@@ -131,9 +143,9 @@ Editor::inst( $db, 'tbviagem', 'id' )
 
 		$rows = $db->sql("select max(id) as id from tbviagens_tarifas")->fetchAll();
 
-		$newRota = $rows[0]["id"];
+		$newTarifa = $rows[0]["id"];
 
-		$db->sql("update tbviagem set tarifa = ".$newRota." where id = ".$id);
+		$db->sql("update tbviagem set tarifa = ".$newTarifa." where id = ".$id);
 	
 		// motorista
 		$db->sql( "insert tbviagens_motorista " .
@@ -143,9 +155,9 @@ Editor::inst( $db, 'tbviagem', 'id' )
 		
 		$rows = $db->sql("select max(id) as id from tbviagens_motorista")->fetchAll();
 
-		$newRota = $rows[0]["id"];
+		$newMotorista = $rows[0]["id"];
 
-		$db->sql("update tbviagem set motorista = ".$newRota." where id = ".$id);
+		$db->sql("update tbviagem set motorista = ".$newMotorista." where id = ".$id);
 	
     } )	
     //->on( 'postCreate', function ( $editor, $values ) {

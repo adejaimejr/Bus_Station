@@ -2,7 +2,7 @@
     require 'session.php';
     require 'utils.php';
 
-    Log::$phpFile = "index.php";
+    Log::$phpFile = "verificaPerfil.php";
     Log::$logLevel = LogLevel::Info;
 
     // Verifica a sessão
