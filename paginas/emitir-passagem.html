@@ -789,7 +789,7 @@
                                     <div class="row">
                                       <div class="element-box-tp col-sm-12">
                                         <table class="table table-clean" style="margin-bottom: 0px;">
-                                          <tr>
+                                          <tr id="resumoContainer1" hidden>
                                             <td>
                                               <div class="value">
                                                 MAO - BVB
@@ -800,10 +800,10 @@
                                               <div class="value text-success">
                                                 R$180,00
                                               </div>
-                                              <span class="sub-value">Poltrona 31</span>
+                                              <span class="sub-value" id="resumoPoltrona1">Poltrona 31</span>
                                             </td>
                                           </tr>
-                                          <tr>
+                                          <tr id="resumoContainer2" hidden>
                                             <td>
                                               <div class="value">
                                                 MAO - BVB
@@ -814,9 +814,23 @@
                                               <div class="value text-success">
                                                 R$180,00
                                               </div>
-                                              <span class="sub-value">Poltrona 32</span>
+                                              <span class="sub-value" id="resumoPoltrona2">Poltrona 32</span>
                                             </td>
                                           </tr>
+                                          <tr id="resumoContainer3" hidden>
+                                            <td>
+                                              <div class="value">
+                                                MAO - BVB
+                                              </div>
+                                              <span class="sub-value">11/08/2018 - 20:00</span>
+                                            </td>
+                                            <td class="text-right">
+                                              <div class="value text-success">
+                                                R$180,00
+                                              </div>
+                                              <span class="sub-value" id="resumoPoltrona3">Poltrona 32</span>
+                                            </td>
+                                          </tr>                                          
                                         </table>
                                         <div class="element-balances justify-content-between mobile-full-width" style="padding-top: 0px;padding-bottom: 0px;">
                                         <div class="balance balance-v2">
@@ -824,7 +838,7 @@
                                               Total:
                                             </div>
                                             <div class="balance-value" style="padding-left: 105px;color: #28a745;font-size: 2rem;">
-                                              <span class="d-xxl-none">R$360,00</span>
+                                              <span class="value text-success" id="valorTotal">R$0,00</span>
                                             </div>
                                           </div>
                                         </div>
@@ -855,7 +869,7 @@
                                                 </div>
                                                 <div class="todo-sidebar-section-sub-section-content">
                                                   <ul class="items-list">
-                                                    <li><a class="add-task-btn" data-target="#passageiro-poltrona" data-toggle="modal" href="#"><span>Add/Alterar Passageiro</span></a></li>
+                                                    <li><a class="add-task-btn" data-target="#passageiro-poltrona" data-toggle="modal" href="#"><span onclick="addPassageiro(1)">Add/Alterar Passageiro</span></a></li>
                                                     <li><a class="add-task-btn" data-target="#passageiro-tarifa" data-toggle="modal" href="#"><span>Selecionar Tarifa</span></a></li>
                                                   </ul>
                                                 </div>
@@ -871,7 +885,7 @@
                                                 </div>
                                                 <div class="todo-sidebar-section-sub-section-content">
                                                   <ul class="items-list">
-                                                    <li><a class="add-task-btn" data-target="#passageiro-poltrona" data-toggle="modal" href="#"><span>Add/Alterar Passageiro</span></a></li>
+                                                    <li><a class="add-task-btn" data-target="#passageiro-poltrona" data-toggle="modal" href="#"><span onclick="addPassageiro(2)">Add/Alterar Passageiro</span></a></li>
                                                     <li><a class="add-task-btn" data-target="#passageiro-tarifa" data-toggle="modal" href="#"><span>Selecionar Tarifa</span></a></li>
                                                   </ul>
                                                 </div>
@@ -886,41 +900,11 @@
                                                 </div>
                                                 <div class="todo-sidebar-section-sub-section-content">
                                                   <ul class="items-list">
-                                                    <li><a class="add-task-btn" data-target="#passageiro-poltrona" data-toggle="modal" href="#"><span>Add/Alterar Passageiro</span></a></li>
+                                                    <li><a class="add-task-btn" data-target="#passageiro-poltrona" data-toggle="modal" href="#"><span onclick="addPassageiro(3)">Add/Alterar Passageiro</span></a></li>
                                                     <li><a class="add-task-btn" data-target="#passageiro-tarifa" data-toggle="modal" href="#"><span>Selecionar Tarifa</span></a></li>
                                                   </ul>
                                                 </div>
-                                              </div>
-                                              <!--Poltrona 4 - INICIO -->
-                                              <div id="poltronaContainer4" hidden class="todo-sidebar-section-sub-section">
-                                                <div class="todo-sidebar-section-sub-section-toggler">
-                                                  <i class="os-icon os-icon-ui-23"></i>
-                                                </div>
-                                                <div class="todo-sidebar-section-sub-header">
-                                                  <h6 id="poltronaCaption4">Poltrona 4</h6>
-                                                </div>
-                                                <div class="todo-sidebar-section-sub-section-content">
-                                                  <ul class="items-list">
-                                                    <li><a class="add-task-btn" data-target="#passageiro-poltrona" data-toggle="modal" href="#"><span>Add/Alterar Passageiro</span></a></li>
-                                                    <li><a class="add-task-btn" data-target="#passageiro-tarifa" data-toggle="modal" href="#"><span>Selecionar Tarifa</span></a></li>
-                                                  </ul>
-                                                </div>
-                                              </div>
-                                              <!--Poltrona 5 - INICIO -->
-                                              <div id="poltronaContainer5" hidden class="todo-sidebar-section-sub-section">
-                                                <div class="todo-sidebar-section-sub-section-toggler">
-                                                  <i class="os-icon os-icon-ui-23"></i>
-                                                </div>
-                                                <div class="todo-sidebar-section-sub-header">
-                                                  <h6 id="poltronaCaption5">Poltrona 5</h6>
-                                                </div>
-                                                <div class="todo-sidebar-section-sub-section-content">
-                                                  <ul class="items-list">
-                                                    <li><a class="add-task-btn" data-target="#passageiro-poltrona" data-toggle="modal" href="#"><span>Add/Alterar Passageiro</span></a></li>
-                                                    <li><a class="add-task-btn" data-target="#passageiro-tarifa" data-toggle="modal" href="#"><span>Selecionar Tarifa</span></a></li>
-                                                  </ul>
-                                                </div>
-        
+                                                      
                                                 <!-- Selecionar tarifa -->
                                                 <div aria-hidden="true" class="modal fade" id="passageiro-tarifa" role="dialog" tabindex="-1">
                                                   <div class="modal-dialog" role="document">
@@ -988,7 +972,7 @@
                                                     <div class="modal-content">
                                                       <div class="modal-header faded smaller">
                                                         <div class="modal-title">
-                                                          <span>MAO - BVB</span><span>11/08/2018 - 20:00 </span><strong>Poltrona 31</strong>
+                                                          <span>MAO - BVB</span><span>11/08/2018 - 20:00 </span><strong id="passageiroPoltronaTitulo">Poltrona 31</strong>
                                                         </div>
                                                         <button aria-label="Close" class="close" data-dismiss="modal" type="button"><span aria-hidden="true"> &times;</span></button>
                                                       </div>
@@ -997,7 +981,7 @@
                                                           <div class="row">
                                                           <div class="col-sm-6">
                                                             <div class="form-group">
-                                                              <label for=""> CPF</label><input class="form-control" placeholder="000.000.000-00" type="text">
+                                                              <label for=""> CPF</label><input id="formCPF" class="form-control" placeholder="000.000.000-00" type="text">
                                                             </div>
                                                           </div>
                                                           <div class="col-sm-6">
@@ -1078,7 +1062,9 @@
                                                         </form>
                                                       </div>
                                                       <div class="modal-footer buttons-on-right">
-                                                        <button class="btn btn-link" data-dismiss="modal" type="button"> Cancelar</button><button class="btn btn-primary" type="button"> Salvar</button>
+                                                        <input type="hidden" id="poltronaIndex">
+                                                        <button class="btn btn-link" data-dismiss="modal" type="button"> Cancelar</button>
+                                                        <button class="btn btn-primary" type="button" id="butSavePassageiro"> Salvar</button>
                                                       </div>
                                                     </div>
                                                   </div>
@@ -1254,8 +1240,8 @@
                                                         <div style="text-transform: uppercase; letter-spacing: 1px; color: #B8B8B8; font-size: 10px; font-weight: bold; margin-bottom: 3px;">
                                                           Valor total
                                                         </div>
-                                                        <div style="font-weight: bold; color: #D62525;">
-                                                          R$380,00
+                                                        <div id="valorTotalEmitir" style="font-weight: bold; color: #D62525;">
+                                                          R$0,00
                                                         </div>
                                                       </td>
                                                     </tr>
@@ -1329,12 +1315,12 @@
       <script>
         applyPoltronas(false, 56);
         poltronas = [];
-        poltronasLivres = ["1", "2", "3", "4", "5"];
-        poltronasOcupadas = [];        
+        poltronasLivres = ["1", "2", "3"];
+        poltronasOcupadas = [];                
 
         function mudaClass(poltrona, el, texto){
           var addPoltrona = el.className == "livre";
-          if(addPoltrona && poltronasOcupadas.length >= 5){
+          if(addPoltrona && poltronasOcupadas.length >= 3){
             alert("Número máximo de poltronas selecionadas!");
             return;
           }
@@ -1360,15 +1346,21 @@
               poltronasOcupadas.push(polContainer);
               document.getElementById('poltronaContainer' + polContainer).hidden = false;              
               document.getElementById('poltronaCaption' + polContainer).innerText = "Poltrona " + poltrona;
+              document.getElementById('resumoContainer' + polContainer).hidden = false;              
+              document.getElementById('resumoPoltrona' + polContainer).innerText = "Poltrona " + poltrona;
               poltronas.push({
                 poltrona: poltrona,
-                polContainer: polContainer
+                polContainer: polContainer,
+                passageiro: {
+                  cpf: ""
+                }
               });
             }
           } else {
             poltronas.forEach(item => {
-              if(item.poltrona == poltrona){                
+              if(item.poltrona == poltrona){
                 document.getElementById('poltronaContainer' + item.polContainer).hidden = true;
+                document.getElementById('resumoContainer' + item.polContainer).hidden = true;                    
                 var index = poltronas.indexOf(item);
                 var polContainer = item.polContainer;
                 poltronas.splice(index, 1);
@@ -1378,7 +1370,39 @@
               }              
             });
           }
+
+          var total = 0;
+          poltronas.forEach(item => {
+            total += 180;
+          });
+          document.getElementById('valorTotal').innerText = 'R$' + total;
+          document.getElementById('valorTotalEmitir').innerText = 'R$' + total;          
         }
+
+        function addPassageiro(index){
+          poltronas.forEach(item => {
+            if(item.polContainer == index){
+              document.getElementById("passageiroPoltronaTitulo").innerHTML = "Poltrona " + item.poltrona;
+              document.getElementById("formCPF").value = item.passageiro.cpf;
+              document.getElementById("poltronaIndex").value = index;
+            }              
+          });          
+        }
+
+        document.getElementById("butSavePassageiro").addEventListener("click", function(e){
+          e.preventDefault();
+
+          var index = document.getElementById("poltronaIndex").value;
+          poltronas.forEach(item => {
+            if(item.polContainer == index){
+              item.passageiro.cpf = document.getElementById("formCPF").value;
+            }              
+          });  
+
+          $("#passageiro-poltrona").modal('hide');
+          
+        });
+
       </script>      
   </body>
 
