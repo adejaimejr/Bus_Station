@@ -458,14 +458,14 @@
                 <div class="padded-lg" style="padding-left: 0px;padding-right: 0px;padding-top: 0px;padding-bottom: 5px;height: 39px;">
                 <!--START - Onibus-->
                 <div class="row">
-                  <div class="col-sm-2">
+                  <!--div class="col-sm-2">
                     <div class="form-group" style="margin-bottom: 0px;">
-                      <a class="btn btn-primary btn-sm" href="#"><i class="icon-calendar"></i></a>
+                      <a class="btn btn-primary btn-sm"  id="calendario"><i class="icon-calendar"></i></a>
                     </div>
-                  </div>
-                  <div class="col-sm-3">
+                  </div-->
+                  <div class="col-sm-12">
                     <div class="form-group" style="margin-bottom: 0px;">
-                      <select class="form-control">
+                      <select class="form-control" id="rotas">
                         <option>
                           08:00
                         </option>
@@ -475,7 +475,7 @@
                       </select>
                     </div>
                   </div>
-                  <div class="col-sm-7">
+                  <!--div class="col-sm-7">
                     <div class="form-group" style="margin-bottom: 0px;">
                       <select class="form-control">
                         <option>
@@ -486,7 +486,7 @@
                         </option>
                       </select>
                     </div>
-                  </div>
+                  </div-->
                 </div>
 
                           <!-- Inicio Onibus Semi Leito -->
@@ -494,7 +494,7 @@
                             <div id="going" class="available-trips" style="width: 200px;margin-left: 25px;margin-right: 25px;">
                             <div class="onibus-title-rota">MAO - BVB</div>
                             <div class="onibus-title-data">11/08/2018</div>
-                            <div class="onibus-title-hora">20:00</div>
+                            <div class="onibus-title-hora" id="viagemHorario1">20:00</div>
                             <div class="onibus-title-hora" style="top: 640px;left: 7px;text-align:  center;">1º Andar</div>
                               <div id="onibus-frente"></div>
                               <div id="onibus-bg">
@@ -695,7 +695,7 @@
                           <a id="current-trips" class="col-5" style="display: flex;justify-content: center;width: 200px;margin-right: 25px;margin-left: 25px;margin-top: 30%;border-left-width: 5px;top: auto;">                            <div id="going" class="available-trips" style="width: 200px;margin-left: 25px;margin-right: 25px;">
                             <div class="onibus-title-rota">MAO - BVB</div>
                             <div class="onibus-title-data">11/08/2018</div>
-                            <div class="onibus-title-hora">20:00</div>
+                            <div class="onibus-title-hora" id="viagemHorario2">20:00</div>
                             <div class="onibus-title-hora" style="top: 310px;left: 7px;text-align:  center;">Térreo</div>
                               <div id="onibus-frente"></div>
                               <div id="onibus-bg">
@@ -1306,6 +1306,8 @@
       <script src="../js/main.js?version=4.4.0"></script>
       <script src="../ux/tools.js"></script>
 
+      <script type="text/javascript" src="https://cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/e8bddc60e73c1ec2475f827be36e1957af72e2ea/src/js/bootstrap-datetimepicker.js"></script>
+
       <!-- verifica o perfil
       <script>
         applyPerfils(false);
@@ -1313,12 +1315,20 @@
 
       <!-- atualiza as poltronas na tela -->
       <script>
-        applyPoltronas(false, 56);
+        applyViagensDisponiveis(false);
+        
         poltronas = [];
         poltronasLivres = ["1", "2", "3"];
-        poltronasOcupadas = [];                
+        poltronasOcupadas = [];     
 
         function mudaClass(poltrona, el, texto){
+
+          var elModel = document.getElementById("rotas");
+          if(elModel.selectedIndex <= 0){
+            alert("Selecione a rota e horário");
+            return;
+          }
+
           var addPoltrona = el.className == "livre";
           if(addPoltrona && poltronasOcupadas.length >= 3){
             alert("Número máximo de poltronas selecionadas!");

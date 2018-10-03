@@ -116,8 +116,80 @@ function sendMessage(url, params, success, failure){
       });
   }
 
+function getViagensDisponiveis(isRoot, success, failure){
+    sendMessage((isRoot ? "" : "../") + "getViagensDisponiveis.php", {}, success, failure);
+}
+
+function applyViagensDisponiveis(isRoot){
+  getViagensDisponiveis(isRoot, function(resp){
+    if(resp.result){
+        viagens = resp.viagensDisponiveis;
+        var viagensHTML = "<option value='-1'>Selecione a Rota</option>";
+        viagens.forEach(viagem => {
+            viagensHTML = viagensHTML + "<option value='" + viagem.id + "'>" + 
+                viagem.horariopartida + " - " +
+                viagem.origemCidade + "-" +
+                viagem.origemUF +  " - " +
+                viagem.destinoCidade +  "-" +
+                viagem.destinoUF
+                "</option>";
+        });
+
+        var elModel = document.getElementById("rotas");
+        elModel.innerHTML = viagensHTML;
+
+        elModel.addEventListener("change", function(e){
+          e.preventDefault();
+          if(e.currentTarget.selectedIndex >= 1){
+            var horario = viagens[e.currentTarget.selectedIndex-1].horariopartida;
+            document.getElementById("viagemHorario1").innerHTML = horario;
+            document.getElementById("viagemHorario2").innerHTML = horario;
+
+            applyPoltronas(false, e.currentTarget.value);
+          } else {
+              document.getElementById("viagemHorario1").innerHTML = "00:00:00";
+              document.getElementById("viagemHorario2").innerHTML = "00:00:00";
+
+              clearPoltronas();
+          }
+        });
+
+        clearPoltronas();
+
+      } else {
+          alert("Não foi possivel verificar as viagens");
+          window.location = "login.html";
+      }
+    }, function(){
+    });
+}
+
 function getPoltronas(isRoot, rota, success, failure){
     sendMessage((isRoot ? "" : "../") + "getPoltronas.php", {rota: rota}, success, failure);
+}
+
+function clearPoltronas(){
+    poltronas = [];
+    poltronasLivres = ["1", "2", "3"];
+    poltronasOcupadas = [];      
+
+    for(var i = 1; i <= 56; i++){
+        if(i < 10){
+            el = document.getElementById("ida_0" + i);
+        } else {
+            el = document.getElementById("ida_" + i);
+        }
+        el.className = "ocupada";
+    };
+
+    poltronasLivres.forEach(polContainer => {
+        document.getElementById('poltronaContainer' + polContainer).hidden = true;
+        document.getElementById('resumoContainer' + polContainer).hidden = true;
+    });
+
+    var total = 0;
+    document.getElementById('valorTotal').innerText = 'R$' + total;
+    document.getElementById('valorTotalEmitir').innerText = 'R$' + total;          
 }
 
 function applyPoltronas(isRoot, rota){
