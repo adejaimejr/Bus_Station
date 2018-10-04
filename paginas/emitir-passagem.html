@@ -797,7 +797,7 @@
                                               <span class="sub-value">11/08/2018 - 20:00</span>
                                             </td>
                                             <td class="text-right">
-                                              <div class="value text-success">
+                                              <div class="value text-success" id="tarifa1">
                                                 R$180,00
                                               </div>
                                               <span class="sub-value" id="resumoPoltrona1">Poltrona 31</span>
@@ -811,7 +811,7 @@
                                               <span class="sub-value">11/08/2018 - 20:00</span>
                                             </td>
                                             <td class="text-right">
-                                              <div class="value text-success">
+                                              <div class="value text-success" id="tarifa2">
                                                 R$180,00
                                               </div>
                                               <span class="sub-value" id="resumoPoltrona2">Poltrona 32</span>
@@ -825,7 +825,7 @@
                                               <span class="sub-value">11/08/2018 - 20:00</span>
                                             </td>
                                             <td class="text-right">
-                                              <div class="value text-success">
+                                              <div class="value text-success" id="tarifa3">
                                                 R$180,00
                                               </div>
                                               <span class="sub-value" id="resumoPoltrona3">Poltrona 32</span>
@@ -870,7 +870,7 @@
                                                 <div class="todo-sidebar-section-sub-section-content">
                                                   <ul class="items-list">
                                                     <li><a class="add-task-btn" data-target="#passageiro-poltrona" data-toggle="modal" href="#"><span onclick="addPassageiro(1)">Add/Alterar Passageiro</span></a></li>
-                                                    <li><a class="add-task-btn" data-target="#passageiro-tarifa" data-toggle="modal" href="#"><span>Selecionar Tarifa</span></a></li>
+                                                    <li><a class="add-task-btn" data-target="#passageiro-tarifa" data-toggle="modal" href="#"><span onclick="changeTarifa(1)">Selecionar Tarifa</span></a></li>
                                                   </ul>
                                                 </div>
                                               </div>
@@ -886,7 +886,7 @@
                                                 <div class="todo-sidebar-section-sub-section-content">
                                                   <ul class="items-list">
                                                     <li><a class="add-task-btn" data-target="#passageiro-poltrona" data-toggle="modal" href="#"><span onclick="addPassageiro(2)">Add/Alterar Passageiro</span></a></li>
-                                                    <li><a class="add-task-btn" data-target="#passageiro-tarifa" data-toggle="modal" href="#"><span>Selecionar Tarifa</span></a></li>
+                                                    <li><a class="add-task-btn" data-target="#passageiro-tarifa" data-toggle="modal" href="#"><span onclick="changeTarifa(2)">Selecionar Tarifa</span></a></li>
                                                   </ul>
                                                 </div>
                                               </div>
@@ -901,7 +901,7 @@
                                                 <div class="todo-sidebar-section-sub-section-content">
                                                   <ul class="items-list">
                                                     <li><a class="add-task-btn" data-target="#passageiro-poltrona" data-toggle="modal" href="#"><span onclick="addPassageiro(3)">Add/Alterar Passageiro</span></a></li>
-                                                    <li><a class="add-task-btn" data-target="#passageiro-tarifa" data-toggle="modal" href="#"><span>Selecionar Tarifa</span></a></li>
+                                                    <li><a class="add-task-btn" data-target="#passageiro-tarifa" data-toggle="modal" href="#"><span onclick="changeTarifa(3)">Selecionar Tarifa</span></a></li>
                                                   </ul>
                                                 </div>
                                                       
@@ -911,7 +911,7 @@
                                                     <div class="modal-content">
                                                       <div class="modal-header faded smaller">
                                                         <div class="modal-title">
-                                                          <span>Selecione a Tarifa - </span><strong>Poltrona 31</strong>
+                                                          <span>Selecione a Tarifa - </span><strong id="tarifaPoltrona">Poltrona 31</strong>
                                                         </div>
                                                         <button aria-label="Close" class="close" data-dismiss="modal" type="button"><span aria-hidden="true"> &times;</span></button>
                                                       </div>
@@ -920,17 +920,18 @@
                                                           <div class="row">
                                                             <div class="col-sm-6">
                                                               <div class="form-group">
-                                                                <label for=""> Tarifa</label><select class="form-control">
-                                                                  <option>
+                                                                <label for=""> Tarifa</label>
+                                                                <select class="form-control" id="tarifa">
+                                                                  <option value="0">
                                                                     Normal
                                                                   </option>
-                                                                  <option>
+                                                                  <option value="1">
                                                                     Promocional
                                                                   </option>
-                                                                  <option>
+                                                                  <option value="2">
                                                                     Meia Passagem
                                                                   </option>
-                                                                  <option>
+                                                                  <option value="3">
                                                                     Gratuidade
                                                                   </option>
                                                                 </select>
@@ -938,7 +939,8 @@
                                                             </div>
                                                             <div class="col-sm-6">
                                                               <div class="form-group">
-                                                                <label for="">Motivo Gratuidade</label><select class="form-control">
+                                                                <label for="">Motivo Gratuidade</label>
+                                                                <select class="form-control" id="motivoGratuidade">
                                                                   <option>
                                                                     Idoso
                                                                   </option>
@@ -959,7 +961,9 @@
                                                         </form>
                                                       </div>
                                                       <div class="modal-footer buttons-on-right">
-                                                        <button class="btn btn-link" data-dismiss="modal" type="button"> Cancelar</button><button class="btn btn-primary" type="button"> Salvar</button>
+                                                        <input type="hidden" id="tarifaIndex">
+                                                        <button class="btn btn-link" data-dismiss="modal" type="button"> Cancelar</button>
+                                                        <button class="btn btn-primary" type="button" id="butSaveTarifa"> Salvar</button>
                                                       </div>
                                                     </div>
                                                   </div>
@@ -1362,9 +1366,14 @@
                 poltrona: poltrona,
                 polContainer: polContainer,
                 passageiro: {
-                  cpf: ""
+                  cpf: "",
+                  tarifa: 0,
+                  motivoGratuidade: -1,
+                  valorTarifa: 100
                 }
               });
+
+              document.getElementById("tarifa" + polContainer).innerText = "100,00 (normal)";
             }
           } else {
             poltronas.forEach(item => {
@@ -1396,7 +1405,34 @@
               document.getElementById("formCPF").value = item.passageiro.cpf;
               document.getElementById("poltronaIndex").value = index;
             }              
-          });          
+          });                    
+        }
+
+        function changeTarifa(index){
+          poltronas.forEach(item => {
+            if(item.polContainer == index){
+              document.getElementById("tarifaPoltrona").innerHTML = "Poltrona " + item.poltrona;
+              document.getElementById("tarifa").selectedIndex = item.passageiro.tarifa;
+              document.getElementById("motivoGratuidade").selectedIndex = item.passageiro.motivoGratuidade;
+              document.getElementById("tarifaIndex").value = index;
+
+              var valTarifa = 0;
+              switch(item.passageiro.tarifa){
+                case 0: valTarifa = "100,00 (normal)"; item.passageiro.valorTarifa = 100; break;
+                case 1: valTarifa = "80,00 (promocional)"; item.passageiro.valorTarifa = 80; break;
+                case 2: valTarifa = "50,00 (1/2 passagem)"; item.passageiro.valorTarifa = 50; break;
+                case 3: valTarifa = "0,00 (gratuidade)"; item.passageiro.valorTarifa = 0; break;
+              }
+              document.getElementById("tarifa" + item.polContainer).innerText = valTarifa;
+
+              /*var total = 0;
+              poltronas.forEach(item => {
+                total += item.passageiro.valorTarifa;
+              });
+              document.getElementById('valorTotal').innerText = 'R$' + total;
+              document.getElementById('valorTotalEmitir').innerText = 'R$' + total;          */
+            }              
+          });                    
         }
 
         document.getElementById("butSavePassageiro").addEventListener("click", function(e){
@@ -1410,6 +1446,38 @@
           });  
 
           $("#passageiro-poltrona").modal('hide');
+          
+        });
+
+        document.getElementById("butSaveTarifa").addEventListener("click", function(e){
+          e.preventDefault();
+
+          var index = document.getElementById("tarifaIndex").value;
+          poltronas.forEach(item => {
+            if(item.polContainer == index){
+              item.passageiro.tarifa = document.getElementById("tarifa").selectedIndex;
+              item.passageiro.motivoGratuidade = document.getElementById("motivoGratuidade").selectedIndex;
+
+              var valTarifa = 0;
+              switch(item.passageiro.tarifa){
+                case 0: valTarifa = "100,00 (normal)"; item.passageiro.valorTarifa = 100; break;
+                case 1: valTarifa = "80,00 (promocional)"; item.passageiro.valorTarifa = 80; break;
+                case 2: valTarifa = "50,00 (1/2 passagem)"; item.passageiro.valorTarifa = 50; break;
+                case 3: valTarifa = "0,00 (gratuidade)"; item.passageiro.valorTarifa = 0; break;
+              }
+
+              document.getElementById("tarifa" + item.polContainer).innerText = valTarifa;
+            }              
+          });            
+
+          $("#passageiro-tarifa").modal('hide');
+
+          var total = 0;
+          poltronas.forEach(item => {
+            total += item.passageiro.valorTarifa;
+          });
+          document.getElementById('valorTotal').innerText = 'R$' + total;
+          document.getElementById('valorTotalEmitir').innerText = 'R$' + total;          
           
         });
 
