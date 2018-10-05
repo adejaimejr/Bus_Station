@@ -780,8 +780,10 @@
                             <div class="element-box" style="padding-left: 0px;padding-right: 0px;height: 700px;">
                             <form>
                               <div class="steps-w">
-                                <div class="step-triggers" style="margin-bottom: 20px;">
-                                  <a class="step-trigger active" href="#stepContent1">Passageiro</a><a class="step-trigger" href="#stepContent2">Pagamento</a><a class="step-trigger" href="#stepContent3">Emitir</a>
+                                <div class="step-triggers" style="margin-bottom: 10px;">
+                                  <a class="step-trigger active" href="#stepContent1">Passageiro</a>
+                                  <a class="step-trigger" href="#stepContent2">Pagamento</a>
+                                  <a class="step-trigger" href="#stepContent3">Emitir</a>
                                 </div>
                                 <div class="step-contents">
                                   <!--Step 1-->
@@ -834,10 +836,8 @@
                                         </table>
                                         <div class="element-balances justify-content-between mobile-full-width" style="padding-top: 0px;padding-bottom: 0px;">
                                         <div class="balance balance-v2">
-                                            <div class="balance-title">
-                                              Total:
-                                            </div>
                                             <div class="balance-value" style="padding-left: 105px;color: #28a745;font-size: 2rem;">
+                                              <span class="balance-title">Total:</span>
                                               <span class="value text-success" id="valorTotal">R$0,00</span>
                                             </div>
                                           </div>
@@ -1109,14 +1109,15 @@
                                         <div class="row">
                                           <div class="col-6">
                                             <div class="form-group">
-                                              <label for="">Forma de pagamento</label><select class="form-control">
-                                                <option>
+                                              <label for="">Forma de pagamento</label>
+                                              <select class="form-control" id="formaPagamento">
+                                                <option value="0">
                                                   Dinheiro
                                                 </option>
-                                                <option>
+                                                <option value="1">
                                                   Cartão de débito
                                                 </option>
-                                                <option>
+                                                <option value="2">
                                                   Cartão de credito
                                                 </option>
                                               </select>
@@ -1124,26 +1125,27 @@
                                           </div>
                                           <div class="col-6">
                                             <div class="form-group">
-                                              <label for="">Prazo</label><select class="form-control">
-                                                <option>
+                                              <label for="">Prazo</label>
+                                              <select class="form-control" id="prazo">
+                                                <option value="0">
                                                   Avista
                                                 </option>
-                                                <option>
+                                                <option value="1">
                                                   1x
                                                 </option>
-                                                <option>
+                                                <option value="2">
                                                   2x
                                                 </option>
-                                                <option>
+                                                <option value="3">
                                                   3x
                                                 </option>
-                                                <option>
+                                                <option value="4">
                                                   4x
                                                 </option>
-                                                <option>
+                                                <option value="5">
                                                   5x
                                                 </option>
-                                                <option>
+                                                <option value="6">
                                                   6x
                                                 </option>
                                               </select>
@@ -1155,7 +1157,7 @@
                                             <div class="form-group">
                                               <label for="">Valor</label>
                                               <div class="input-group">
-                                                <input class="form-control" placeholder="Amount..." type="text" value="1.37">
+                                                <input id="valorParcela" class="form-control" placeholder="Amount..." type="number" value="1.37">
                                                 <div class="input-group-append">
                                                   <div class="input-group-text">
                                                     R$
@@ -1164,9 +1166,21 @@
                                               </div>
                                             </div>
                                           </div>
-
+                                          <div class="col-6">
+                                              <div class="form-group">
+                                                <label for="">Valor Restante</label>
+                                                <div class="input-group">
+                                                  <input id="valorRestante" class="form-control" placeholder="Amount..." type="number" value="1.37" disabled>
+                                                  <div class="input-group-append">
+                                                    <div class="input-group-text">
+                                                      R$
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div> 
                                         </div>
-                                        <button class="btn btn-primary btn-block btn-lg"><span>Receber</span></button>
+                                        <button id="butReceber" class="btn btn-primary btn-block btn-lg"><span>Receber</span></button>
                                       </form>
                                     </div>
                                   </div>
@@ -1175,12 +1189,17 @@
                                       <a class="element-action element-action-fold" href="#"><i class="os-icon os-icon-minus-circle"></i></a>
                                     </div>
                                     <h6 class="element-header">
-                                      Pagamento Realizados
+                                      Pagamentos Realizados
                                     </h6>
                                     <div class="element-box-tp">
                                       <table class="table table-compact smaller text-faded mb-0">
                                         <thead>
                                           <tr>
+                                            <th>
+                                              <div class="icon-w">
+                                                <div class="os-icon os-icon-layout"></div>
+                                              </div>                                      
+                                            </th>    
                                             <th>
                                               Forma de pagamento
                                             </th>
@@ -1192,19 +1211,24 @@
                                             </th>
                                           </tr>
                                         </thead>
-                                        <tbody>
-                                          <tr>
-                                            <td class="text-left text-bright">
+                                        <tbody id="pagamentosRealizados">
+                                          <tr id="pagamentoRow" hidden>
+                                            <td id="pagamentoCol" class="text-left text-bright">
+                                              <div class="icon-w">
+                                                <div class="os-icon os-icon-layout"></div>
+                                              </div>
+                                            </td>    
+                                            <td id="pagamentoCol" class="text-left text-bright">
                                               Dinheiro
                                             </td>
-                                            <td class="text-center text-bright">
+                                            <td id="pagamentoPrazoCol" class="text-center text-bright">
                                               Avista
                                             </td>
-                                            <td class="text-right text-danger">
+                                            <td id="pagamentoValorCol" class="text-right text-danger">
                                               R$ 100,00
                                             </td>
                                           </tr>
-                                          <tr>
+                                          <!--tr>
                                             <td class="text-left text-bright">
                                               Cartão de credito
                                             </td>
@@ -1214,11 +1238,19 @@
                                             <td class="text-right text-danger">
                                               R$ 260,00
                                             </td>
-                                          </tr>
+                                          </tr-->
                                         </tbody>
                                       </table>
                                     </div>
                                   </div>
+
+                                  <div class="form-buttons-w text-left">
+                                    <span class="balance-title">Total:</span>
+                                    <span class="value text-success" id="valorFinal">R$0,00</span>
+                                    <span class="balance-title"> - Principal:</span>
+                                    <span class="value text-success" id="valorPrincipal">R$0,00</span>
+                                  </div>
+    
                                   <div class="form-buttons-w text-right">
                                     <button class="btn btn-primary step-trigger-btn" href="#stepContent3">Próximo</button>
                                   </div>
@@ -1324,6 +1356,9 @@
         poltronas = [];
         poltronasLivres = ["1", "2", "3"];
         poltronasOcupadas = [];     
+        pagamentos = [];
+        lastPagamentoIndex = 0;
+        valorPrincipal = 0;
 
         function mudaClass(poltrona, el, texto){
 
@@ -1355,6 +1390,7 @@
                 found = true;
               }              
             });
+
             if(!found){
               var polContainer = poltronasLivres.pop();
               poltronasOcupadas.push(polContainer);
@@ -1373,7 +1409,7 @@
                 }
               });
 
-              document.getElementById("tarifa" + polContainer).innerText = "100,00 (normal)";
+              document.getElementById("tarifa" + polContainer).innerText = "100,00 (normal)";              
             }
           } else {
             poltronas.forEach(item => {
@@ -1394,8 +1430,12 @@
           poltronas.forEach(item => {
             total += 180;
           });
+          valorPrincipal = total;
+
           document.getElementById('valorTotal').innerText = 'R$' + total;
-          document.getElementById('valorTotalEmitir').innerText = 'R$' + total;          
+          document.getElementById('valorTotalEmitir').innerText = 'R$' + total;         
+          document.getElementById('valorPrincipal').innerHTML = "R$ " + total;
+          document.getElementById('valorRestante').value = getValorRestante();
         }
 
         function addPassageiro(index){
@@ -1476,10 +1516,147 @@
           poltronas.forEach(item => {
             total += item.passageiro.valorTarifa;
           });
+
+          valorPrincipal = total;          
           document.getElementById('valorTotal').innerText = 'R$' + total;
           document.getElementById('valorTotalEmitir').innerText = 'R$' + total;          
-          
+          document.getElementById('valorPrincipal').innerHTML = "R$ " + total;
         });
+
+        document.getElementById('pagamentosRealizados').innerHTML = "";
+        document.getElementById('valorParcela').value = 0;
+        
+        document.getElementById("butReceber").addEventListener("click", function(e){
+          e.preventDefault();
+
+          var formaPag = document.getElementById('formaPagamento').value;
+          var prazo = document.getElementById('prazo').value;
+          var valorParcela = document.getElementById('valorParcela').value;
+
+          var valorRestante = getValorRestante();
+
+          if(valorParcela < 0){
+            alert("Valor do pagamento precisa ser positivo");
+            return;
+          }
+
+          if(valorParcela == 0){
+            alert("Valor do pagamento obrigatório");
+            return;
+          }
+
+          if((1*valorParcela) > valorRestante){
+            alert("Valor do pagamento acima do valor devido");
+            return;
+          }
+
+          lastPagamentoIndex++;
+
+          pagamentos.push({
+            pagamentoIndex: lastPagamentoIndex,
+            formaPag: formaPag,
+            prazo: prazo,
+            valorParcela: valorParcela
+          });
+
+          var strFormaPag = "";
+          switch(formaPag){
+            case "0": strFormaPag = "Dinheiro"; break;
+            case "1": strFormaPag = "Cartão de débito"; break;
+            case "2": strFormaPag = "Cartão de crédito"; break;
+            default: 
+              alert("Forma de pagamento obrigatória");
+              return;
+          }
+
+          var strPrazo = "";
+          switch(prazo){
+            case "0": strPrazo = "À vista"; break;
+            case "1": strPrazo = "1x"; break;
+            case "2": strPrazo = "2x"; break;
+            case "3": strPrazo = "3x"; break;
+            case "4": strPrazo = "4x"; break;
+            case "5": strPrazo = "5x"; break;
+            case "6": strPrazo = "6x"; break;
+            default: 
+              alert("Prazo obrigatório");
+              return;
+          }
+
+          var newPag = 
+              '<tr id="' + lastPagamentoIndex + '">' +
+              '  <td id="pagamentoCol" class="text-left text-bright">' +
+              '   <div class="icon-w" onclick="deleteFormaPagto(' + lastPagamentoIndex + ')">' +
+              '    <div class="os-icon os-icon-layout"></div>' +
+              '   </div>' +
+              '  </td>' +
+              '  <td id="pagamentoCol" class="text-left text-bright">' +
+              strFormaPag +
+              '  </td>' +
+              '  <td id="pagamentoPrazoCol" class="text-center text-bright">' +
+              strPrazo +
+              '  </td>' +
+              '  <td id="pagamentoValorCol" class="text-right text-danger">' +
+              '    R$ ' + valorParcela +
+              '  </td>' +
+              '</tr>';
+
+          document.getElementById('pagamentosRealizados').insertAdjacentHTML("beforeend", newPag);
+
+          valorRestante = getValorRestante();
+          valorFinal = getValorFinal();
+          document.getElementById('valorRestante').value = valorRestante;
+          document.getElementById('valorFinal').innerText = "R$ " + valorFinal;   
+          if(valorParcela > valorRestante){
+            valorParcela = valorRestante;
+          }
+          document.getElementById('valorParcela').value = valorParcela;
+          document.getElementById('valorParcela').focus();
+
+          if(valorRestante == 0){
+            document.getElementById('butReceber').disabled = true;
+          }
+        });
+
+        function deleteFormaPagto(pagIndex){
+          var i = 0;
+          pagamentos.forEach(item => {
+            if(item.pagamentoIndex == pagIndex){
+              var el = document.getElementById(item.pagamentoIndex);
+              document.getElementById('pagamentosRealizados').removeChild(el);
+              pagamentos.splice(i, 1);
+
+              var valorRestante = getValorRestante();
+              var valorFinal = getValorFinal();
+              document.getElementById('valorRestante').value = valorRestante;
+              document.getElementById('valorFinal').innerText = "R$ " + valorFinal;                        
+
+              if(valorRestante > 0){
+                document.getElementById('valorParcela').value = valorRestante;
+                document.getElementById('butReceber').disabled = false;
+                document.getElementById('valorParcela').focus();
+              }              
+              return;
+            }
+            i++;
+          });          
+        }
+
+        document.getElementById('valorRestante').value = 0;
+        document.getElementById('valorFinal').innerText = "R$ 0,00";
+        document.getElementById('valorPrincipal').innerHTML = "R$ 0,00";
+
+        function getValorFinal(){
+          var valorFinal = 0;
+          pagamentos.forEach(item => {
+            valorFinal += (1 * item.valorParcela);
+          });
+          return valorFinal;
+        }
+
+        function getValorRestante(){
+          return valorPrincipal - getValorFinal();
+        }
 
       </script>      
   </body>
