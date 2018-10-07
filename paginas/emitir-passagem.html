@@ -1111,7 +1111,7 @@
                                             <div class="form-group">
                                               <label for="">Forma de pagamento</label>
                                               <select class="form-control" id="formaPagamento">
-                                                <option value="0">
+                                                <option value="0" selected>
                                                   Dinheiro
                                                 </option>
                                                 <option value="1">
@@ -1126,8 +1126,8 @@
                                           <div class="col-6">
                                             <div class="form-group">
                                               <label for="">Prazo</label>
-                                              <select class="form-control" id="prazo">
-                                                <option value="0">
+                                              <select class="form-control" id="prazo" disabled>
+                                                <option value="0" selected>
                                                   Avista
                                                 </option>
                                                 <option value="1">
@@ -1287,7 +1287,7 @@
                                                   </div>
                                                 </div>
                                               <div class="form-buttons-w text-right">
-                                                <button class="btn btn-primary"><i class="icon-printer"></i>  Emitir Passagem</button>
+                                                <button class="btn btn-primary" id="butEmitirPassagem"><i class="icon-printer"></i>  Emitir Passagem</button>
                                               </div>
                                   </div>
                                 </div>
@@ -1358,7 +1358,7 @@
         poltronasOcupadas = [];     
         pagamentos = [];
         lastPagamentoIndex = 0;
-        valorPrincipal = 0;
+        valorPrincipal = 0;        
 
         function mudaClass(poltrona, el, texto){
 
@@ -1381,9 +1381,6 @@
           }
 
           if(addPoltrona){
-            /*var elModel = document.getElementById("poltronaModel");
-            var newEl = elModel.cloneNode(true);
-            elModel.parentNode.appendChild(newEl);*/
             var found = false;
             poltronas.forEach(item => {
               if(item.poltrona == poltrona){
@@ -1398,6 +1395,9 @@
               document.getElementById('poltronaCaption' + polContainer).innerText = "Poltrona " + poltrona;
               document.getElementById('resumoContainer' + polContainer).hidden = false;              
               document.getElementById('resumoPoltrona' + polContainer).innerText = "Poltrona " + poltrona;
+
+              var valTarifa = getValPassagemNormal();
+
               poltronas.push({
                 poltrona: poltrona,
                 polContainer: polContainer,
@@ -1405,11 +1405,11 @@
                   cpf: "",
                   tarifa: 0,
                   motivoGratuidade: -1,
-                  valorTarifa: 100
+                  valorTarifa: valTarifa
                 }
               });
 
-              document.getElementById("tarifa" + polContainer).innerText = "100,00 (normal)";              
+              document.getElementById("tarifa" + polContainer).innerText = valTarifa + " (normal)";
             }
           } else {
             poltronas.forEach(item => {
@@ -1426,9 +1426,14 @@
             });
           }
 
+          adjustePassagemTotais();
+          clearFormaPagto();
+        }
+
+        function adjustePassagemTotais(){
           var total = 0;
           poltronas.forEach(item => {
-            total += 180;
+            total += item.passageiro.valorTarifa;
           });
           valorPrincipal = total;
 
@@ -1457,22 +1462,33 @@
               document.getElementById("tarifaIndex").value = index;
 
               var valTarifa = 0;
+              var valPassagem = 0;
               switch(item.passageiro.tarifa){
-                case 0: valTarifa = "100,00 (normal)"; item.passageiro.valorTarifa = 100; break;
-                case 1: valTarifa = "80,00 (promocional)"; item.passageiro.valorTarifa = 80; break;
-                case 2: valTarifa = "50,00 (1/2 passagem)"; item.passageiro.valorTarifa = 50; break;
-                case 3: valTarifa = "0,00 (gratuidade)"; item.passageiro.valorTarifa = 0; break;
+                case 0: 
+                  var valPassagem = getValPassagemNormal();
+                  valTarifa = valPassagem + " (normal)"; 
+                  item.passageiro.valorTarifa = valPassagem; 
+                  break;
+                case 1: 
+                  var valPassagem = getValPassagemPromocional(); 
+                  valTarifa = valPassagem + " (promocional)"; 
+                  item.passageiro.valorTarifa = valPassagem;
+                  break;
+                case 2: 
+                  var valPassagem = getValMeiaPassagem(); 
+                  valTarifa = valPassagem + " (1/2 passagem)"; 
+                  item.passageiro.valorTarifa = valPassagem;
+                  break;
+                case 3: 
+                  valTarifa = "0,00 (gratuidade)"; 
+                  item.passageiro.valorTarifa = 0; 
+                  break;
               }
               document.getElementById("tarifa" + item.polContainer).innerText = valTarifa;
-
-              /*var total = 0;
-              poltronas.forEach(item => {
-                total += item.passageiro.valorTarifa;
-              });
-              document.getElementById('valorTotal').innerText = 'R$' + total;
-              document.getElementById('valorTotalEmitir').innerText = 'R$' + total;          */
             }              
-          });                    
+          });     
+          
+          adjustePassagemTotais();
         }
 
         document.getElementById("butSavePassageiro").addEventListener("click", function(e){
@@ -1499,12 +1515,28 @@
               item.passageiro.motivoGratuidade = document.getElementById("motivoGratuidade").selectedIndex;
 
               var valTarifa = 0;
+              var valPassagem = 0;
               switch(item.passageiro.tarifa){
-                case 0: valTarifa = "100,00 (normal)"; item.passageiro.valorTarifa = 100; break;
-                case 1: valTarifa = "80,00 (promocional)"; item.passageiro.valorTarifa = 80; break;
-                case 2: valTarifa = "50,00 (1/2 passagem)"; item.passageiro.valorTarifa = 50; break;
-                case 3: valTarifa = "0,00 (gratuidade)"; item.passageiro.valorTarifa = 0; break;
-              }
+                case 0: 
+                  var valPassagem = getValPassagemNormal();
+                  valTarifa = valPassagem + " (normal)"; 
+                  item.passageiro.valorTarifa = valPassagem; 
+                  break;
+                case 1: 
+                  var valPassagem = getValPassagemPromocional(); 
+                  valTarifa = valPassagem + " (promocional)"; 
+                  item.passageiro.valorTarifa = valPassagem;
+                  break;
+                case 2: 
+                  var valPassagem = getValMeiaPassagem(); 
+                  valTarifa = valPassagem + " (1/2 passagem)"; 
+                  item.passageiro.valorTarifa = valPassagem;
+                  break;
+                case 3: 
+                  valTarifa = "0,00 (gratuidade)"; 
+                  item.passageiro.valorTarifa = 0; 
+                  break;
+              }              
 
               document.getElementById("tarifa" + item.polContainer).innerText = valTarifa;
             }              
@@ -1512,15 +1544,8 @@
 
           $("#passageiro-tarifa").modal('hide');
 
-          var total = 0;
-          poltronas.forEach(item => {
-            total += item.passageiro.valorTarifa;
-          });
-
-          valorPrincipal = total;          
-          document.getElementById('valorTotal').innerText = 'R$' + total;
-          document.getElementById('valorTotalEmitir').innerText = 'R$' + total;          
-          document.getElementById('valorPrincipal').innerHTML = "R$ " + total;
+          adjustePassagemTotais();
+          clearFormaPagto();
         });
 
         document.getElementById('pagamentosRealizados').innerHTML = "";
@@ -1545,20 +1570,6 @@
             return;
           }
 
-          if((1*valorParcela) > valorRestante){
-            alert("Valor do pagamento acima do valor devido");
-            return;
-          }
-
-          lastPagamentoIndex++;
-
-          pagamentos.push({
-            pagamentoIndex: lastPagamentoIndex,
-            formaPag: formaPag,
-            prazo: prazo,
-            valorParcela: valorParcela
-          });
-
           var strFormaPag = "";
           switch(formaPag){
             case "0": strFormaPag = "Dinheiro"; break;
@@ -1570,18 +1581,35 @@
           }
 
           var strPrazo = "";
+          var valParTotal = valorParcela;
+
           switch(prazo){
             case "0": strPrazo = "À vista"; break;
             case "1": strPrazo = "1x"; break;
-            case "2": strPrazo = "2x"; break;
-            case "3": strPrazo = "3x"; break;
-            case "4": strPrazo = "4x"; break;
-            case "5": strPrazo = "5x"; break;
-            case "6": strPrazo = "6x"; break;
+            case "2": strPrazo = "2x"; valParTotal = valorParcela * 2; break;
+            case "3": strPrazo = "3x"; valParTotal = valorParcela * 3; break;
+            case "4": strPrazo = "4x"; valParTotal = valorParcela * 4; break;
+            case "5": strPrazo = "5x"; valParTotal = valorParcela * 5; break;
+            case "6": strPrazo = "6x"; valParTotal = valorParcela * 6; break;
             default: 
               alert("Prazo obrigatório");
               return;
           }
+
+          if((valParTotal) > valorRestante){
+            alert("Valor do pagamento acima do valor devido");
+            return;
+          }
+
+          lastPagamentoIndex++;
+
+          pagamentos.push({
+            pagamentoIndex: lastPagamentoIndex,
+            formaPag: formaPag,
+            prazo: prazo,
+            valorParcela: valorParcela,
+            valParTotal: valParTotal
+          });
 
           var newPag = 
               '<tr id="' + lastPagamentoIndex + '">' +
@@ -1646,10 +1674,22 @@
         document.getElementById('valorFinal').innerText = "R$ 0,00";
         document.getElementById('valorPrincipal').innerHTML = "R$ 0,00";
 
+        function clearFormaPagto(){
+          pagamentos = [];
+          document.getElementById('pagamentosRealizados').innerHTML = "";
+
+          document.getElementById('valorRestante').value = getValorRestante();
+          document.getElementById('valorFinal').innerText = "R$ 0,00";
+
+          document.getElementById('valorParcela').value = valorRestante;
+          document.getElementById('butReceber').disabled = false;
+          document.getElementById('valorParcela').focus();
+        }        
+
         function getValorFinal(){
           var valorFinal = 0;
           pagamentos.forEach(item => {
-            valorFinal += (1 * item.valorParcela);
+            valorFinal += parseInt(item.valParTotal);
           });
           return valorFinal;
         }
@@ -1657,6 +1697,54 @@
         function getValorRestante(){
           return valorPrincipal - getValorFinal();
         }
+
+        document.getElementById('formaPagamento').addEventListener("change", function(e){
+          e.preventDefault();
+          if(document.getElementById('formaPagamento').value == 0 ||
+            document.getElementById('formaPagamento').value == 1){ // a vista
+            document.getElementById('prazo').value = 0;
+            document.getElementById('prazo').disabled = true;
+          } else {
+            document.getElementById('prazo').disabled = false;
+          }
+        });
+
+        document.getElementById('prazo').addEventListener("click", function(e){
+          e.preventDefault();
+        });
+        
+        document.getElementById("butEmitirPassagem").addEventListener("click", function(e){
+          e.preventDefault();
+
+          var passagem = {
+            poltronas: JSON.stringify(poltronas),
+            pagamentos: JSON.stringify(pagamentos)
+          };
+
+/*          var index = 0;
+          poltronas.forEach(element => {
+            passagem["poltrona" + index] = JSON.stringify(element);
+            index++;
+          });
+
+          index = 0;
+          pagamentos.forEach(element => {
+            passagem["pagamento" + index] = JSON.stringify(element);
+            index++;
+          });*/
+
+          emitirPassagem(false, passagem, function(result){
+            if(result.success){
+              
+            }
+          }, function(result){
+            if(result.serverMsg){
+              alert(result.serverMsg);
+            } else {
+              alert("Servidor indisponível. Tente novamente.");
+            }
+          });
+        });
 
       </script>      
   </body>

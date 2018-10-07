@@ -120,6 +120,51 @@ function getViagensDisponiveis(isRoot, success, failure){
     sendMessage((isRoot ? "" : "../") + "getViagensDisponiveis.php", {}, success, failure);
 }
 
+function getValMeiaPassagem(){
+    var elModel = document.getElementById("rotas");
+    if(elModel.selectedIndex >= 1){
+        return parseInt(viagens[elModel.selectedIndex-1].meiapassagem);
+    } else {
+        return 0;
+    }
+}
+
+function getValPassagemNormal(){
+    var elModel = document.getElementById("rotas");
+    if(elModel.selectedIndex >= 1){
+        return parseInt(viagens[elModel.selectedIndex-1].normal);
+    } else {
+        return 0;
+    }
+}
+
+function getValPassagemPedagio(){
+    var elModel = document.getElementById("rotas");
+    if(elModel.selectedIndex >= 1){
+        return parseInt(viagens[elModel.selectedIndex-1].pedagio);
+    } else {
+        return 0;
+    }
+}
+
+function getValPassagemPromocional(){
+    var elModel = document.getElementById("rotas");
+    if(elModel.selectedIndex >= 1){
+        return parseInt(viagens[elModel.selectedIndex-1].promocional);
+    } else {
+        return 0;
+    }
+}
+
+function getValPassagemSeguro(){
+    var elModel = document.getElementById("rotas");
+    if(elModel.selectedIndex >= 1){
+        return parseInt(viagens[elModel.selectedIndex-1].seguro);
+    } else {
+        return 0;
+    }
+}
+
 function applyViagensDisponiveis(isRoot){
   getViagensDisponiveis(isRoot, function(resp){
     if(resp.result){
@@ -144,7 +189,6 @@ function applyViagensDisponiveis(isRoot){
             var horario = viagens[e.currentTarget.selectedIndex-1].horariopartida;
             document.getElementById("viagemHorario1").innerHTML = horario;
             document.getElementById("viagemHorario2").innerHTML = horario;
-
             applyPoltronas(false, e.currentTarget.value);
           } else {
               document.getElementById("viagemHorario1").innerHTML = "00:00:00";
@@ -166,6 +210,11 @@ function applyViagensDisponiveis(isRoot){
 
 function getPoltronas(isRoot, rota, success, failure){
     sendMessage((isRoot ? "" : "../") + "getPoltronas.php", {rota: rota}, success, failure);
+}
+
+function emitirPassagem(isRoot, passagem, success, failure){    
+    var params = convertCGI(passagem);
+    sendMessage((isRoot ? "" : "../") + "emitirPassagem.php", params, success, failure);
 }
 
 function clearPoltronas(){
