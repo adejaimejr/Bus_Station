@@ -51,6 +51,12 @@ $(document).ready(function() {
 				//Dados da tabela Viagem
 		fields: [
 			{
+				"label": "Data da Viagem:",
+				"name": "tbviagem.dataviagem",
+				"type": "date",
+				"format": "ddd, D MMM YY"
+			},			
+			{
                 label: "Rota:",
                 name: "tbviagem.rota",
                 type: "select",
@@ -229,7 +235,13 @@ $(document).ready(function() {
 			{
 				"label": "Seguro:",
 				"name": "seguro_tarifa"
-			},*/{
+			},*/			
+			{
+				"label": "Data da Viagem:",
+				"name": "tbviagem.dataviagem",
+				"type": "date",
+				"format": "ddd, D MMM YY"
+			},{
                 label: "Rota:",
                 name: "tbviagem.rota"
 			},{
@@ -289,6 +301,9 @@ $(document).ready(function() {
 					},
 					//Dados da tabela Viagem
 		columns: [
+			{
+				"data": "tbviagem.dataviagem"
+			},
 			{
 				"data": "tbviagens_rotas.horariopartida"
 			},

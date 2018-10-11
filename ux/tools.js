@@ -168,16 +168,19 @@ function getValPassagemSeguro(){
 function applyViagensDisponiveis(isRoot){
   getViagensDisponiveis(isRoot, function(resp){
     if(resp.result){
+        datasViagens = resp.datasDisponiveis;
         viagens = resp.viagensDisponiveis;
         var viagensHTML = "<option value='-1'>Selecione a Rota</option>";
+        index = 0;
         viagens.forEach(viagem => {
-            viagensHTML = viagensHTML + "<option value='" + viagem.id + "'>" + 
+            viagensHTML = viagensHTML + "<option id='rotaViagem" + index + "' value='" + viagem.id + "'>" + 
                 viagem.horariopartida + " - " +
                 viagem.origemCidade + "-" +
                 viagem.origemUF +  " - " +
                 viagem.destinoCidade +  "-" +
                 viagem.destinoUF
                 "</option>";
+            index++;
         });
 
         var elModel = document.getElementById("rotas");
@@ -185,19 +188,54 @@ function applyViagensDisponiveis(isRoot){
 
         elModel.addEventListener("change", function(e){
           e.preventDefault();
+
+          clearPoltronas();
+
           if(e.currentTarget.selectedIndex >= 1){
             var horario = viagens[e.currentTarget.selectedIndex-1].horariopartida;
             document.getElementById("viagemHorario1").innerHTML = horario;
-            document.getElementById("viagemHorario2").innerHTML = horario;
+            document.getElementById("viagemHorario2").innerHTML = horario;            
             applyPoltronas(false, e.currentTarget.value);
           } else {
               document.getElementById("viagemHorario1").innerHTML = "00:00:00";
-              document.getElementById("viagemHorario2").innerHTML = "00:00:00";
-
-              clearPoltronas();
-          }
+              document.getElementById("viagemHorario2").innerHTML = "00:00:00";                            
+          }          
         });
 
+        // Datas
+        var datasHTML = "<option value='-1'>Selecione a Data da Viagem</option>";
+        datasViagens.forEach(dataViagem => {
+            datasHTML = datasHTML + "<option>" + 
+                dataViagem +
+                "</option>";
+        });
+
+        var elDatas = document.getElementById("datas");
+        elDatas.innerHTML = datasHTML;
+
+        elDatas.addEventListener("change", function(e){
+            e.preventDefault();
+            if(e.currentTarget.selectedIndex >= 1){
+              var dataViagem = datasViagens[e.currentTarget.selectedIndex-1];
+              document.getElementById("dataViagem1").innerHTML = dataViagem;
+              document.getElementById("dataViagem2").innerHTML = dataViagem;
+            } else {
+                document.getElementById("dataViagem1").innerHTML = "";
+                document.getElementById("dataViagem2").innerHTML = "";
+            }
+
+            document.getElementById("rotas").selectedIndex = 0;
+            clearPoltronas();
+
+            // filtra a lista de rotas pela data
+            index = 0;
+            viagens.forEach(viagem => {
+                var hide = (viagem.dataviagem != dataViagem);
+                document.getElementById("rotaViagem" + index).hidden = hide;
+                index++;
+            });
+        });
+  
         clearPoltronas();
 
       } else {

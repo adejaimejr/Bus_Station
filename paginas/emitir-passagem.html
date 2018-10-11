@@ -463,7 +463,16 @@
                       <a class="btn btn-primary btn-sm"  id="calendario"><i class="icon-calendar"></i></a>
                     </div>
                   </div-->
-                  <div class="col-sm-12">
+                  <div class="col-sm-4">
+                    <div class="form-group" style="margin-bottom: 0px;">
+                      <select class="form-control" id="datas">
+                        <option>
+                          01/01/2018
+                        </option>
+                      </select>
+                    </div>
+                  </div>  
+                  <div class="col-sm-8">
                     <div class="form-group" style="margin-bottom: 0px;">
                       <select class="form-control" id="rotas">
                         <option>
@@ -493,7 +502,7 @@
                           <a id="current-trips" class="col-5" style="display: flex;justify-content: center;width: 200px;margin-right: 25px;margin-left: 35px;margin-top: 0px;border-left-width: 5px;">
                             <div id="going" class="available-trips" style="width: 200px;margin-left: 25px;margin-right: 25px;">
                             <div class="onibus-title-rota">MAO - BVB</div>
-                            <div class="onibus-title-data">11/08/2018</div>
+                            <div class="onibus-title-data" id="dataViagem1">11/08/2018</div>
                             <div class="onibus-title-hora" id="viagemHorario1">20:00</div>
                             <div class="onibus-title-hora" style="top: 640px;left: 7px;text-align:  center;">1º Andar</div>
                               <div id="onibus-frente"></div>
@@ -694,7 +703,7 @@
                           <!-- Inicio Onibus Leito -->
                           <a id="current-trips" class="col-5" style="display: flex;justify-content: center;width: 200px;margin-right: 25px;margin-left: 25px;margin-top: 30%;border-left-width: 5px;top: auto;">                            <div id="going" class="available-trips" style="width: 200px;margin-left: 25px;margin-right: 25px;">
                             <div class="onibus-title-rota">MAO - BVB</div>
-                            <div class="onibus-title-data">11/08/2018</div>
+                            <div class="onibus-title-data" id="dataViagem2">11/08/2018</div>
                             <div class="onibus-title-hora" id="viagemHorario2">20:00</div>
                             <div class="onibus-title-hora" style="top: 310px;left: 7px;text-align:  center;">Térreo</div>
                               <div id="onibus-frente"></div>
@@ -796,7 +805,7 @@
                                               <div class="value">
                                                 MAO - BVB
                                               </div>
-                                              <span class="sub-value">11/08/2018 - 20:00</span>
+                                              <span class="sub-value" id="dtViagem1">11/08/2018 - 20:00</span>
                                             </td>
                                             <td class="text-right">
                                               <div class="value text-success" id="tarifa1">
@@ -810,7 +819,7 @@
                                               <div class="value">
                                                 MAO - BVB
                                               </div>
-                                              <span class="sub-value">11/08/2018 - 20:00</span>
+                                              <span class="sub-value" id="dtViagem2">11/08/2018 - 20:00</span>
                                             </td>
                                             <td class="text-right">
                                               <div class="value text-success" id="tarifa2">
@@ -824,7 +833,7 @@
                                               <div class="value">
                                                 MAO - BVB
                                               </div>
-                                              <span class="sub-value">11/08/2018 - 20:00</span>
+                                              <span class="sub-value" id="dtViagem3">11/08/2018 - 20:00</span>
                                             </td>
                                             <td class="text-right">
                                               <div class="value text-success" id="tarifa3">
@@ -990,54 +999,54 @@
                                                           </div>
                                                           <div class="col-sm-6">
                                                             <div class="form-group">
-                                                              <label for="">Data nascimento</label><input class="form-control" placeholder="" type="date">
+                                                              <label for="">Data nascimento</label><input id="formDtNasc" class="form-control" placeholder="" type="date">
                                                             </div>
                                                           </div>
                                                         </div>
                                                           <div class="form-group">
-                                                            <label for="">Passageiro</label><input class="form-control" placeholder="Nome Completo" type="text">
+                                                            <label for="">Passageiro</label><input id="formPassageiro" class="form-control" placeholder="Nome Completo" type="text">
                                                           </div>
                                                             <div class="form-group">
-                                                              <label for=""> Email</label><input class="form-control" placeholder="Digite o email" type="email">
+                                                              <label for=""> Email</label><input id="formEmail" class="form-control" placeholder="Digite o email" type="email">
                                                             </div>
                                                             <div class="row">
                                                           <div class="col-sm-6" style="padding-right: 5px;">
                                                               <div class="form-group">
-                                                                <label for=""> Telefone</label><input class="form-control" placeholder="(00) 00000-0000" type="text">
+                                                                <label for=""> Telefone</label><input id="formFone" class="form-control" placeholder="(00) 00000-0000" type="text">
                                                               </div>
                                                             </div>
                                                             <div class="col-sm-6" style="padding-left: 5px;">
                                                               <div class="form-group">
-                                                                <label for=""> Emergência</label><input class="form-control" placeholder="(00) 00000-0000" type="text">
+                                                                <label for=""> Emergência</label><input id="formEmergencia" class="form-control" placeholder="(00) 00000-0000" type="text">
                                                               </div>
                                                             </div>
                                                           </div>
                                                           <div class="row">
                                                             <div class="col-sm-5">
                                                             <div class="form-group">
-                                                              <label for="">Logradouro</label><input class="form-control" placeholder="" type="text">
+                                                              <label for="">Logradouro</label><input id="formLogradouro" class="form-control" placeholder="" type="text">
                                                             </div>
                                                             </div>
                                                             <div class="col-sm-3">
                                                             <div class="form-group">
-                                                              <label for="">Número</label><input class="form-control" placeholder="" type="text">
+                                                              <label for="">Número</label><input id="formNumero" class="form-control" placeholder="" type="text">
                                                             </div>
                                                             </div>
                                                             <div class="col-sm-4">
                                                               <div class="form-group">
-                                                                <label for="">CEP</label><input class="form-control" placeholder="00000-000" type="text">
+                                                                <label for="">CEP</label><input id="formCEP" class="form-control" placeholder="00000-000" type="text">
                                                               </div>
                                                             </div>
                                                           </div>
                                                           <div class="row">
                                                             <div class="col-sm-4">
                                                               <div class="form-group">
-                                                                <label for=""> Bairro</label><input class="form-control" placeholder="" type="text">
+                                                                <label for=""> Bairro</label><input id="formBairro" class="form-control" placeholder="" type="text">
                                                               </div>
                                                             </div>
                                                             <div class="col-sm-5">
                                                               <div class="form-group">
-                                                                <label for=""> Cidade</label><select class="form-control">
+                                                                <label for=""> Cidade</label><select id="formCidade" class="form-control">
                                                                   <option>
                                                                     Manaus
                                                                   </option>
@@ -1049,7 +1058,7 @@
                                                             </div>
                                                             <div class="col-sm-3">
                                                               <div class="form-group">
-                                                                <label for="">UF</label><select class="form-control">
+                                                                <label for="">UF</label><select id="formUF" class="form-control">
                                                                   <option>
                                                                     AM
                                                                   </option>
@@ -1061,7 +1070,7 @@
                                                             </div>
                                                           </div>
                                                           <div class="form-group">
-                                                            <label for="">Observação</label><textarea class="form-control" name="" rows="3"></textarea>
+                                                            <label for="">Observação</label><textarea id="formObservacao" class="form-control" name="" rows="3"></textarea>
                                                           </div>
                                                         </form>
                                                       </div>
@@ -1266,7 +1275,7 @@
                                                         <div style="text-transform: uppercase; letter-spacing: 1px; color: #B8B8B8; font-size: 10px; font-weight: bold; margin-bottom: 3px;">
                                                           Data Emissão
                                                         </div>
-                                                        <div style="font-weight: bold;">
+                                                        <div id="dataEmissao" style="font-weight: bold;">
                                                           28/08/2018 16:00
                                                         </div>
                                                       </td>
@@ -1398,18 +1407,43 @@
 
               var valTarifa = getValPassagemNormal();
 
+              var index = document.getElementById("datas").selectedIndex;
+              var dt = viagens[index-1].dataviagem; 
+              index = document.getElementById("rotas").selectedIndex;
+              var horario = viagens[index-1].horariopartida; 
+
               poltronas.push({
                 poltrona: poltrona,
                 polContainer: polContainer,
                 passageiro: {
                   cpf: "",
+                  dtNasc: "",
+                  nome: "",
+                  email: "",
+                  fone: "",
+                  emergencia: "",
+                  logradouro: "",
+                  numero: "",
+                  cep: "",
+                  bairro: "",
+                  cidade: "",
+                  uf: "",
+                  observacao: "",
                   tarifa: 0,
                   motivoGratuidade: -1,
-                  valorTarifa: valTarifa
+                  valorTarifa: valTarifa,
+                  dataviagem: dt,
+                  horario: horario
                 }
               });
 
               document.getElementById("tarifa" + polContainer).innerText = valTarifa + " (normal)";
+              document.getElementById("dtViagem" + polContainer).innerText = dt + " - " + horario;
+
+              var d = new Date();
+              var dataEmissao = ("0" + d.getDate()).slice(-2) + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" +
+                  d.getFullYear() + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
+              document.getElementById("dataEmissao").innerText = dataEmissao;
             }
           } else {
             poltronas.forEach(item => {
@@ -1448,6 +1482,18 @@
             if(item.polContainer == index){
               document.getElementById("passageiroPoltronaTitulo").innerHTML = "Poltrona " + item.poltrona;
               document.getElementById("formCPF").value = item.passageiro.cpf;
+              document.getElementById("formDtNasc").value = item.passageiro.dtNasc;
+              document.getElementById("formPassageiro").value = item.passageiro.nome;
+              document.getElementById("formEmail").value = item.passageiro.email;
+              document.getElementById("formFone").value = item.passageiro.fone;
+              document.getElementById("formEmergencia").value = item.passageiro.emergencia;
+              document.getElementById("formLogradouro").value = item.passageiro.logradouro;
+              document.getElementById("formNumero").value = item.passageiro.numero;
+              document.getElementById("formCEP").value = item.passageiro.cep;
+              document.getElementById("formBairro").value = item.passageiro.bairro;
+              document.getElementById("formCidade").value = item.passageiro.cidade;
+              document.getElementById("formUF").value = item.passageiro.uf;
+              document.getElementById("formObservacao").value = item.passageiro.observacao;
               document.getElementById("poltronaIndex").value = index;
             }              
           });                    
@@ -1498,6 +1544,18 @@
           poltronas.forEach(item => {
             if(item.polContainer == index){
               item.passageiro.cpf = document.getElementById("formCPF").value;
+              item.passageiro.dtNasc = document.getElementById("formDtNasc").value;
+              item.passageiro.nome = document.getElementById("formPassageiro").value;
+              item.passageiro.email = document.getElementById("formEmail").value;
+              item.passageiro.fone = document.getElementById("formFone").value;
+              item.passageiro.emergencia = document.getElementById("formEmergencia").value;
+              item.passageiro.logradouro = document.getElementById("formLogradouro").value;
+              item.passageiro.numero = document.getElementById("formNumero").value;
+              item.passageiro.cep = document.getElementById("formCEP").value;
+              item.passageiro.bairro = document.getElementById("formBairro").value;
+              item.passageiro.cidade = document.getElementById("formCidade").value;
+              item.passageiro.uf = document.getElementById("formUF").value;
+              item.passageiro.observacao = document.getElementById("formObservacao").value;              
             }              
           });  
 

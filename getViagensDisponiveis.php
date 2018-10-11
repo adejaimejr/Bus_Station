@@ -21,6 +21,7 @@
 
     $result = false;
     $viagensDisponiveis = [];
+    $datasDisponiveis = [];
     try {
         Log::debug(LogLevel::Info, "mysql connecting");
 
@@ -42,6 +43,7 @@
             'd.cidade destinoCidade,   ' .
             'd.uf destinoUF, ' .
             'horariopartida,  ' .
+            'v.dataviagem, ' .
             't.meiapassagem,  ' .
             't.normal,  ' .
             't.pedagio,  ' .
@@ -64,6 +66,8 @@
             return false;
         }
 
+        $dataViagem = '';
+
         while($logDataset = mysqli_fetch_array($logQuery, MYSQLI_BOTH)){
             $newRow = array(  
                 'id' => $logDataset["id"],
@@ -76,10 +80,16 @@
                 'normal' => $logDataset["normal"],
                 'pedagio' => $logDataset["pedagio"],
                 'promocional' => $logDataset["promocional"],
-                'seguro' => $logDataset["seguro"]
+                'seguro' => $logDataset["seguro"],
+                'dataviagem' => $logDataset["dataviagem"]
             );
             
-            array_push($viagensDisponiveis, $newRow);              
+            array_push($viagensDisponiveis, $newRow);
+            if($dataViagem == "" || $dataViagem != $logDataset["dataviagem"]){
+                $dataViagem = $logDataset["dataviagem"];
+                array_push($datasDisponiveis, $dataViagem);
+            }
+
         }
 
         $result = true;
@@ -91,7 +101,8 @@
 
     $data = [
         'result' => $result,
-        'viagensDisponiveis' => $viagensDisponiveis
+        'viagensDisponiveis' => $viagensDisponiveis,
+        'datasDisponiveis' => $datasDisponiveis
     ];
 
     header('Content-Type: application/json');

@@ -43,6 +43,7 @@ $db->sql( "CREATE TABLE IF NOT EXISTS `tbviagem` (
 // Build our Editor instance and process the data coming from _POST
 Editor::inst( $db, 'tbviagem', 'id' )
 	->fields(
+		Field::inst( 'tbviagem.dataviagem' ),
 		Field::inst( 'tbviagem.rota' )
 			->options( Options::inst()			
 			->table( 'tbrotas b, location origem, location dest' )
