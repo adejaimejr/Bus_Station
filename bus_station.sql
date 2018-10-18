@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: 15-Set-2018 às 00:48
+-- Generation Time: 18-Out-2018 às 21:49
 -- Versão do servidor: 10.1.29-MariaDB
 -- PHP Version: 7.2.0
 
@@ -382,6 +382,7 @@ INSERT INTO `tbusuarios` (`id`, `nome`, `cpf`, `nascimento`, `email`, `telefone`
 
 CREATE TABLE `tbviagem` (
   `id` int(10) NOT NULL,
+  `dataviagem` date NOT NULL,
   `rota` int(10) NOT NULL,
   `onibus` int(10) NOT NULL,
   `tarifa` int(10) NOT NULL,
@@ -392,8 +393,9 @@ CREATE TABLE `tbviagem` (
 -- Extraindo dados da tabela `tbviagem`
 --
 
-INSERT INTO `tbviagem` (`id`, `rota`, `onibus`, `tarifa`, `motorista`) VALUES
-(90, 57, 14, 12, 12);
+INSERT INTO `tbviagem` (`id`, `dataviagem`, `rota`, `onibus`, `tarifa`, `motorista`) VALUES
+(90, '2018-10-11', 57, 14, 12, 12),
+(91, '2018-10-12', 58, 15, 13, 13);
 
 -- --------------------------------------------------------
 
@@ -417,7 +419,8 @@ CREATE TABLE `tbviagens_motorista` (
 --
 
 INSERT INTO `tbviagens_motorista` (`id`, `nome`, `cpf`, `nascimento`, `email`, `telefone`, `cnh`, `validadecnh`) VALUES
-(12, 'João Queiroz', '732.341.126-00', '1992-01-02', 'joaoq@gmail.com', '(92) 9812-34422', '23234534534', '2018-08-31');
+(12, 'João Queiroz', '732.341.126-00', '1992-01-02', 'joaoq@gmail.com', '(92) 9812-34422', '23234534534', '2018-08-31'),
+(13, 'João Queiroz', '732.341.126-00', '1992-01-02', 'joaoq@gmail.com', '(92) 9812-34422', '23234534534', '2018-08-31');
 
 -- --------------------------------------------------------
 
@@ -444,7 +447,8 @@ CREATE TABLE `tbviagens_onibus` (
 --
 
 INSERT INTO `tbviagens_onibus` (`id`, `placa`, `classe`, `poltronas`, `anofabricacao`, `chassi`, `renavam`, `marca`, `modelo`, `vencimentoipva`, `quilometragem`) VALUES
-(14, 'JAN-3234', 'Semi Leito', 56, 2018, '9BWHE21JX24060960', '1243.435666-7', 'Mercedes', 'x31', '2019-06-07', 0);
+(14, 'JAN-3234', 'Semi Leito', 56, 2018, '9BWHE21JX24060960', '1243.435666-7', 'Mercedes', 'x31', '2019-06-07', 0),
+(15, 'JAN-3234', 'Semi Leito', 56, 2018, '9BWHE21JX24060960', '1243.435666-7', 'Mercedes', 'x31', '2019-06-07', 0);
 
 -- --------------------------------------------------------
 
@@ -519,7 +523,63 @@ INSERT INTO `tbviagens_passagens` (`id`, `viagem`, `poltrona`, `disponivel`) VAL
 (69, 90, 84, 1),
 (70, 90, 85, 1),
 (71, 90, 86, 1),
-(72, 90, 87, 1);
+(72, 90, 87, 1),
+(73, 91, 88, 1),
+(74, 91, 89, 1),
+(75, 91, 90, 1),
+(76, 91, 91, 1),
+(77, 91, 92, 1),
+(78, 91, 93, 1),
+(79, 91, 94, 1),
+(80, 91, 95, 1),
+(81, 91, 96, 1),
+(82, 91, 97, 1),
+(83, 91, 98, 1),
+(84, 91, 99, 1),
+(85, 91, 100, 1),
+(86, 91, 101, 1),
+(87, 91, 102, 1),
+(88, 91, 103, 1),
+(89, 91, 104, 1),
+(90, 91, 105, 1),
+(91, 91, 106, 1),
+(92, 91, 107, 1),
+(93, 91, 108, 1),
+(94, 91, 109, 1),
+(95, 91, 110, 1),
+(96, 91, 111, 1),
+(97, 91, 112, 1),
+(98, 91, 113, 1),
+(99, 91, 114, 1),
+(100, 91, 115, 1),
+(101, 91, 116, 1),
+(102, 91, 117, 1),
+(103, 91, 118, 1),
+(104, 91, 119, 1),
+(105, 91, 120, 1),
+(106, 91, 121, 1),
+(107, 91, 122, 1),
+(108, 91, 123, 1),
+(109, 91, 124, 1),
+(110, 91, 125, 1),
+(111, 91, 126, 1),
+(112, 91, 127, 1),
+(113, 91, 128, 1),
+(114, 91, 129, 1),
+(115, 91, 130, 1),
+(116, 91, 131, 1),
+(117, 91, 132, 1),
+(118, 91, 133, 1),
+(119, 91, 134, 1),
+(120, 91, 135, 1),
+(121, 91, 136, 1),
+(122, 91, 137, 1),
+(123, 91, 138, 1),
+(124, 91, 139, 1),
+(125, 91, 140, 1),
+(126, 91, 141, 1),
+(127, 91, 142, 1),
+(128, 91, 143, 1);
 
 -- --------------------------------------------------------
 
@@ -594,7 +654,63 @@ INSERT INTO `tbviagens_poltronas` (`id`, `numero`, `onibus`, `disponivel`) VALUE
 (84, 53, 14, 1),
 (85, 54, 14, 1),
 (86, 55, 14, 1),
-(87, 56, 14, 1);
+(87, 56, 14, 1),
+(88, 1, 15, 1),
+(89, 2, 15, 1),
+(90, 3, 15, 1),
+(91, 4, 15, 1),
+(92, 5, 15, 1),
+(93, 6, 15, 1),
+(94, 7, 15, 1),
+(95, 8, 15, 1),
+(96, 9, 15, 1),
+(97, 10, 15, 1),
+(98, 11, 15, 1),
+(99, 12, 15, 1),
+(100, 13, 15, 1),
+(101, 14, 15, 1),
+(102, 15, 15, 1),
+(103, 16, 15, 1),
+(104, 17, 15, 1),
+(105, 18, 15, 1),
+(106, 19, 15, 1),
+(107, 20, 15, 1),
+(108, 21, 15, 1),
+(109, 22, 15, 1),
+(110, 23, 15, 1),
+(111, 24, 15, 1),
+(112, 25, 15, 1),
+(113, 26, 15, 1),
+(114, 27, 15, 1),
+(115, 28, 15, 1),
+(116, 29, 15, 1),
+(117, 30, 15, 1),
+(118, 31, 15, 1),
+(119, 32, 15, 1),
+(120, 33, 15, 1),
+(121, 34, 15, 1),
+(122, 35, 15, 1),
+(123, 36, 15, 1),
+(124, 37, 15, 1),
+(125, 38, 15, 1),
+(126, 39, 15, 1),
+(127, 40, 15, 1),
+(128, 41, 15, 1),
+(129, 42, 15, 1),
+(130, 43, 15, 1),
+(131, 44, 15, 1),
+(132, 45, 15, 1),
+(133, 46, 15, 1),
+(134, 47, 15, 1),
+(135, 48, 15, 1),
+(136, 49, 15, 1),
+(137, 50, 15, 1),
+(138, 51, 15, 1),
+(139, 52, 15, 1),
+(140, 53, 15, 1),
+(141, 54, 15, 1),
+(142, 55, 15, 1),
+(143, 56, 15, 1);
 
 -- --------------------------------------------------------
 
@@ -620,7 +736,8 @@ CREATE TABLE `tbviagens_rotas` (
 --
 
 INSERT INTO `tbviagens_rotas` (`id`, `origem`, `uforigem`, `codorigem`, `destino`, `ufdestino`, `coddestino`, `distancia`, `horariopartida`, `horariochegada`) VALUES
-(57, '2', '2', 2, '1', '1', 1, 750, '08:00:00', '20:00:00');
+(57, '2', '2', 2, '1', '1', 1, 750, '08:00:00', '20:00:00'),
+(58, '2', '2', 2, '1', '1', 1, 750, '09:00:00', '21:00:00');
 
 -- --------------------------------------------------------
 
@@ -643,7 +760,8 @@ CREATE TABLE `tbviagens_tarifas` (
 --
 
 INSERT INTO `tbviagens_tarifas` (`id`, `nome`, `normal`, `promocional`, `meiapassagem`, `pedagio`, `seguro`) VALUES
-(12, 'Tarifa Agosto 2018', '180.00', '140.00', '90.00', '0.00', '0.00');
+(12, 'Tarifa Agosto 2018', '180.00', '140.00', '90.00', '0.00', '0.00'),
+(13, 'Tarifa Agosto 2018', '180.00', '140.00', '90.00', '0.00', '0.00');
 
 --
 -- Indexes for dumped tables
@@ -848,43 +966,43 @@ ALTER TABLE `tbusuarios`
 -- AUTO_INCREMENT for table `tbviagem`
 --
 ALTER TABLE `tbviagem`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=91;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=92;
 
 --
 -- AUTO_INCREMENT for table `tbviagens_motorista`
 --
 ALTER TABLE `tbviagens_motorista`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `tbviagens_onibus`
 --
 ALTER TABLE `tbviagens_onibus`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `tbviagens_passagens`
 --
 ALTER TABLE `tbviagens_passagens`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=80;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=129;
 
 --
 -- AUTO_INCREMENT for table `tbviagens_poltronas`
 --
 ALTER TABLE `tbviagens_poltronas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=95;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=144;
 
 --
 -- AUTO_INCREMENT for table `tbviagens_rotas`
 --
 ALTER TABLE `tbviagens_rotas`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
 
 --
 -- AUTO_INCREMENT for table `tbviagens_tarifas`
 --
 ALTER TABLE `tbviagens_tarifas`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- Constraints for dumped tables
