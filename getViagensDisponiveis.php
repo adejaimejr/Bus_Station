@@ -40,8 +40,10 @@
             'r.id,  ' .
             'o.cidade origemCidade,  ' .
             'o.uf origemUF, ' .
+            'o.municipioIBGE origemMunicipioIBGE, ' .
             'd.cidade destinoCidade,   ' .
             'd.uf destinoUF, ' .
+            'd.municipioIBGE destinoMunicipioIBGE, ' .
             'horariopartida,  ' .
             'v.dataviagem, ' .
             't.meiapassagem,  ' .
@@ -73,8 +75,10 @@
                 'id' => $logDataset["id"],
                 'origemCidade' =>  utf8_encode($logDataset["origemCidade"]),
                 'origemUF' =>  utf8_encode($logDataset["origemUF"]),
+                'origemMunicipioIBGE' =>  utf8_encode($logDataset["origemMunicipioIBGE"]),
                 'destinoCidade' =>  utf8_encode($logDataset["destinoCidade"]),
                 'destinoUF' =>  utf8_encode($logDataset["destinoUF"]),
+                'destinoMunicipioIBGE' =>  utf8_encode($logDataset["destinoMunicipioIBGE"]),
                 'horariopartida' => $logDataset["horariopartida"],
                 'meiapassagem' => $logDataset["meiapassagem"],
                 'normal' => $logDataset["normal"],

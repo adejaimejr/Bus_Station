@@ -120,6 +120,67 @@ function getViagensDisponiveis(isRoot, success, failure){
     sendMessage((isRoot ? "" : "../") + "getViagensDisponiveis.php", {}, success, failure);
 }
 
+function getMunicipios(isRoot, success, failure){
+    sendMessage((isRoot ? "" : "../") + "getMunicipios.php", {}, function(resp){
+        if(resp.result){
+            municipios = resp.municipios;
+            var municipiosHTML = "<option value='-1'>Selecione o Município</option>";
+            var estadosHTML = "<option value='-1'>Selecione o Estado</option>";
+            index = 0;
+            municipios.forEach(municipio => {
+                municipiosHTML = municipiosHTML + "<option id='municipio" + index + "' value='" + municipio.id + "' ibge='" + municipio.municipioIBGE + "' cidade='" + municipio.cidade + "'>" + 
+                    municipio.cidade + " (" +
+                    municipio.municipioIBGE +  ")"
+                    "</option>";
+
+                estadosHTML = estadosHTML + "<option id='estado" + index + "' value='" + municipio.id + "'>" + 
+                municipio.uf
+                "</option>";
+
+                index++;
+            });
+
+            var elUF = document.getElementById("formUF");
+            elUF.innerHTML = estadosHTML;
+            
+            var elMunicipio = document.getElementById("formCidade");
+            elMunicipio.innerHTML = municipiosHTML;
+    
+            elMunicipio.addEventListener("change", function(e){
+                e.preventDefault();
+                elUF.selectedIndex = elMunicipio.selectedIndex;         
+            });      
+
+        }
+        if(success){
+            success();
+        }
+    }, failure);
+}
+
+function getDescontos(isRoot, success, failure){
+    sendMessage((isRoot ? "" : "../") + "getDescontos.php", {}, function(resp){
+        if(resp.result){
+            var descontos = resp.descontos;
+            var descontosHTML = "<option value='-1'>Selecione o Desconto</option>";
+            index = 0;
+            descontos.forEach(desconto => {
+                descontosHTML = descontosHTML + "<option id='desconto" + index + "' value='" + desconto.id + "' descricao='" + desconto.descricao + "' descontoporc='" + desconto.descontoporc + "'>" + 
+                    desconto.descricao + " (" +
+                    desconto.descontoporc +  "%)" + 
+                    "</option>";
+                index++;
+            });
+
+            var elUF = document.getElementById("tarifa");
+            elUF.innerHTML = descontosHTML;
+        }
+        if(success){
+            success();
+        }
+    }, failure);
+}
+
 function getValMeiaPassagem(){
     var elModel = document.getElementById("rotas");
     if(elModel.selectedIndex >= 1){
@@ -166,6 +227,8 @@ function getValPassagemSeguro(){
 }
 
 function applyViagensDisponiveis(isRoot){
+  getMunicipios(isRoot, function(){}, function(){});
+  getDescontos(isRoot, function(){}, function(){});
   getViagensDisponiveis(isRoot, function(resp){
     if(resp.result){
         datasViagens = resp.datasDisponiveis;
@@ -255,6 +318,11 @@ function emitirPassagem(isRoot, passagem, success, failure){
     sendMessage((isRoot ? "" : "../") + "emitirPassagem.php", params, success, failure);
 }
 
+function verificarPassagem(isRoot, passagem, success, failure){    
+    var params = convertCGI(passagem);
+    sendMessage((isRoot ? "" : "../") + "verificarPassagem.php", params, success, failure);
+}
+
 function clearPoltronas(){
     poltronas = [];
     poltronasLivres = ["1", "2", "3"];
@@ -296,6 +364,8 @@ function applyPoltronas(isRoot, rota){
                   } else {
                     el.className = "ocupada";
                   }
+
+                  el.attributes["passagem"] = poltrona.passagem;
               } else {
                   console.log("poltrona: " + poltrona.numero + " não encontrada ");
               }
