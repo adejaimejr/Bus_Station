@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: 18-Out-2018 às 21:49
+-- Generation Time: 26-Nov-2018 às 21:47
 -- Versão do servidor: 10.1.29-MariaDB
 -- PHP Version: 7.2.0
 
@@ -32,16 +32,60 @@ CREATE TABLE `location` (
   `id` int(10) NOT NULL,
   `cidade` varchar(20) DEFAULT NULL,
   `uf` varchar(2) DEFAULT NULL,
-  `codigo` bigint(10) DEFAULT NULL
+  `codigo` bigint(10) DEFAULT NULL,
+  `municipioIBGE` varchar(7) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Extraindo dados da tabela `location`
 --
 
-INSERT INTO `location` (`id`, `cidade`, `uf`, `codigo`) VALUES
-(1, 'Manaus', 'AM', 234234),
-(2, 'Boa Vista', 'RR', 321123);
+INSERT INTO `location` (`id`, `cidade`, `uf`, `codigo`, `municipioIBGE`) VALUES
+(1, 'Manaus', 'AM', 234234, '1302603'),
+(2, 'Boa Vista', 'RR', 321123, '1400100');
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `paises`
+--
+
+CREATE TABLE `paises` (
+  `id` int(11) NOT NULL,
+  `país` varchar(60) NOT NULL,
+  `codigoBACEN` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `tbdescontos`
+--
+
+CREATE TABLE `tbdescontos` (
+  `id` int(11) NOT NULL,
+  `descricao` varchar(30) NOT NULL,
+  `descontoporc` decimal(10,0) NOT NULL,
+  `ativo` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Extraindo dados da tabela `tbdescontos`
+--
+
+INSERT INTO `tbdescontos` (`id`, `descricao`, `descontoporc`, `ativo`) VALUES
+(1, 'Tarifa promocional', '0', 1),
+(2, 'Idoso', '100', 1),
+(3, 'Criança', '50', 1),
+(4, 'Deficiente', '100', 1),
+(5, 'Estudante', '50', 1),
+(6, 'Animal Doméstico', '50', 1),
+(7, 'Acordo Coletivo', '100', 1),
+(8, 'Profissional em Deslocamento', '100', 1),
+(9, 'Profissional da Empresa', '100', 1),
+(10, 'Jovem', '100', 1),
+(99, 'Outros', '0', 1),
+(0, 'Tarifa Normal', '0', 1);
 
 -- --------------------------------------------------------
 
