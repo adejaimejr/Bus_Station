@@ -1525,6 +1525,7 @@
           }
 
           var passagem = el.attributes["passagem"];
+          var tipoServicoBPe = el.attributes["tipoServicoBPe"];
 
           if(addPoltrona){
             var found = false;
@@ -1552,6 +1553,7 @@
               poltronas.push({
                 poltrona: poltrona,
                 passagem: passagem,
+                tipoServicoBPe: tipoServicoBPe,
                 polContainer: polContainer,
                 passageiro: {
                   cpf: "",
@@ -1646,7 +1648,14 @@
               document.getElementById("formIE").value = item.passageiro.ie;
               document.getElementById("formIdEstrangeiro").value = item.passageiro.idEstrangeiro;
               document.getElementById("formTipoDocumento").value = item.passageiro.tipoDocumento;
-              document.getElementById("formNumeroDocumento").value = item.passageiro.numeroDocumento;
+              document.getElementById("formNumeroDocumento").value = item.passageiro.numeroDocumento;       
+
+              // campos que serão mostrados para o passageiro porque é solicitado pelo BPe
+              document.getElementById("formDtNasc").hidden = false;
+              document.getElementById("formEmergencia").hidden = false;
+              document.getElementById("formObservacao").hidden = false;
+              document.getElementById("formTipoDocumento").hidden = false;
+              document.getElementById("formNumeroDocumento").hidden = false;
             }              
           });                    
         }
@@ -1654,11 +1663,11 @@
         function showComprador(){
           document.getElementById("passageiroPoltronaTitulo").innerHTML = "Informações do Comprador";
           document.getElementById("formCPF").value = comprador.cpf;
-          document.getElementById("formDtNasc").value = comprador.dtNasc;
+          document.getElementById("formDtNasc").value = comprador.dtNasc;          
           document.getElementById("formPassageiro").value = comprador.nome;
           document.getElementById("formEmail").value = comprador.email;
           document.getElementById("formFone").value = comprador.fone;
-          document.getElementById("formEmergencia").value = comprador.emergencia;
+          document.getElementById("formEmergencia").value = comprador.emergencia;          
           document.getElementById("formLogradouro").value = comprador.logradouro;
           document.getElementById("formNumero").value = comprador.numero;
           document.getElementById("formComplemento").value = comprador.complemento;
@@ -1666,15 +1675,22 @@
           document.getElementById("formBairro").value = comprador.bairro;
           document.getElementById("formCidade").value = comprador.cidade;
           document.getElementById("formUF").value = comprador.uf;
-          document.getElementById("formObservacao").value = comprador.observacao;
+          document.getElementById("formObservacao").value = comprador.observacao;          
           document.getElementById("poltronaIndex").value = index;
           document.getElementById("formPais").value = comprador.pais;
           document.getElementById("formCNPJ").value = comprador.cnpj;
           document.getElementById("formIE").value = comprador.ie;
-          document.getElementById("formIdEstrangeiro").value = comprador.idEstrangeiro;
-          document.getElementById("formTipoDocumento").value = comprador.tipoDocumento;
-          document.getElementById("formNumeroDocumento").value = comprador.numeroDocumento;
+          document.getElementById("formIdEstrangeiro").value = comprador.idEstrangeiro;          
+          document.getElementById("formTipoDocumento").value = comprador.tipoDocumento;          
+          document.getElementById("formNumeroDocumento").value = comprador.numeroDocumento;          
           document.getElementById("isComprador").value = true; // informando que é o cadastro do comprador
+
+          // campos que serão escondidos para o comprador porque não é solicitado pelo BPe
+          document.getElementById("formDtNasc").hidden = true;
+          document.getElementById("formEmergencia").hidden = true;
+          document.getElementById("formObservacao").hidden = true;
+          document.getElementById("formTipoDocumento").hidden = true;
+          document.getElementById("formNumeroDocumento").hidden = true;
         }        
 
         function changeTarifa(index){
@@ -1715,7 +1731,7 @@
                   valTarifa = "0,00 (gratuidade)"; 
                   item.passageiro.valorTarifa = 0; 
                   break;
-              }*/ jjjj
+              }*/ 
               document.getElementById("tarifa" + item.polContainer).innerText = valTarifa;
               return false;
             }              
@@ -2077,6 +2093,12 @@
           emitirPassagem(false, passagem, function(result){
             if(result.success){
               
+            } else {
+              if(result.serverMsg){
+                alert(result.serverMsg);
+              } else {
+                alert("Servidor indisponível. Tente novamente.");
+              }
             }
           }, function(result){
             if(result.serverMsg){

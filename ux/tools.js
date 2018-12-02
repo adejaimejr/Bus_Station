@@ -366,6 +366,7 @@ function applyPoltronas(isRoot, rota){
                   }
 
                   el.attributes["passagem"] = poltrona.passagem;
+                  el.attributes["tipoServicoBPe"] = poltrona.tipoServicoBPe;
               } else {
                   console.log("poltrona: " + poltrona.numero + " não encontrada ");
               }

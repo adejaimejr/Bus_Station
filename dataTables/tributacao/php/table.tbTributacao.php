@@ -36,6 +36,7 @@ $db->sql( "CREATE TABLE IF NOT EXISTS `tbTributacao` (
 	`nome` varchar(40),
 	`icmsAliquota` float,
 	`outrosImpostos` float,
+	`CST` varchar(2),
 	PRIMARY KEY( `id` )
 );" );
 
@@ -90,6 +91,11 @@ Editor::inst( $db, 'tbTributacao', 'id' )
 										6,
 										ValidateOptions::inst()
 									//	->message( 'Ex: 17,00% ou 7%' )
+										) ),
+		Field::inst( 'tbTributacao.CST' )
+					->validator( Validate::unique(
+										ValidateOptions::inst()
+										->message( 'Já existe' )
 										) )
 				/*	->validator( Validate::unique(
 										ValidateOptions::inst()

@@ -88,6 +88,10 @@ $(document).ready(function() {
 				attr:  {
 		        placeholder: '11,50%'
 					}
+			},
+			{
+				label: "CST:",
+				name: "tbTributacao.CST"
 			}
 		]
 	} );
@@ -161,6 +165,9 @@ $(document).ready(function() {
 						{
 							data: "tbTributacao.outrosImpostos",
 							render: $.fn.dataTable.render.number( '.', ',', 2, '', '%' )
+						},
+						{
+							data: "tbTributacao.CST"
 						}
 					]
 	} );
@@ -187,7 +194,6 @@ $(document).ready(function() {
 			editor.field(`tbTributacao.outrosImpostos`).input().addClass(`outrosimp-number`);
 			$(`.outrosimp-number`).mask(outrosimpMaskBehavior, {reverse: true}, outrosimpOptions);
 	});
-
 	editor.on("onSubmitError", function(e, xhr, err, thrown, data){
 		console.log("onSubmitError");
 		if(xhr.status == 302){

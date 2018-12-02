@@ -159,7 +159,12 @@ Editor::inst( $db, 'tbviagem', 'id' )
 		$newMotorista = $rows[0]["id"];
 
 		$db->sql("update tbviagem set motorista = ".$newMotorista." where id = ".$id);
-	
+
+		// tributacao
+		$db->sql( "insert tbviagens_tributacao " .
+			"(nome, icmsaliquota, outrosimpostos, cst, viagem) " .
+			"select nome, icmsaliquota, outrosimpostos, cst, " . $id .
+			" from tbtributacao" );	
     } )	
     //->on( 'postCreate', function ( $editor, $values ) {
 	//	$db->sql( "insert tbviagens_rotas (origem) values(1)" );		

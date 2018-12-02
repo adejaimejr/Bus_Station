@@ -27,6 +27,9 @@
     $applicationVersion = $generalCfg["applicationVersion"]; 
     $mysqlDateFormat = $generalCfg["mysqlDateFormat"];
 
+    // BPe Config
+    $bpeConfig = $config["BPeConfig"];
+    $bpeConfig_TAR = $bpeConfig["TAR"];
 
     Log::debug(LogLevel::Info, "<<< ".json_encode($_POST));
     /*
@@ -153,410 +156,570 @@ FORMA DE PAGAMENTO
 99 - Outros
 */
 
-$bpePagtos = [];
+class EmitirPassagemException extends Exception {    
+}
 
-$pagamentos = json_decode($_POST["pagamentos"], false);
+try {
 
-$i = 0;
-while(array_key_exists($i, $pagamentos)){
-    $pagamento = json_encode($pagamentos[$i], true);
-    $pagamento = json_decode($pagamento, true);
-    $formaPag = $pagamento["formaPag"];    
-    if($formaPag == "0"){ // 0 - dinheiro
-        $bpeFormaPag = "01"; // 01 - dinheiro
-    } else if($formaPag == "1"){ // 1 - cartão de débito
-        $bpeFormaPag = "04"; // 04 - cartão de débito
-    } else if($formaPag == "2"){ // 2 - cartão de crédito
-        $bpeFormaPag = "03"; // 03 - cartão de crédito
-    } else {
-        Log::debug(LogLevel::Error, "Forma de pagamento inválida: " . $formaPag);
-        throw new Exception("Forma de pagamento inválida");
+    $pagamentos = json_decode($_POST["pagamentos"], false);
+
+    /* REGISTRO DOS DADOS NA BASE **********************************************************************************************/
+
+    Log::debug(LogLevel::Info, "--- mysql connecting");
+
+    $conn = mysqli_connect($dbLogServer, $dbLogUser, $dbLogPassword, $dbLogDatabase);
+    if (mysqli_connect_errno()) {
+        Log::debug(LogLevel::Error, "MySQL Connect Log failed: ".mysqli_connect_error());
+        throw new EmitirPassagemException("Erro no servidor, verifique com o Administrador.");
+    }      
+
+    Log::debug(LogLevel::Info, "--- mysql setting");
+    mysqli_autocommit($conn, TRUE);
+
+    /*Valida os dados do comprador*/
+
+    // Valida o nome - obrigatório
+    $comprador["nome"] = trim($comprador["nome"]);
+    if($comprador["nome"] == ""){
+        throw new EmitirPassagemException("Nome do comprador é obrigatório");
+    }
+    if(strlen($comprador["nome"]) < 2){
+        throw new EmitirPassagemException("O nome do comprador precisa ter pelo menos 2 caracteres");
+    }
+    if(strlen($comprador["nome"]) > 60){
+        throw new EmitirPassagemException("O nome do comprador tem o tamanho máximo de 60 caracteres");
     }
 
-    $newItem = array(  
-        "tPag" => $bpeFormaPag, // Forma de Pagamento:01-Dinheiro;02-Cheque;03-Cartão de Crédito;04-Cartão de Débito;05-Vale Transportel;99 - Outros
-        "vPag" => number_format($pagamento["valParTotal"], 2), // Valor do Pagamento
-        "card" =>  [ // Grupo de Cartões
-            "tpIntegra" => "2", // OK FIXO - Tipo de Integração do processo de pagamento com o sistema de automação da empresa 1=Pagamento integrado com o sistema de automação da empresa Ex. equipamento TEF , Comercio Eletronico 2=Pagamento não integrado com o sistema de automação da empresa Ex: equipamento POS
-            //"CNPJ" => "", // CNPJ da credenciadora de cartão de crédito/débito - para tpIntegra=2 não informar o CNPJ
-            "tBand" => $pagamento["bandeira"] // Bandeira da operadora de cartão de crédito/débito:01–Visa; 02–Mastercard; 03–American Express; 04–Sorocred; 05 - Elo; 06 - Diners;99–Outros
-            //"cAut" => "" // Número de autorização da operação cartão de crédito/débito - para tpIntegra=2 não informar o cAut
-        ]                
-    );
-    
-    array_push($bpePagtos, $newItem);
-    $i++;   
-}
+    // Valida o CNPJ - obrigatório
+    $comprador["cnpj"] = trim($comprador["cnpj"]);    
+    if($comprador["cnpj"] == ""){
+        throw new EmitirPassagemException("CNPJ do comprador é obrigatório");
+    }
+    $comprador["cnpj"] = str_replace(".", "", $comprador["cnpj"]);
+    $comprador["cnpj"] = str_replace("/", "", $comprador["cnpj"]);
+    $comprador["cnpj"] = str_replace("-", "", $comprador["cnpj"]);
+    if(!is_numeric($comprador["cnpj"])){
+        throw new EmitirPassagemException("CNPJ do comprador aceita apenas números");
+    }
+    $comprador["cnpj"] = str_pad($comprador["cnpj"], 14, "0", STR_PAD_LEFT);
+    if(strlen($comprador["cnpj"]) != 14){
+        throw new EmitirPassagemException("O CNPJ do comprador precisa ter 14 caracteres numéricos - tamanho: " . strlen($comprador["cnpj"]));
+    }
+              
 
-// geração do cBP - Código numérico que compõe a Chave de Acesso. - Código aleatório gerado pelo emitente, com o objetivo de evitar acessos indevidos ao documento.
-// GERA O CÓDIGO ALEATÓRIO DE 8 POSICOES (cBP)
-$cBP = mt_rand(11111111, 99999999);
-$valor = $cBP;
-$peso = 2; // COMEÇA COM PESO 2 E VAI ATÉ 9
-$result = 0;
-for($i = 0; $i < 8; $i++){
-    $rest = $valor % 10;
-    $result += ($rest * $peso); 
-    $valor = $valor - $rest;
-    $valor = $valor / 10;
-    $peso++;
-}
+    // Valida o CPF - obrigatório
+    $comprador["cpf"] = trim($comprador["cpf"]);
+    if($comprador["cpf"] == ""){
+        throw new EmitirPassagemException("CPF do comprador é obrigatório");
+    }
+    $comprador["cpf"] = str_replace(".", "", $comprador["cpf"]);
+    $comprador["cpf"] = str_replace("-", "", $comprador["cpf"]);
+    if(!is_numeric($comprador["cpf"])){
+        throw new EmitirPassagemException("CPF do comprador aceita apenas números");
+    }
+    $comprador["cpf"] = str_pad($comprador["cpf"], 11, "0", STR_PAD_LEFT);
+    if(strlen($comprador["cpf"]) != 11){
+        throw new EmitirPassagemException("O CPF do comprador precisa ter 11 caracteres numéricos - tamanho: " . strlen($comprador["cpf"]));
+    }
 
-// CALCULA O DIGITO VERIFICADOR (DV)
-$resto = $result % 11;
-$dv = 11 - $resto;
-if($dv == 0 || $dv == 1){
-    $dv = 0;
-}
+    // Valida o IdEstrangeiro - é obrigatório somente se for estrangeiro
+    $comprador["idEstrangeiro"] = trim($comprador["idEstrangeiro"]);
+    if(strlen($comprador["idEstrangeiro"]) > 60){
+        throw new EmitirPassagemException("A identificação de estrangeiro do comprador tem o tamanho máximo de 60 caracteres");
+    }
 
-// monta o BPe pra transmitir
-$i = 0;
-while(array_key_exists($i, $poltronas)){
-    $poltrona = json_encode($poltronas[$i], true);
-    $poltrona = json_decode($poltrona, true);
+    // Valida a Inscrição Estadual - opcional
+    $comprador["ie"] = trim($comprador["ie"]);
+    if(strlen($comprador["ie"]) > 60){
+        throw new EmitirPassagemException("A inscrição estadual do comprador tem o tamanho máximo de 14 caracteres");
+    }
 
-    $valorPago = $poltrona["viagem"]["normal"] - $poltrona["passageiro"]["valDesconto"];
+    // Valida o Logradouro - obrigatório
+    $comprador["logradouro"] = trim($comprador["logradouro"]);
+    if($comprador["logradouro"] == ""){
+        throw new EmitirPassagemException("Logradouro do comprador é obrigatório");
+    }
+    if(strlen($comprador["logradouro"]) > 255){
+        throw new EmitirPassagemException("O logradouro do comprador tem o tamanho máximo de 255 caracteres");
+    }
 
-    $BPe = [
-        "infBPe" =>  [
-            "versao" => "1.00", // OK FIXO Versão do leiaute
-            //"id"   => "BPe...", // Identificador da tag a ser assina. do BP-e e precedida do literal "BPe" [NAO PRECISA PORQUE A API vai inserir automaticamente]
-            "ide" =>  [ // Identificação do BP-e
-                "cUF" => "13", // DOMINIO D1 - Código da UF do emitente do BP-e - 13 Amazonas
-                "tpAmb" => "2", // Tipo do Ambiente (1-Producao; 2-Homologacao)
-                "mod" => "63", // OK FIXO - Modelo do Bilhete de Passagem - Utilizar o código 63 para identificação do BP-e
-                "serie" => "1", // Série do documento fiscal
-                "nBP" => $poltrona["passagem"], // Número do bilhete de passagem - Número que identifica o bilhete 1 a 999999999.
-                "cBP" => $cBP, // Código numérico que compõe a Chave de Acesso. - Código aleatório gerado pelo emitente, com o objetivo de evitar acessos indevidos ao documento.
-                "cDV" => $dv, // Digito verificador da chave de acesso
-                "modal" => "1", // OK FIXO - Modalidade de transporte - 1 - Rodoviário; 3 - Aquaviário; 4 - Ferroviário.
-                "dhEmi" => $dataEmissao, // Data e hora de emissão do Bilhete de Passagem - Formato AAAA-MMDDTHH:MM:DD TZD
-                "tpEmis" => "1", // OK FIXO - Forma de emissão do Bilhete (Normal ou Contingência Off-Line) - 1 - Normal; 2 - Contingência Off-Line
-                "verProc" => $applicationVersion, // Versão do processo de emissão - Informar a versão do aplicativo emissor de BP-e.
-                "tpBPe" => "0", // Tipo do BP-e - (0 - BP-e normal; 3 - BP-e substituição)
-                "indPres" => "1", // Indicador de presença do comprador no estabelecimento comercial no momento da operação. 1=Operação presencial não embarcado; 2=Operação não presencial, pela Internet; 3=Operação não presencial, Teleatendimento; 4=BP-e em operação com entrega a domicílio; 5=Operação presencial embarcada; 9=Operação não presencial, outros.
-                "UFIni" => $viagem["origemUF"], // DOMINIO D6 - Sigla da UF Início da Viagem
-                "cMunIni" => $viagem["origemMunicipioIBGE"], // Código do município do início da viagem - 1400100 Boa Vista - 1302603 Manaus
-                "UFFim" => $viagem["destinoUF"], // DOMINIO D6 - Sigla da UF do Fim da Viagem
-                "cMunFim" => $viagem["destinoMunicipioIBGE"] // Código do município do fim da viagem - 1400100 Boa Vista - 1302603 Manaus
-                //"dhCont" => "2010-08-19T13:00:15-03:00", // Data e Hora da entrada em contingência - Informar a data e hora no formato AAAA-MMDDTHH:MM:SS
-                //"xJust" => "" // Justificativa da entrada em contingência
-            ],
-            "emit" =>  [ // Identificação do Emitente do BP-e
-                "CNPJ" => "63679351000190", // OK FIXO - CNPJ do emitente - 63679351000190 - DANTAS TRANSPORTES E INSTALACOES LTDA
-                "IE" => "54021588", // OK FIXO - Inscrição Estadual do emitemte
-                //"IEST" => "", // OK FIXO - Inscrição Estadual do Substituto Tributário
-                "xNome" => "DANTAS TRANSPORTES E INSTALACOES LTDA", // OK FIXO - Razão social ou Nome do emitente
-                "xFant" => "A DANTAS TRANSPORTES", // OK FIXO - Nome fantasia do emitente
-                "IM" => "4420601", // OK FIXO - Inscrição Municipal
-                "CNAE" => "4929902", // OK FIXO - CNAE Fiscal
-                "CRT" => "3", // OK FIXO - Código de Regime Tributário. - 1 – Simples Nacional; 2 – Simples Nacional – excesso de sublimite de receita bruta; 3 – Regime Normal
-                "enderEmit" =>  [ // Endereço do emitente
-                    "xLgr" => "RUA UTINGA", // OK FIXO - Logradouro
-                    "nro" => "310", // OK FIXO - Número
-                    //"xCpl" => "", // OK FIXO - Complemento
-                    "xBairro" => "LIRIO DO VALE", // OK FIXO - Bairro
-                    "cMun" => "1302603", // OK FIXO - Código do município (utilizar a tabela do IBGE)
-                    "xMun" => "MANAUS", // OK FIXO - Nome do município
-                    "CEP" => "69038286", // OK FIXO - CEP
-                    "UF" => "AM", // DOMINIO D6 - OK FIXO - Sigla da UF
-                    "Fone" => "92 33062903", // OK FIXO - Telefone
-                    "Email" => "dantast@argo.com.br" // OK FIXO - Endereço de E-mail
-                ],
-    /*>>>*/            "TAR" => "0" // Termo de Autorização de Serviço Regular - emitente do BP-e junto à ANTT para exercer a atividade
-            ],
-            "Comp" =>  [ // Identificação do Comprador do BP-e
-                "xNome" => $comprador["nome"], // Razão social ou Nome do comprado
-                "CNPJ" => $comprador["cnpj"], // Número do CNPJ
-                "CPF" => $comprador["cpf"], // Número do CPF
-                "idEstrangeiro" => $comprador["idEstrangeiro"], // Identificador do comprador em caso de comprador estrangeiro
-                "IE" => $comprador["ie"], // Inscrição Estadual
-                "enderComp" =>  [ // Endereço do comprador
-                    "xLgr" => $comprador["logradouro"], // Logradouro
-                    "nro" => $comprador["numero"], // Número
-                    "xCpl" => $comprador["complemento"], // Complemento
-                    "xBairro" => $comprador["bairro"], // Bairro
-                    "cMun" => $comprador["municipioIBGE"], // Código do município (utilizar a tabela do IBGE), informar 9999999 para operações com o exterior
-                    "xMun" => $comprador["nomeCidade"], // Nome do município, informar EXTERIOR para operações com o exterior.
-                    "CEP" => $comprador["cep"], // CEP
-                    "UF" => $comprador["uf"], // DOMINIO D5 - Sigla da UF, informar EX para operações com o exterior.
-                    "cPais" => $comprador["pais"], // Código do país (BACEN)
-                    "xPais" => $comprador["nomePais"], // Nome do país
-                    "Fone" => $comprador["fone"], // Telefone
-                    "Email" => $comprador["email"] // Endereço de E-mail
-                ]                
-            ]/*,
-            "agencia" =>  [ // Identificação da agência/preposto/terceiro que comercializou o BP-e
-                "xNome" => "", // Razão social ou Nome da Agência
-                "CNPJ" => "", // Número do CNPJ
-                "enderAgencia" =>  [ // Endereço da agência
-                    "xLgr" => "", // Logradouro
-                    //"nro" => "",
-                    "Nro" => "", // Número
-                    "xCpl" => "", // Complemento
-                    "xBairro" => "", // Bairro
-                    "cMun" => "", // município (utilizar a tabela do IBGE)
-                    "xMun" => "", // Nome do município
-                    "CEP" => "", // CEP 
-                    "UF" => "", // Sigla da UF
-                    "Fone" => "", // Telefone
-                    "Email" => "" // Endereço de E-mail
-                ]
-            ],*/
-    /*        "infBPeSub" =>  [ // Substituição para remarcação e/ou transferência
-                "chBPe" => "", // Chave do Bilhete de Passagem Substituido
-                "tpSub" => "" // Tipo de Substituição
-            ]*/,
-            "infPassagem" =>  [ // Informações do detalhamento da Passagem
-                "cLocOrig" => $viagem["origemUF"], // Código da Localidade de Origem - 1400100 Boa Vista - 1302603 Manaus
-                "xLocOrig" => $viagem["origemMunicipioIBGE"], // Descrição da Localidade de Origem
-                "cLocDest" => $viagem["destinoUF"],  // Código da Localidade de Destino - 1400100 Boa Vista - 1302603 Manaus
-                "xLocDest" => $viagem["destinoMunicipioIBGE"], // Descrição da Localidade de Destino
-                "dhEmb" => $dataEmbarque, // Data e hora de embarque
-                "dhValidade" => $dataValidade, // Data e hora de validade
-                "infPassageiro" =>  [ // Informações do passageiro
-                    "xNome" => $poltrona["passageiro"]["nome"], // Nome do Passageiro
-                    "CPF" => $poltrona["passageiro"]["cpf"], // Número do CPF
-                    "tpDoc" => $poltrona["passageiro"]["tipoDocumento"], // Tipo do Documento de identificação
-                    "nDoc" => $poltrona["passageiro"]["numeroDocumento"], // Número do Documento do passageiro
-                    "dNasc" => $poltrona["passageiro"]["dtNasc"], // Data de Nascimento yyyy-mm-dd
-                    "Fone" => $poltrona["passageiro"]["fone"], // Telefone
-                    "Email" => $poltrona["passageiro"]["email"] // Endereço de E-mail
-                ]
-            ],
-            "infViagem" =>  [ // Grupo de informações da viagem do BP-e
-    /*>>>*/            "cPercurso" => "0", // Código do percurso da viagem
-    /*>>>*/            "xPercurso" => "teste", // Descrição do Percurso da viagem
-                "tpViagem" => "00", // Tipo de Viagem - 00-regular, 01-extra
-    /*>>>*/            "tpServ" => "1", // Tipo de Serviço
-                "tpAcomodacao" => "1", // FIXO - Tipo de Acomodação - 1-Assento/poltrona; 2-Rede; 3-Rede com ar-condicionado; 4-cabine; 5-outros
-                "tpTrecho" => "1", // FIXO - Tipo de trecho da viagem - 1-Normal; 2-Trecho Inicial; 3-Conexão
-                //"dhConexao" => "", // Data e hora da conexão Informar se tpTrecho = 3
-                //"Prefixo" => "", // Prefixo da linha
-                "Poltrona" => $poltrona["poltrona"], // Número da Poltrona / assento / cabine
-                //"Plataforma" => "", // Plataforma/carro/barco de Embarque
-                "dhViagem" => $dataEmbarque
-            ]/*,
-            "infTravessia" =>  [ // Informações do transporte aquaviário de travessia
-                "tpVeiculo" => "3", // Tipo do veículo transportado - 1-Vazio; 2-Carregado; 3-Não se aplica
-                "sitVeiculo" => "" // Situação do veículo transportado
-            ]*/,
-            "infValorBPe" =>  [ // Informações dos valores do Bilhete de Passagem
-                "vBP" => $poltrona["passageiro"]["valorTarifa"], // Valor do Bilhete de Passagem (ex: 1.00)
-                "vDesconto" => $poltrona["passageiro"]["valDesconto"], // Valor do desconto concedido ao comprador
-                "vPgto" => $valorPago, // Valor pago pelo BP-e (vBP - vDesconto)
-                "vTroco" => $poltrona["passageiro"]["valTroco"], // Valor do troco
-                "tpDesconto" => $poltrona["passageiro"]["tpDesconto"], // Tipo de desconto/benefício para o BP-e
-                "xDesconto" => $poltrona["passageiro"]["tarifaDescr"] /*, // Descrição do tipo de desconto/benefício concedido
-                "Comp" =>  [ // Componentes do Valor do Bilhete
-                    [
-                    "tpComp" => "01", // Tipo do Componente
-                    "vComp" => "0.50" // Valor do componente
-                    ],
-                    [
-                    "tpComp" => "02", // Tipo do Componente
-                    "vComp" => "0.50" // Valor do componente
-                    ]
-                ]*/
-            ],
-            "imp" =>  [ // Informações relativas aos Impostos
-                "ICMS" =>  [ // Informações relativas ao ICMS
-                    "ICMS00" =>  [ // Prestação sujeito à tributação normal do ICMS
-                        "CST" => "00", // OK FIXO - classificação Tributária do Serviço
-    /*>>>*/                    "vBC" => "100.00", // OK VARIAVEL - Valor da BC do ICMS
-    /*>>>*/                    "pICMS" => "12.00", // OK VARIAVEL - Alíquota do ICMS
-    /*>>>*/                    "vICMS" => "12.00" // OK CALCULADO - Valor do ICMS
-                    ]/*,
-                    "ICMS20" =>  [ // Prestação sujeito à tributação com redução de BC do ICMS
-                        "CST" => "", // Classificação Tributária do serviço
-                        "pRedBC" => "", // Percentual de redução da BC
-                        "vBC" => "", // Valor da BC do ICMS
-                        "pICMS" => "", // Alíquota do ICMS
-                        "vICMS" => "" // Valor do ICMS
-                    ],
-                    "ICMS45" =>  [ // ICMS Isento, não Tributado ou diferido
-                        "CST" => "40" // Classificação Tributária do Serviço
-                    ],
-                    "ICMS90" =>  [ // ICMS Outros
-                        "CST" => "", // Classificação Tributária do Serviço
-                        "pRedBC" => "", // Percentual de redução da BC
-                        "vBC" => "", // Valor da BC do ICMS
-                        "pICMS" => "", // Alíquota do ICMS
-                        "vICMS" => "", // Valor do ICMS
-                        "vCred" => "" // Valor do Crédito Outorgado/Presumido
-                    ],
-                    "ICMSOoutraUF" =>  [ // ICMS devido à UF de início da viagem, quando diferente da UF do emitente
-                        "CST" => "", // Classificação Tributária do Serviço
-                        "pRedBCOutraUF" => "", // Percentual de redução da BC
-                        "vBCOutraUF" => "", // Valor da BC do ICMS
-                        "pICMSOutraUF" => "", // Alíquota do ICMS
-                        "vICMSOutraUF" => "" // Valor do ICMS devido outra UF
-                    ],
-                    "ICMSSN" =>  [ // Simples Nacional
-                        "CST" => "", // Classificação Tributária do Serviço
-                        "indSN" => "" // Indica se o contribuinte é Simples Nacional 1=Sim
-                    ],
-                    "vTotTrib" => "", // Valor Total dos Tributos
-                    "infAdFisco" => "", // Informações adicionais de interesse do Fisco
-                    "ICMSUFFim" =>  [ // Informações do ICMS de partilha com a UF de término do serviço de transporte na operação interestadual
-                        "vBCUFFim" => "", // Valor da BC do ICMS na UF fim da viagem
-                        "pFCPUFFim" => "", // Percentual do ICMS relativo ao Fundo de Combate à pobreza (FCP) na UF fim da viagem
-                        "pICMSUFFim" => "", // Alíquota interna da UF fim da viagem
-                        "pICMSInter" => "", // Alíquota interestadual das UF envolvidas
-                        "pICMSInterPart" => "", // Percentual provisório de partilha entre os estados
-                        "vFCPUFim" => "", // Valor do ICMS relativo ao Fundo de Combate á Pobreza (FCP) da UF fim da viagem
-                        "vICMSUFFim" => "", // Valor do ICMS de partilha para a UF fim da viagem
-                        "vICMSUFIni" => "" // Valor do ICMS de partilha para a UF início da viagem
-                    ]             */
-                ]
-            ],
-            "pag" =>  $bpePagtos /*,
-            "autXML" =>  [ // Autorizados para download do XML do DF-e
-                "CNPJ" => "", // CNPJ do autorizado
-                "CPF" => "" // CPF do autorizado
-            ],
-            "infAdic" =>  [ // Informações Adicionais
-                "infAdFisco" => "", // Informações adicionais de interesse do Fisco
-                "infCpl" => "" // Informações complementares de interesse do Contribuinte
-        ]*//*,
-            "infBPeSupl" =>  [ // Informações suplementares do BP-e [NAO PRECISA PORQUE A API vai inserir automaticamente]
-                "qrCodBPe" => "", // Texto com o QR-Code impresso no DABPE
-                "boardPassBPe" => "" // Texto contendo o boarding Pass impresso no DABPE (padrão PDF417)
-            ]*/
-        ]
-    ];
+    // Valida o Número - obrigatório
+    $comprador["numero"] = trim($comprador["numero"]);
+    if($comprador["numero"] == ""){
+        throw new EmitirPassagemException("Número do endereço do comprador é obrigatório");
+    }
+    if(strlen($comprador["numero"]) > 60){
+        throw new EmitirPassagemException("O número do endereço do comprador tem o tamanho máximo de 60 caracteres");
+    }
 
-    $conteudo = [
-        "BPe" => $BPe
-    ];
+    // Valida o Complemento - opcional
+    $comprador["complemento"] = trim($comprador["complemento"]);
+    if(strlen($comprador["complemento"]) > 60){
+        throw new EmitirPassagemException("O complemento do endereço do comprador tem o tamanho máximo de 60 caracteres");
+    }
+
+    // Valida o Bairro - obrigatório
+    $comprador["bairro"] = trim($comprador["bairro"]);
+    if($comprador["bairro"] == ""){
+        throw new EmitirPassagemException("Bairro do comprador é obrigatório");
+    }
+    if(strlen($comprador["bairro"]) > 60){
+        throw new EmitirPassagemException("O bairro do comprador tem o tamanho máximo de 60 caracteres");
+    }
+
+    // Valida o Município IBGE - obrigatório
+    $comprador["municipioIBGE"] = trim($comprador["municipioIBGE"]);
+    if($comprador["municipioIBGE"] == ""){
+        throw new EmitirPassagemException("Município do comprador é obrigatório");
+    }
+    if(strlen($comprador["municipioIBGE"]) != 7){
+        throw new EmitirPassagemException("O código do município do comprador precisa ter 7 números. Verifique com o Administrador.");
+    }
+
+    // Valida o CEP - opcional
+    $comprador["cep"] = trim($comprador["cep"]);
+    $comprador["cep"] = str_replace("-", "", $comprador["cep"]);
+    if(!is_numeric($comprador["cep"])){
+        throw new EmitirPassagemException("CEP do comprador aceita apenas números");
+    }
+    if(strlen($comprador["cep"]) > 8){
+        throw new EmitirPassagemException("O cep do comprador precisa ter 8 números.");
+    }
+    if(strlen($comprador["cep"]) > 0){    
+        $comprador["cep"] = str_pad($comprador["cep"], 8, "0", STR_PAD_LEFT);
+    }
+
+    // Valida o pais - opcional
+    $comprador["pais"] = trim($comprador["pais"]);
+    if(!is_numeric($comprador["pais"])){
+        throw new EmitirPassagemException("País do comprador aceita apenas números");
+    }
+    if(strlen($comprador["pais"]) > 4){
+        throw new EmitirPassagemException("O país do comprador precisa ter no máximo 4 números. Verifique com o Administrador");
+    }
+
+    // Valida o fone - opcional
+    $comprador["fone"] = trim($comprador["fone"]);
+    if($comprador["fone"] != ""){
+        $comprador["fone"] = str_replace(" ", "", $comprador["fone"]);
+        $comprador["fone"] = str_replace("-", "", $comprador["fone"]);
+        $comprador["fone"] = str_replace("(", "", $comprador["fone"]);
+        $comprador["fone"] = str_replace(")", "", $comprador["fone"]);
+        if(!is_numeric($comprador["fone"])){
+            throw new EmitirPassagemException("O telefone do comprador aceita apenas números");
+        }   
+        if(strlen($comprador["fone"]) < 7){
+            throw new EmitirPassagemException("O telefone do comprador precisa ter no mínimo 7 números.");
+        }    
+        if(strlen($comprador["fone"]) > 12){
+            throw new EmitirPassagemException("O telefone do comprador precisa ter no máximo 12 números.");
+        }    
+    }
+
+    // Valida o email - opcional
+    $comprador["email"] = trim($comprador["email"]);
+    if($comprador["email"] != ""){
+        if(strlen($comprador["email"]) > 60){
+            throw new EmitirPassagemException("O e-mail do comprador precisa ter no máximo 60 caracteres.");
+        }    
+    }
+
+    /*Registro do comprador na base*/
+
+    $stmt = mysqli_prepare($conn, 'insert into tbpassagens_comprador (nome, cnpj, cpf, IdEstrangeiro, InscricaoEstadual, logradouro, ' . 
+        'numero, complemento, bairro, cidade, cep, pais, telefone, email) values( ' .
+        '?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)') or die(mysqli_error($conn)); 
+
+    if(!mysqli_stmt_bind_param($stmt, 'sssssssssisiss', 
+            $comprador["nome"], 
+            $comprador["cnpj"], 
+            $comprador["cpf"], 
+            $comprador["idEstrangeiro"], 
+            $comprador["ie"], 
+            $comprador["logradouro"], 
+            $comprador["numero"], 
+            $comprador["complemento"], 
+            $comprador["bairro"], 
+            $comprador["municipioIBGE"], 
+            $comprador["cep"], 
+            $comprador["pais"], 
+            $comprador["fone"], 
+            $comprador["email"])){
+        $error = mysqli_error($conn);
+        Log::debug(LogLevel::Error, " bind error: ".$error);        
+        throw new EmitirPassagemException("Erro no servidor, tente novamente ou saia do sistema e entre novamente.");
+    }    
+
+    if(!mysqli_stmt_execute($stmt)){
+        $error = mysqli_error($conn);
+        Log::debug(LogLevel::Error, " error: ".$error);
+        throw new EmitirPassagemException("Erro no servidor, tente novamente ou saia do sistema e entre novamente.");
+    }
 
 
-
-    /************************/
-    // enviado: string(1621) "{"BPe":{"infBPe":{"versao":"1.00","ide":{"cUF":"13","tpAmb":"2","mod":"63","serie":"1","nBP":"1","cBP":"","cDV":"","modal":"1","dhEmi":"2010-08-19T13:00:15-03:00","tpEmis":"1","verProc":"1","tpBPe":"0","indPres":"1","UFIni":"13","cMunIni":"1302603","UFFim":"RR","cMunFim":"1400100"},"emit":{"CNPJ":"63679351000190","IE":"1234567890","IEST":"1234567890","xNome":"DANTAS TRANSPORTES E INSTALACOES LTDA","xFant":"A DANTAS TRANSPORTES","IM":"0123456789","CNAE":"1234567","CRT":"3","enderEmit":{"xLgr":"teste","nro":"0","xCpl":"0","xBairro":"Teste","cMun":"1302603","xMun":"Teste","CEP":"00000000","UF":"AM","Fone":"","Email":""},"TAR":"0"},"Comp":{"xNome":"","CNPJ":"","CPF":"","idEstrangeiro":"","IE":"","enderComp":{"xLgr":"","Nro":"","xCpl":"","xBairro":"","cMun":"","xMun":"","CEP":"","UF":"","cPais":"1058","xPais":"Brasil","Fone":"","Email":""}},"infPassagem":{"cLocOrig":"0","xLocOrig":"teste","cLocDest":"0","xLocDest":"teste","dhEmb":"2010-08-19T13:00:15-03:00","infPassageiro":{"xNome":"Teste","CPF":"11111111111","tpDoc":"5","nDoc":"1234","dNasc":"2010-08-19","Fone":"","Email":""}},"infViagem":{"cPercurso":"0","xPercurso":"teste","tpViagem":"00","tpServ":"1","tpAcomodacao":"1","tpTrecho":"1","Prefixo":"","Poltrona":"","Plataforma":"","dhViagem":"2010-08-19T13:00:15-03:00"},"infValorBPe":{"vBP":"1.00","vDesconto":"0.00","vPgto":"1.00","vTroco":"0.00","tpDesconto":"99","xDesconto":"teste","Comp":[{"tpComp":"01","vComp":"0.50"},{"tpComp":"02","vComp":"0.50"}]},"imp":{"ICMS":{"ICMS45":{"CST":"40"}}},"pag":{"tPag":"01","vPag":"1.00","card":{"tpIntegra":"2","CNPJ":"11111111111111","tBand":"01","cAut":"0"}}}}}"
-    // recebido: {"status":200,"motivo":"BP-e enviado para Sefaz","nsNRec":4}
-    /************************/
-
-    $conteudo = json_encode($conteudo);
-    var_dump($conteudo);
-    Log::debug(LogLevel::Info, "xml saída: " . $conteudo);
-
-    $sefaz = new Sefaz();
-    $retorno = $sefaz->emitirNFe($token, $conteudo, $tpConteudo);
-    echo $retorno;
-    //var_dump($retorno);
-    //Log::debug(LogLevel::Info, "curl executado: " + $retorno);
-
-    $i++;    
-}
-
-return;
-
-/********************************************************************************/
+    /***************************************************************************************************************************/
 
 
+    /* GERAÇÃO DAS PASSAGENS */
 
+    $bpePagtos = [];
 
+    $i = 0;
+    while(array_key_exists($i, $pagamentos)){
+        $pagamento = json_encode($pagamentos[$i], true);
+        $pagamento = json_decode($pagamento, true);
+        $formaPag = $pagamento["formaPag"];    
+        if($formaPag == "0"){ // 0 - dinheiro
+            $bpeFormaPag = "01"; // 01 - dinheiro
+        } else if($formaPag == "1"){ // 1 - cartão de débito
+            $bpeFormaPag = "04"; // 04 - cartão de débito
+        } else if($formaPag == "2"){ // 2 - cartão de crédito
+            $bpeFormaPag = "03"; // 03 - cartão de crédito
+        } else {
+            Log::debug(LogLevel::Error, "Forma de pagamento inválida: " . $formaPag);
+            throw new EmitirPassagemException("Forma de pagamento inválida");
+        }
 
+        $newItem = array(  
+            "tPag" => $bpeFormaPag, // Forma de Pagamento:01-Dinheiro;02-Cheque;03-Cartão de Crédito;04-Cartão de Débito;05-Vale Transportel;99 - Outros
+            "vPag" => number_format($pagamento["valParTotal"], 2), // Valor do Pagamento
+            "card" =>  [ // Grupo de Cartões
+                "tpIntegra" => "2", // OK FIXO - Tipo de Integração do processo de pagamento com o sistema de automação da empresa 1=Pagamento integrado com o sistema de automação da empresa Ex. equipamento TEF , Comercio Eletronico 2=Pagamento não integrado com o sistema de automação da empresa Ex: equipamento POS
+                //"CNPJ" => "", // CNPJ da credenciadora de cartão de crédito/débito - para tpIntegra=2 não informar o CNPJ
+                "tBand" => $pagamento["bandeira"] // Bandeira da operadora de cartão de crédito/débito:01–Visa; 02–Mastercard; 03–American Express; 04–Sorocred; 05 - Elo; 06 - Diners;99–Outros
+                //"cAut" => "" // Número de autorização da operação cartão de crédito/débito - para tpIntegra=2 não informar o cAut
+            ]                
+        );
+        
+        array_push($bpePagtos, $newItem);
+        $i++;   
+    }
 
+    // geração do cBP - Código numérico que compõe a Chave de Acesso. - Código aleatório gerado pelo emitente, com o objetivo de evitar acessos indevidos ao documento.
+    // GERA O CÓDIGO ALEATÓRIO DE 8 POSICOES (cBP)
+    $cBP = mt_rand(11111111, 99999999);
+    $valor = $cBP;
+    $peso = 2; // COMEÇA COM PESO 2 E VAI ATÉ 9
+    $result = 0;
+    for($i = 0; $i < 8; $i++){
+        $rest = $valor % 10;
+        $result += ($rest * $peso); 
+        $valor = $valor - $rest;
+        $valor = $valor / 10;
+        $peso++;
+    }
 
+    // CALCULA O DIGITO VERIFICADOR (DV)
+    $resto = $result % 11;
+    $dv = 11 - $resto;
+    if($dv == 0 || $dv == 1){
+        $dv = 0;
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    $result = false;
-    $viagensDisponiveis = [];
     try {
         Log::debug(LogLevel::Info, "mysql connecting");
 
-        $logConn = mysqli_connect($dbLogServer, $dbLogUser, $dbLogPassword, $dbLogDatabase);
+        $conn = mysqli_connect($dbLogServer, $dbLogUser, $dbLogPassword, $dbLogDatabase);
         if (mysqli_connect_errno()) {
             Log::debug(LogLevel::Error, "MySQL Connect Log failed: ".mysqli_connect_error());
             return false;
         }
 
-        mysqli_set_charset($logConn,"utf8");
+        mysqli_set_charset($conn,"utf8");
 
         Log::debug(LogLevel::Info, "mysql setting");
-        mysqli_autocommit($logConn, TRUE);
+        mysqli_autocommit($conn, TRUE);
 
         $select = 'select ' .
-            'r.id,  ' .
-            'o.cidade origemCidade,  ' .
-            'o.uf origemUF, ' .
-            'd.cidade destinoCidade,   ' .
-            'd.uf destinoUF, ' .
-            'horariopartida,  ' .
-            't.meiapassagem,  ' .
-            't.normal,  ' .
-            't.pedagio,  ' .
-            't.promocional,  ' .
-            't.seguro  ' .
-            'from tbviagens_rotas r ' .
-            'inner join location o on (o.id = origem) ' .
-            'inner join location d on (d.id = destino) ' .
-            'inner join tbviagem v on (v.rota = r.id) ' .
-            'inner join tbviagens_tarifas t on (t.id = v.tarifa) ';
+            'id,  ' .
+            'nome,  ' .
+            'icmsAliquota ' .
+            'from tbviagens_tributacao ' .
+            'where CST = "00" and viagem = ' . $viagem;
 
         Log::debug(LogLevel::Info, "select: ".$select);
 
-        $logQuery = mysqli_query($logConn, $select);
+        $query = mysqli_query($conn, $select);
         if (!$logQuery) {
-            Log::debug(LogLevel::Error, "mysqli_query - ".mysqli_error($logConn));
+            Log::debug(LogLevel::Error, "mysqli_query - ".mysqli_error($conn));
             header("location:login.html");
             // destroy a sessão
             session_destroy();
             return false;
         }
 
-        while($logDataset = mysqli_fetch_array($logQuery, MYSQLI_BOTH)){
-            $newRow = array(  
-                'id' => $logDataset["id"],
-                'origemCidade' =>  utf8_encode($logDataset["origemCidade"]),
-                'origemUF' =>  utf8_encode($logDataset["origemUF"]),
-                'destinoCidade' =>  utf8_encode($logDataset["destinoCidade"]),
-                'destinoUF' =>  utf8_encode($logDataset["destinoUF"]),
-                'horariopartida' => $logDataset["horariopartida"],
-                'meiapassagem' => $logDataset["meiapassagem"],
-                'normal' => $logDataset["normal"],
-                'pedagio' => $logDataset["pedagio"],
-                'promocional' => $logDataset["promocional"],
-                'seguro' => $logDataset["seguro"]
-            );
-            
-            array_push($viagensDisponiveis, $newRow);              
+        $dataset = mysqli_fetch_array($query, MYSQLI_BOTH);
+
+        $icmsAliquota = $dataset["icmsAliquota"];    
+
+        // monta o BPe pra transmitir
+        $i = 0;
+        while(array_key_exists($i, $poltronas)){
+            $poltrona = json_encode($poltronas[$i], true);
+            $poltrona = json_decode($poltrona, true);
+
+            $valorPago = $poltrona["viagem"]["normal"] - $poltrona["passageiro"]["valDesconto"];
+
+            // Cálculo do ICMS
+            $vBC = $valorPago;
+            $vICMS = $valorPago * $icmsAliquota / 100;
+
+            // Montagem do pacote BPe
+            $BPe = [
+                "infBPe" =>  [
+                    "versao" => "1.00", // OK FIXO Versão do leiaute
+                    //"id"   => "BPe...", // Identificador da tag a ser assina. do BP-e e precedida do literal "BPe" [NAO PRECISA PORQUE A API vai inserir automaticamente]
+                    "ide" =>  [ // Identificação do BP-e
+                        "cUF" => "13", // DOMINIO D1 - Código da UF do emitente do BP-e - 13 Amazonas
+                        "tpAmb" => "2", // Tipo do Ambiente (1-Producao; 2-Homologacao)
+                        "mod" => "63", // OK FIXO - Modelo do Bilhete de Passagem - Utilizar o código 63 para identificação do BP-e
+                        "serie" => "1", // Série do documento fiscal
+                        "nBP" => $poltrona["passagem"], // Número do bilhete de passagem - Número que identifica o bilhete 1 a 999999999.
+                        "cBP" => $cBP, // Código numérico que compõe a Chave de Acesso. - Código aleatório gerado pelo emitente, com o objetivo de evitar acessos indevidos ao documento.
+                        "cDV" => $dv, // Digito verificador da chave de acesso
+                        "modal" => "1", // OK FIXO - Modalidade de transporte - 1 - Rodoviário; 3 - Aquaviário; 4 - Ferroviário.
+                        "dhEmi" => $dataEmissao, // Data e hora de emissão do Bilhete de Passagem - Formato AAAA-MMDDTHH:MM:DD TZD
+                        "tpEmis" => "1", // OK FIXO - Forma de emissão do Bilhete (Normal ou Contingência Off-Line) - 1 - Normal; 2 - Contingência Off-Line
+                        "verProc" => $applicationVersion, // Versão do processo de emissão - Informar a versão do aplicativo emissor de BP-e.
+                        "tpBPe" => "0", // Tipo do BP-e - (0 - BP-e normal; 3 - BP-e substituição)
+                        "indPres" => "1", // Indicador de presença do comprador no estabelecimento comercial no momento da operação. 1=Operação presencial não embarcado; 2=Operação não presencial, pela Internet; 3=Operação não presencial, Teleatendimento; 4=BP-e em operação com entrega a domicílio; 5=Operação presencial embarcada; 9=Operação não presencial, outros.
+                        "UFIni" => $viagem["origemUF"], // DOMINIO D6 - Sigla da UF Início da Viagem
+                        "cMunIni" => $viagem["origemMunicipioIBGE"], // Código do município do início da viagem - 1400100 Boa Vista - 1302603 Manaus
+                        "UFFim" => $viagem["destinoUF"], // DOMINIO D6 - Sigla da UF do Fim da Viagem
+                        "cMunFim" => $viagem["destinoMunicipioIBGE"] // Código do município do fim da viagem - 1400100 Boa Vista - 1302603 Manaus
+                        //"dhCont" => "2010-08-19T13:00:15-03:00", // Data e Hora da entrada em contingência - Informar a data e hora no formato AAAA-MMDDTHH:MM:SS
+                        //"xJust" => "" // Justificativa da entrada em contingência
+                    ],
+                    "emit" =>  [ // Identificação do Emitente do BP-e
+                        "CNPJ" => "63679351000190", // OK FIXO - CNPJ do emitente - 63679351000190 - DANTAS TRANSPORTES E INSTALACOES LTDA
+                        "IE" => "54021588", // OK FIXO - Inscrição Estadual do emitemte
+                        //"IEST" => "", // OK FIXO - Inscrição Estadual do Substituto Tributário
+                        "xNome" => "DANTAS TRANSPORTES E INSTALACOES LTDA", // OK FIXO - Razão social ou Nome do emitente
+                        "xFant" => "A DANTAS TRANSPORTES", // OK FIXO - Nome fantasia do emitente
+                        "IM" => "4420601", // OK FIXO - Inscrição Municipal
+                        "CNAE" => "4929902", // OK FIXO - CNAE Fiscal
+                        "CRT" => "3", // OK FIXO - Código de Regime Tributário. - 1 – Simples Nacional; 2 – Simples Nacional – excesso de sublimite de receita bruta; 3 – Regime Normal
+                        "enderEmit" =>  [ // Endereço do emitente
+                            "xLgr" => "RUA UTINGA", // OK FIXO - Logradouro
+                            "nro" => "310", // OK FIXO - Número
+                            //"xCpl" => "", // OK FIXO - Complemento
+                            "xBairro" => "LIRIO DO VALE", // OK FIXO - Bairro
+                            "cMun" => "1302603", // OK FIXO - Código do município (utilizar a tabela do IBGE)
+                            "xMun" => "MANAUS", // OK FIXO - Nome do município
+                            "CEP" => "69038286", // OK FIXO - CEP
+                            "UF" => "AM", // DOMINIO D6 - OK FIXO - Sigla da UF
+                            "Fone" => "92 33062903", // OK FIXO - Telefone
+                            "Email" => "dantast@argo.com.br" // OK FIXO - Endereço de E-mail
+                        ],
+                        "TAR" => $bpeConfig_TAR // Termo de Autorização de Serviço Regular - emitente do BP-e junto à ANTT para exercer a atividade
+                    ],
+                    "Comp" =>  [ // Identificação do Comprador do BP-e
+                        "xNome" => $comprador["nome"], // Razão social ou Nome do comprado
+                        "CNPJ" => $comprador["cnpj"], // Número do CNPJ
+                        "CPF" => $comprador["cpf"], // Número do CPF
+                        "idEstrangeiro" => $comprador["idEstrangeiro"], // Identificador do comprador em caso de comprador estrangeiro
+                        "IE" => $comprador["ie"], // Inscrição Estadual
+                        "enderComp" =>  [ // Endereço do comprador
+                            "xLgr" => $comprador["logradouro"], // Logradouro
+                            "nro" => $comprador["numero"], // Número
+                            "xCpl" => $comprador["complemento"], // Complemento
+                            "xBairro" => $comprador["bairro"], // Bairro
+                            "cMun" => $comprador["municipioIBGE"], // Código do município (utilizar a tabela do IBGE), informar 9999999 para operações com o exterior
+                            "xMun" => $comprador["nomeCidade"], // Nome do município, informar EXTERIOR para operações com o exterior.
+                            "CEP" => $comprador["cep"], // CEP
+                            "UF" => $comprador["uf"], // DOMINIO D5 - Sigla da UF, informar EX para operações com o exterior.
+                            "cPais" => $comprador["pais"], // Código do país (BACEN)
+                            "xPais" => $comprador["nomePais"], // Nome do país
+                            "Fone" => $comprador["fone"], // Telefone
+                            "Email" => $comprador["email"] // Endereço de E-mail
+                        ]                
+                    ]/*,
+                    "agencia" =>  [ // Identificação da agência/preposto/terceiro que comercializou o BP-e
+                        "xNome" => "", // Razão social ou Nome da Agência
+                        "CNPJ" => "", // Número do CNPJ
+                        "enderAgencia" =>  [ // Endereço da agência
+                            "xLgr" => "", // Logradouro
+                            //"nro" => "",
+                            "Nro" => "", // Número
+                            "xCpl" => "", // Complemento
+                            "xBairro" => "", // Bairro
+                            "cMun" => "", // município (utilizar a tabela do IBGE)
+                            "xMun" => "", // Nome do município
+                            "CEP" => "", // CEP 
+                            "UF" => "", // Sigla da UF
+                            "Fone" => "", // Telefone
+                            "Email" => "" // Endereço de E-mail
+                        ]
+                    ],*/
+            /*        "infBPeSub" =>  [ // Substituição para remarcação e/ou transferência
+                        "chBPe" => "", // Chave do Bilhete de Passagem Substituido
+                        "tpSub" => "" // Tipo de Substituição
+                    ]*/,
+                    "infPassagem" =>  [ // Informações do detalhamento da Passagem
+                        "cLocOrig" => $viagem["origemUF"], // Código da Localidade de Origem - 1400100 Boa Vista - 1302603 Manaus
+                        "xLocOrig" => $viagem["origemMunicipioIBGE"], // Descrição da Localidade de Origem
+                        "cLocDest" => $viagem["destinoUF"],  // Código da Localidade de Destino - 1400100 Boa Vista - 1302603 Manaus
+                        "xLocDest" => $viagem["destinoMunicipioIBGE"], // Descrição da Localidade de Destino
+                        "dhEmb" => $dataEmbarque, // Data e hora de embarque
+                        "dhValidade" => $dataValidade, // Data e hora de validade
+                        "infPassageiro" =>  [ // Informações do passageiro
+                            "xNome" => $poltrona["passageiro"]["nome"], // Nome do Passageiro
+                            "CPF" => $poltrona["passageiro"]["cpf"], // Número do CPF
+                            "tpDoc" => $poltrona["passageiro"]["tipoDocumento"], // Tipo do Documento de identificação
+                            "nDoc" => $poltrona["passageiro"]["numeroDocumento"], // Número do Documento do passageiro
+                            "dNasc" => $poltrona["passageiro"]["dtNasc"], // Data de Nascimento yyyy-mm-dd
+                            "Fone" => $poltrona["passageiro"]["fone"], // Telefone
+                            "Email" => $poltrona["passageiro"]["email"] // Endereço de E-mail
+                        ]
+                    ],
+                    "infViagem" =>  [ // Grupo de informações da viagem do BP-e
+            /*>>>*/            "cPercurso" => "0", // Código do percurso da viagem
+            /*>>>*/            "xPercurso" => "teste", // Descrição do Percurso da viagem
+                        "tpViagem" => "00", // Tipo de Viagem - 00-regular, 01-extra
+                        "tpServ" => $poltrona["tipoServicoBPe"], // Tipo de Serviço
+                        "tpAcomodacao" => "1", // FIXO - Tipo de Acomodação - 1-Assento/poltrona; 2-Rede; 3-Rede com ar-condicionado; 4-cabine; 5-outros
+                        "tpTrecho" => "1", // FIXO - Tipo de trecho da viagem - 1-Normal; 2-Trecho Inicial; 3-Conexão
+                        //"dhConexao" => "", // Data e hora da conexão Informar se tpTrecho = 3
+                        //"Prefixo" => "", // Prefixo da linha
+                        "Poltrona" => $poltrona["poltrona"], // Número da Poltrona / assento / cabine
+                        //"Plataforma" => "", // Plataforma/carro/barco de Embarque
+                        "dhViagem" => $dataEmbarque
+                    ]/*,
+                    "infTravessia" =>  [ // Informações do transporte aquaviário de travessia
+                        "tpVeiculo" => "3", // Tipo do veículo transportado - 1-Vazio; 2-Carregado; 3-Não se aplica
+                        "sitVeiculo" => "" // Situação do veículo transportado
+                    ]*/,
+                    "infValorBPe" =>  [ // Informações dos valores do Bilhete de Passagem
+                        "vBP" => $poltrona["passageiro"]["valorTarifa"], // Valor do Bilhete de Passagem (ex: 1.00)
+                        "vDesconto" => $poltrona["passageiro"]["valDesconto"], // Valor do desconto concedido ao comprador
+                        "vPgto" => $valorPago, // Valor pago pelo BP-e (vBP - vDesconto)
+                        "vTroco" => $poltrona["passageiro"]["valTroco"], // Valor do troco
+                        "tpDesconto" => $poltrona["passageiro"]["tpDesconto"], // Tipo de desconto/benefício para o BP-e
+                        "xDesconto" => $poltrona["passageiro"]["tarifaDescr"] /*, // Descrição do tipo de desconto/benefício concedido
+                        "Comp" =>  [ // Componentes do Valor do Bilhete
+                            [
+                            "tpComp" => "01", // Tipo do Componente
+                            "vComp" => "0.50" // Valor do componente
+                            ],
+                            [
+                            "tpComp" => "02", // Tipo do Componente
+                            "vComp" => "0.50" // Valor do componente
+                            ]
+                        ]*/
+                    ],
+                    "imp" =>  [ // Informações relativas aos Impostos
+                        "ICMS" =>  [ // Informações relativas ao ICMS
+                            "ICMS00" =>  [ // Prestação sujeito à tributação normal do ICMS
+                                "CST" => "00", // OK FIXO - classificação Tributária do Serviço
+                                "vBC" => $valorPago, // OK VARIAVEL - Valor da BC do ICMS
+                                "pICMS" => $icmsAliquota, // OK VARIAVEL - Alíquota do ICMS - Exemplo: 12.00
+                                "vICMS" => $vICMS // OK CALCULADO - Valor do ICMS - Exemplo 12.00
+                            ]/*,
+                            "ICMS20" =>  [ // Prestação sujeito à tributação com redução de BC do ICMS
+                                "CST" => "", // Classificação Tributária do serviço
+                                "pRedBC" => "", // Percentual de redução da BC
+                                "vBC" => "", // Valor da BC do ICMS
+                                "pICMS" => "", // Alíquota do ICMS
+                                "vICMS" => "" // Valor do ICMS
+                            ],
+                            "ICMS45" =>  [ // ICMS Isento, não Tributado ou diferido
+                                "CST" => "40" // Classificação Tributária do Serviço
+                            ],
+                            "ICMS90" =>  [ // ICMS Outros
+                                "CST" => "", // Classificação Tributária do Serviço
+                                "pRedBC" => "", // Percentual de redução da BC
+                                "vBC" => "", // Valor da BC do ICMS
+                                "pICMS" => "", // Alíquota do ICMS
+                                "vICMS" => "", // Valor do ICMS
+                                "vCred" => "" // Valor do Crédito Outorgado/Presumido
+                            ],
+                            "ICMSOoutraUF" =>  [ // ICMS devido à UF de início da viagem, quando diferente da UF do emitente
+                                "CST" => "", // Classificação Tributária do Serviço
+                                "pRedBCOutraUF" => "", // Percentual de redução da BC
+                                "vBCOutraUF" => "", // Valor da BC do ICMS
+                                "pICMSOutraUF" => "", // Alíquota do ICMS
+                                "vICMSOutraUF" => "" // Valor do ICMS devido outra UF
+                            ],
+                            "ICMSSN" =>  [ // Simples Nacional
+                                "CST" => "", // Classificação Tributária do Serviço
+                                "indSN" => "" // Indica se o contribuinte é Simples Nacional 1=Sim
+                            ],
+                            "vTotTrib" => "", // Valor Total dos Tributos
+                            "infAdFisco" => "", // Informações adicionais de interesse do Fisco
+                            "ICMSUFFim" =>  [ // Informações do ICMS de partilha com a UF de término do serviço de transporte na operação interestadual
+                                "vBCUFFim" => "", // Valor da BC do ICMS na UF fim da viagem
+                                "pFCPUFFim" => "", // Percentual do ICMS relativo ao Fundo de Combate à pobreza (FCP) na UF fim da viagem
+                                "pICMSUFFim" => "", // Alíquota interna da UF fim da viagem
+                                "pICMSInter" => "", // Alíquota interestadual das UF envolvidas
+                                "pICMSInterPart" => "", // Percentual provisório de partilha entre os estados
+                                "vFCPUFim" => "", // Valor do ICMS relativo ao Fundo de Combate á Pobreza (FCP) da UF fim da viagem
+                                "vICMSUFFim" => "", // Valor do ICMS de partilha para a UF fim da viagem
+                                "vICMSUFIni" => "" // Valor do ICMS de partilha para a UF início da viagem
+                            ]             */
+                        ]
+                    ],
+                    "pag" =>  $bpePagtos /*,
+                    "autXML" =>  [ // Autorizados para download do XML do DF-e
+                        "CNPJ" => "", // CNPJ do autorizado
+                        "CPF" => "" // CPF do autorizado
+                    ],
+                    "infAdic" =>  [ // Informações Adicionais
+                        "infAdFisco" => "", // Informações adicionais de interesse do Fisco
+                        "infCpl" => "" // Informações complementares de interesse do Contribuinte
+                ]*//*,
+                    "infBPeSupl" =>  [ // Informações suplementares do BP-e [NAO PRECISA PORQUE A API vai inserir automaticamente]
+                        "qrCodBPe" => "", // Texto com o QR-Code impresso no DABPE
+                        "boardPassBPe" => "" // Texto contendo o boarding Pass impresso no DABPE (padrão PDF417)
+                    ]*/
+                ]
+            ];
+
+            $conteudo = [
+                "BPe" => $BPe
+            ];
+
+
+
+            /************************/
+            // enviado: string(1621) "{"BPe":{"infBPe":{"versao":"1.00","ide":{"cUF":"13","tpAmb":"2","mod":"63","serie":"1","nBP":"1","cBP":"","cDV":"","modal":"1","dhEmi":"2010-08-19T13:00:15-03:00","tpEmis":"1","verProc":"1","tpBPe":"0","indPres":"1","UFIni":"13","cMunIni":"1302603","UFFim":"RR","cMunFim":"1400100"},"emit":{"CNPJ":"63679351000190","IE":"1234567890","IEST":"1234567890","xNome":"DANTAS TRANSPORTES E INSTALACOES LTDA","xFant":"A DANTAS TRANSPORTES","IM":"0123456789","CNAE":"1234567","CRT":"3","enderEmit":{"xLgr":"teste","nro":"0","xCpl":"0","xBairro":"Teste","cMun":"1302603","xMun":"Teste","CEP":"00000000","UF":"AM","Fone":"","Email":""},"TAR":"0"},"Comp":{"xNome":"","CNPJ":"","CPF":"","idEstrangeiro":"","IE":"","enderComp":{"xLgr":"","Nro":"","xCpl":"","xBairro":"","cMun":"","xMun":"","CEP":"","UF":"","cPais":"1058","xPais":"Brasil","Fone":"","Email":""}},"infPassagem":{"cLocOrig":"0","xLocOrig":"teste","cLocDest":"0","xLocDest":"teste","dhEmb":"2010-08-19T13:00:15-03:00","infPassageiro":{"xNome":"Teste","CPF":"11111111111","tpDoc":"5","nDoc":"1234","dNasc":"2010-08-19","Fone":"","Email":""}},"infViagem":{"cPercurso":"0","xPercurso":"teste","tpViagem":"00","tpServ":"1","tpAcomodacao":"1","tpTrecho":"1","Prefixo":"","Poltrona":"","Plataforma":"","dhViagem":"2010-08-19T13:00:15-03:00"},"infValorBPe":{"vBP":"1.00","vDesconto":"0.00","vPgto":"1.00","vTroco":"0.00","tpDesconto":"99","xDesconto":"teste","Comp":[{"tpComp":"01","vComp":"0.50"},{"tpComp":"02","vComp":"0.50"}]},"imp":{"ICMS":{"ICMS45":{"CST":"40"}}},"pag":{"tPag":"01","vPag":"1.00","card":{"tpIntegra":"2","CNPJ":"11111111111111","tBand":"01","cAut":"0"}}}}}"
+            // recebido: {"status":200,"motivo":"BP-e enviado para Sefaz","nsNRec":4}
+            /************************/
+
+            $conteudo = json_encode($conteudo);
+            var_dump($conteudo);
+            Log::debug(LogLevel::Info, "xml saída: " . $conteudo);
+
+            $sefaz = new Sefaz();
+            $retorno = $sefaz->emitirNFe($token, $conteudo, $tpConteudo);
+            echo $retorno;
+            //var_dump($retorno);
+            //Log::debug(LogLevel::Info, "curl executado: " + $retorno);
+
+            $i++;    
         }
 
-        $result = true;
+
     } finally {
-        if($logConn){
-            mysqli_close($logConn);
+        if($conn){
+            mysqli_close($conn);
         }
     }
 
-    $data = [
-        'result' => $result,
-        'viagensDisponiveis' => $viagensDisponiveis
-    ];
 
-    header('Content-Type: application/json');
-    Log::debug(LogLevel::Info, ">>> ".json_encode($data));
+} catch(EmitirPassagemException $e) {
+    $serverMsg = $e->getMessage();
+    $result = false;
+}
 
-    echo json_encode($data);
-    Log::debug(LogLevel::Info, "--- out");
-    return true;
+$data = [
+    'result' => $result,
+    'serverMsg' => $serverMsg
+];
+
+header('Content-Type: application/json');
+Log::debug(LogLevel::Info, ">>> ".json_encode($data));
+
+echo json_encode($data);
+Log::debug(LogLevel::Info, "--- out");
+return true;
 ?>

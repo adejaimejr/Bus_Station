@@ -38,7 +38,7 @@
         Log::debug(LogLevel::Info, "mysql setting");
         mysqli_autocommit($logConn, TRUE);
 
-        $select = 'select tbviagens_passagens.id as passagem, numero, tbviagens_passagens.disponivel from tbviagem ' .
+        $select = 'select tbviagens_passagens.id as passagem, numero, tbviagens_passagens.disponivel, tbviagens_poltronas.tipoServicoBPe from tbviagem ' .
             'inner join tbviagens_passagens on (viagem = tbviagem.id) ' .
             'inner join tbviagens_poltronas on (poltrona = tbviagens_poltronas.id) ' .
             'where rota = '.$rota;
@@ -58,7 +58,8 @@
             $newRow = array(  
                 'passagem' => $logDataset["passagem"],
                 'numero' =>  utf8_encode($logDataset["numero"]),
-                'disponivel' => $logDataset["disponivel"] == "1"
+                'disponivel' => $logDataset["disponivel"] == "1",
+                'tipoServico' => $logDataset["tipoServicoBPe"]
             );
             
             array_push($poltronas, $newRow);              
