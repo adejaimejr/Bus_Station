@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: 02-Dez-2018 às 05:03
+-- Generation Time: 02-Dez-2018 às 16:59
 -- Versão do servidor: 10.1.29-MariaDB
 -- PHP Version: 7.2.0
 
@@ -235,15 +235,21 @@ CREATE TABLE `tbpassagens_comprador` (
   `cep` varchar(8) NOT NULL,
   `pais` int(11) NOT NULL,
   `telefone` varchar(12) NOT NULL,
-  `email` varchar(60) NOT NULL
+  `email` varchar(60) NOT NULL,
+  `estrangeiro` tinyint(1) NOT NULL DEFAULT '0',
+  `tipoComprador` int(11) NOT NULL,
+  `tipoContribuicaoICMS` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Extraindo dados da tabela `tbpassagens_comprador`
 --
 
-INSERT INTO `tbpassagens_comprador` (`id`, `nome`, `cnpj`, `cpf`, `IdEstrangeiro`, `InscricaoEstadual`, `logradouro`, `numero`, `complemento`, `bairro`, `cidade`, `cep`, `pais`, `telefone`, `email`) VALUES
-(2, 'teste', '00000000000010', '', '', '', '', '', '', '', 1400100, '', 1058, '', '');
+INSERT INTO `tbpassagens_comprador` (`id`, `nome`, `cnpj`, `cpf`, `IdEstrangeiro`, `InscricaoEstadual`, `logradouro`, `numero`, `complemento`, `bairro`, `cidade`, `cep`, `pais`, `telefone`, `email`, `estrangeiro`, `tipoComprador`, `tipoContribuicaoICMS`) VALUES
+(2, 'teste', '00000000000010', '', '', '', '', '', '', '', 1400100, '', 1058, '', '', 0, 0, 0),
+(3, 'dfasf', '00000000000000', '11111111111', '', 'fafdasdf', '45235', '345235', '23452', 'fasa', 1302603, '00345235', 1058, '333333333', 'asdfasf', 0, 0, 0),
+(4, 'teste', '11111111111111', '', '35345345', 'ISENTO', 'afsdfasd', '352354', 'sdfasf', 'fadsfasdf', 1400100, '55345345', 1058, '1234567', 'asdfadsfa', 1, 1, 3),
+(5, 'dfasdf', '11111111111111', '11111111111', '', 'ISENTO', 'dfasdfa', 'sdfasdf', 'asdfasdf', 'fasdf', 1400100, '22345354', 1058, '12342341', 'asdfasdf', 0, 1, 3);
 
 -- --------------------------------------------------------
 
@@ -1593,6 +1599,46 @@ INSERT INTO `tbviagens_tributacao` (`id`, `nome`, `icmsAliquota`, `outrosImposto
 (5, 'Decreto RR 3512-2', 7, 0, '', 100),
 (6, 'tributação normal ICMS - BPe', 12, 0, '00', 100);
 
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `tptiposcomprador`
+--
+
+CREATE TABLE `tptiposcomprador` (
+  `id` int(11) NOT NULL,
+  `descricao` varchar(15) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Extraindo dados da tabela `tptiposcomprador`
+--
+
+INSERT INTO `tptiposcomprador` (`id`, `descricao`) VALUES
+(0, 'Pessoa Física'),
+(1, 'Pessoa Jurídica');
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `tptiposcontribuicaoicms`
+--
+
+CREATE TABLE `tptiposcontribuicaoicms` (
+  `id` int(11) NOT NULL,
+  `descricao` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Extraindo dados da tabela `tptiposcontribuicaoicms`
+--
+
+INSERT INTO `tptiposcontribuicaoicms` (`id`, `descricao`) VALUES
+(0, 'Nenhum'),
+(1, 'Não é contribuinte do ICMS'),
+(2, 'Contribuinte do ICMS'),
+(3, 'É contribuinte do ICMS Isento de inscrição no cadastro de contribuintes do ICMS');
+
 --
 -- Indexes for dumped tables
 --
@@ -1637,7 +1683,8 @@ ALTER TABLE `tbpassageiro`
 -- Indexes for table `tbpassagens_comprador`
 --
 ALTER TABLE `tbpassagens_comprador`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `tipoContribuicaoICMS` (`tipoContribuicaoICMS`);
 
 --
 -- Indexes for table `tbperfil`
@@ -1737,6 +1784,18 @@ ALTER TABLE `tbviagens_tributacao`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `tptiposcomprador`
+--
+ALTER TABLE `tptiposcomprador`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `tptiposcontribuicaoicms`
+--
+ALTER TABLE `tptiposcontribuicaoicms`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -1780,7 +1839,7 @@ ALTER TABLE `tbpassageiro`
 -- AUTO_INCREMENT for table `tbpassagens_comprador`
 --
 ALTER TABLE `tbpassagens_comprador`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `tbperfil`
@@ -1875,6 +1934,12 @@ ALTER TABLE `tbviagens_tributacao`
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Limitadores para a tabela `tbpassagens_comprador`
+--
+ALTER TABLE `tbpassagens_comprador`
+  ADD CONSTRAINT `tbpassagens_comprador_ibfk_1` FOREIGN KEY (`tipoContribuicaoICMS`) REFERENCES `tptiposcontribuicaoicms` (`id`);
 
 --
 -- Limitadores para a tabela `tbpoltronas`

@@ -999,19 +999,42 @@
                                                       </div>
                                                       <div class="modal-body">
                                                         <form>
-                                                          <div class="row">
-                                                            <div class="col-sm-6">
-                                                              <div class="form-group">
-                                                                <label for=""> CPF</label><input id="formCPF" class="form-control" placeholder="000.000.000-00" type="text">
-                                                              </div>
-                                                            </div>
-                                                            <div class="col-sm-6">
-                                                              <div class="form-group">
-                                                                <label for=""> CNPJ</label><input id="formCNPJ" class="form-control" placeholder="00.000.000/0000-00" type="text">
+                                                          <div class="row" id="formTipoCompradorContainer">
+                                                            <div class="col-sm-12">
+                                                              <div class="form-group">                                                                 
+                                                                  <label class="control-label" for="mRadio">Tipo de Comprador</label>
+                                                                  <div id="tipoComprador" class="form-control">
+                                                                    <div class="row">
+                                                                      <div class="col-sm-6">
+                                                                        <label class="radio-inline">
+                                                                          <input type="radio" id="formTipoCompradorPF" name="formTipoComprador" value="0" checked>
+                                                                          &nbsp;Pessoa Física&nbsp;&nbsp;&nbsp;&nbsp;
+                                                                        </label>
+                                                                      </div>
+                                                                      <div class="col-sm-6">                                                                        
+                                                                        <label class="radio-inline">
+                                                                          <input type="radio" id="formTipoCompradorPJ" name="formTipoComprador" value="1">
+                                                                          &nbsp;Pessoa Jurídica
+                                                                        </label>
+                                                                      </div>
+                                                                    </div>
+                                                                  </div>                                                                
                                                               </div>
                                                             </div>
                                                           </div>
                                                           <div class="row">
+                                                            <div class="col-sm-6">
+                                                              <div class="form-group">
+                                                                <label for=""> CPF</label><input id="formCPF" maxlength="14" class="form-control" placeholder="000.000.000-00" type="text">
+                                                              </div>
+                                                            </div>
+                                                            <div class="col-sm-6">
+                                                              <div class="form-group">
+                                                                <label for=""> CNPJ</label><input id="formCNPJ" maxlength="18" class="form-control" placeholder="00.000.000/0000-00" type="text" disabled>
+                                                              </div>
+                                                            </div>
+                                                          </div>
+                                                          <div class="row" id="formTipoDocumentoContainer">
                                                             <div class="col-sm-6">
                                                               <div class="form-group">
                                                                 <label for="">Tipo de Documento de Identificação</label>
@@ -1036,24 +1059,80 @@
                                                             </div>
                                                             <div class="col-sm-6">
                                                               <div class="form-group">
-                                                                <label for="">Número do Documento de Identificação</label><input id="formNumeroDocumento" class="form-control" placeholder="" type="text">
+                                                                <label for="">Número Documento Identificação</label><input id="formNumeroDocumento" class="form-control" placeholder="" type="text">
                                                               </div>
                                                             </div>
                                                           </div>
+                                                          <div class="row" id="tipoContribuicaoICMSContainer">
+                                                            <div class="col-sm-12">
+                                                              <div class="form-group">                                                                 
+                                                                  <label class="control-label" for="mRadio">Tipo de Contribuição do ICMS</label>
+                                                                  <div id="TipoContribuicaoICMS" class="form-control">
+                                                                    <div class="row">
+                                                                      <div class="col-sm-12">
+                                                                        <label class="radio-inline">
+                                                                          <input type="radio" id="formTipoContrICMSNaoContribuinte" name="formTipoContribuicaoICMS" value="1" disabled>
+                                                                          &nbsp;Não é contribuinte do ICMS&nbsp;&nbsp;&nbsp;&nbsp;
+                                                                        </label>
+                                                                      </div>
+                                                                    </div>    
+                                                                    <div class="row">
+                                                                      <div class="col-sm-12">                                                                        
+                                                                        <label class="radio-inline">
+                                                                          <input type="radio" id="formTipoContrICMSContribuinte" name="formTipoContribuicaoICMS" value="2" disabled>
+                                                                          &nbsp;Contribuinte do ICMS&nbsp;&nbsp;&nbsp;&nbsp;
+                                                                        </label>
+                                                                      </div>  
+                                                                    </div>
+                                                                    <div class="row">
+                                                                      <div class="col-sm-12">
+                                                                        <label class="radio-inline">
+                                                                          <input type="radio" id="formTipoContrICMSIsento" name="formTipoContribuicaoICMS" value="3" disabled>
+                                                                          &nbsp;É contribuinte do ICMS Isento de inscrição no cadastro de contribuintes do ICMS
+                                                                        </label>
+                                                                      </div>  
+                                                                    </div>
+                                                                  </div>                                                                
+                                                              </div>
+                                                            </div>
+                                                          </div>                                                            
                                                           <div class="form-group">
-                                                            <label for="">Inscrição Estadual</label><input id="formIE" class="form-control" placeholder="" type="text">
+                                                            <label for="">Inscrição Estadual</label><input id="formIE" maxlength="14" class="form-control" placeholder="" type="text" disabled>
                                                           </div>
+                                                          <div class="row">
+                                                            <div class="col-sm-12">
+                                                              <div class="form-group">                                                                 
+                                                                  <label class="control-label" for="mRadio">Nacionalidade</label>
+                                                                  <div id="Nacionalidade" class="form-control">
+                                                                    <div class="row">
+                                                                      <div class="col-sm-6">
+                                                                        <label class="radio-inline">
+                                                                          <input type="radio" id="formNacionalidadeBrasileira" name="formNacionalidade" value="0" checked>
+                                                                          &nbsp;Brasileira&nbsp;&nbsp;&nbsp;&nbsp;
+                                                                        </label>
+                                                                      </div>
+                                                                      <div class="col-sm-6">                                                                        
+                                                                        <label class="radio-inline">
+                                                                          <input type="radio" id="formNacionalidadeEstrangeira" name="formNacionalidade" value="1">
+                                                                          &nbsp;Estrangeira
+                                                                        </label>
+                                                                      </div>
+                                                                    </div>
+                                                                  </div>                                                                
+                                                              </div>
+                                                            </div>
+                                                          </div>  
                                                           <div class="form-group">
-                                                            <label for="">Identificação de Estrangeiro</label><input id="formIdEstrangeiro" class="form-control" placeholder="" type="text">
+                                                            <label for="">Identificação de Estrangeiro</label><input id="formIdEstrangeiro" maxlength="60" class="form-control" placeholder="" type="text" disabled>
                                                           </div>
-                                                          <div class="form-group">
+                                                          <div class="form-group" id="formDtNascContainer">
                                                             <label for="">Data nascimento</label><input id="formDtNasc" class="form-control" placeholder="" type="date">
                                                           </div>
                                                           <div class="form-group">
-                                                            <label for="">Passageiro</label><input id="formPassageiro" class="form-control" placeholder="Nome Completo" type="text">
+                                                            <label for="">Passageiro</label><input id="formPassageiro" maxlength="60" class="form-control" placeholder="Nome Completo" type="text">
                                                           </div>
                                                             <div class="form-group">
-                                                              <label for=""> Email</label><input id="formEmail" class="form-control" placeholder="Digite o email" type="email">
+                                                              <label for=""> Email</label><input id="formEmail" maxlength="60" class="form-control" placeholder="Digite o email" type="email">
                                                             </div>
                                                             <div class="row">
                                                           <div class="col-sm-6" style="padding-right: 5px;">
@@ -1062,7 +1141,7 @@
                                                               </div>
                                                             </div>
                                                             <div class="col-sm-6" style="padding-left: 5px;">
-                                                              <div class="form-group">
+                                                              <div class="form-group" id="formEmergenciaContainer">
                                                                 <label for=""> Emergência</label><input id="formEmergencia" class="form-control" placeholder="(00) 00000-0000" type="text">
                                                               </div>
                                                             </div>
@@ -1070,26 +1149,26 @@
                                                           <div class="row">
                                                             <div class="col-sm-5">
                                                               <div class="form-group">
-                                                                <label for="">Logradouro</label><input id="formLogradouro" class="form-control" placeholder="" type="text">
+                                                                <label for="">Logradouro</label><input id="formLogradouro" maxlength="60" class="form-control" placeholder="" type="text">
                                                               </div>
                                                             </div>
                                                             <div class="col-sm-3">
                                                               <div class="form-group">
-                                                                <label for="">Número</label><input id="formNumero" class="form-control" placeholder="" type="text">
+                                                                <label for="">Número</label><input id="formNumero" maxlength="60" class="form-control" placeholder="" type="text">
                                                               </div>
                                                             </div>
                                                             <div class="col-sm-3">
                                                               <div class="form-group">
-                                                                <label for="">Complemento</label><input id="formComplemento" class="form-control" placeholder="" type="text">
-                                                              </div>
-                                                            </div>
-                                                            <div class="col-sm-4">
-                                                              <div class="form-group">
-                                                                <label for="">CEP</label><input id="formCEP" class="form-control" placeholder="00000-000" type="text">
+                                                                <label for="">Complemento</label><input id="formComplemento" maxlength="60" class="form-control" placeholder="" type="text">
                                                               </div>
                                                             </div>
                                                           </div>
                                                           <div class="row">
+                                                            <div class="col-sm-6">
+                                                              <div class="form-group">
+                                                                <label for="">CEP</label><input id="formCEP" class="form-control" maxlength="9" placeholder="00000-000" type="text">
+                                                              </div>
+                                                            </div>    
                                                             <div class="col-sm-6">
                                                               <div class="form-group">
                                                                 <label for="">País</label><select id="formPais" class="form-control">
@@ -1103,7 +1182,7 @@
                                                           <div class="row">
                                                             <div class="col-sm-4">
                                                               <div class="form-group">
-                                                                <label for=""> Bairro</label><input id="formBairro" class="form-control" placeholder="" type="text">
+                                                                <label for=""> Bairro</label><input id="formBairro" maxlength="60" class="form-control" placeholder="" type="text">
                                                               </div>
                                                             </div>
                                                             <div class="col-sm-5">
@@ -1120,18 +1199,11 @@
                                                             </div>
                                                             <div class="col-sm-3">
                                                               <div class="form-group">
-                                                                <label for="">UF</label><select id="formUF" class="form-control" disabled> 
-                                                                  <option>
-                                                                    AM
-                                                                  </option>
-                                                                  <option>
-                                                                    RR
-                                                                  </option>
-                                                                </select>
+                                                                <label for="">UF</label><input id="formUF" class="form-control" placeholder="" type="text" disabled>
                                                               </div>
                                                             </div>
                                                           </div>
-                                                          <div class="form-group">
+                                                          <div class="form-group" id="formObservacaoContainer">
                                                             <label for="">Observação</label><textarea id="formObservacao" class="form-control" name="" rows="3"></textarea>
                                                           </div>
                                                         </form>
@@ -1501,7 +1573,10 @@
           //motivoGratuidade: -1,
           valorTarifa: 0,
           dataviagem: '',
-          horario: ''
+          horario: '',
+          tipoComprador: 0,
+          nacionalidade: 0,
+          tipoContribuicaoICMS: 0
         };        
 
         function mudaClass(poltrona, el, texto){
@@ -1579,7 +1654,8 @@
                   //motivoGratuidade: -1,
                   valorTarifa: valTarifa,
                   dataviagem: dt,
-                  horario: horario
+                  horario: horario,
+                  nacionalidade: 0
                 }
               });
 
@@ -1641,21 +1717,30 @@
               document.getElementById("formCidade").value = item.passageiro.cidade;
               document.getElementById("formUF").value = item.passageiro.uf;
               document.getElementById("formObservacao").value = item.passageiro.observacao;
-              document.getElementById("poltronaIndex").value = index;
-              document.getElementById("isComprador").value = false; // informando que não é o cadastro do comprador e sim do passageiro
+              document.getElementById("poltronaIndex").value = index;              
               document.getElementById("formPais").value = item.passageiro.pais;
               document.getElementById("formCNPJ").value = item.passageiro.cnpj;
               document.getElementById("formIE").value = item.passageiro.ie;
               document.getElementById("formIdEstrangeiro").value = item.passageiro.idEstrangeiro;
               document.getElementById("formTipoDocumento").value = item.passageiro.tipoDocumento;
               document.getElementById("formNumeroDocumento").value = item.passageiro.numeroDocumento;       
+              document.getElementById("formTipoCompradorPF").checked = true;
+              document.getElementById("formTipoCompradorPJ").checked = false;              
+              document.getElementById("formTipoContrICMSNaoContribuinte").checked = false;
+              document.getElementById("formTipoContrICMSContribuinte").checked = false;
+              document.getElementById("formTipoContrICMSIsento").checked = false;              
+              document.getElementById("formNacionalidadeBrasileira").checked = item.passageiro.nacionalidade == 0;
+              document.getElementById("formNacionalidadeEstrangeira").checked = item.passageiro.nacionalidade == 1;
+
+              document.getElementById("isComprador").value = false; // informando que não é o cadastro do comprador e sim do passageiro
 
               // campos que serão mostrados para o passageiro porque é solicitado pelo BPe
-              document.getElementById("formDtNasc").hidden = false;
-              document.getElementById("formEmergencia").hidden = false;
-              document.getElementById("formObservacao").hidden = false;
-              document.getElementById("formTipoDocumento").hidden = false;
-              document.getElementById("formNumeroDocumento").hidden = false;
+              document.getElementById("formDtNascContainer").hidden = false;
+              document.getElementById("formEmergenciaContainer").hidden = false;
+              document.getElementById("formObservacaoContainer").hidden = false;
+              document.getElementById("formTipoDocumentoContainer").hidden = false;
+              document.getElementById("formTipoCompradorContainer").hidden = true;
+              document.getElementById("tipoContribuicaoICMSContainer").hidden = true;              
             }              
           });                    
         }
@@ -1683,14 +1768,23 @@
           document.getElementById("formIdEstrangeiro").value = comprador.idEstrangeiro;          
           document.getElementById("formTipoDocumento").value = comprador.tipoDocumento;          
           document.getElementById("formNumeroDocumento").value = comprador.numeroDocumento;          
+          document.getElementById("formTipoCompradorPF").checked = comprador.tipoComprador == 0;
+          document.getElementById("formTipoCompradorPJ").checked = comprador.tipoComprador == 1;
+          document.getElementById("formNacionalidadeBrasileira").checked = comprador.nacionalidade == 0;
+          document.getElementById("formNacionalidadeEstrangeira").checked = comprador.nacionalidade == 1;
+          document.getElementById("formTipoContrICMSNaoContribuinte").checked = comprador.tipoContribuicaoICMS == 1;
+          document.getElementById("formTipoContrICMSContribuinte").checked = comprador.tipoContribuicaoICMS == 2;
+          document.getElementById("formTipoContrICMSIsento").checked = comprador.tipoContribuicaoICMS == 3;
+
           document.getElementById("isComprador").value = true; // informando que é o cadastro do comprador
 
           // campos que serão escondidos para o comprador porque não é solicitado pelo BPe
-          document.getElementById("formDtNasc").hidden = true;
-          document.getElementById("formEmergencia").hidden = true;
-          document.getElementById("formObservacao").hidden = true;
-          document.getElementById("formTipoDocumento").hidden = true;
-          document.getElementById("formNumeroDocumento").hidden = true;
+          document.getElementById("formDtNascContainer").hidden = true;
+          document.getElementById("formEmergenciaContainer").hidden = true;
+          document.getElementById("formObservacaoContainer").hidden = true;
+          document.getElementById("formTipoDocumentoContainer").hidden = true;
+          document.getElementById("formTipoCompradorContainer").hidden = false;
+          document.getElementById("tipoContribuicaoICMSContainer").hidden = false;
         }        
 
         function changeTarifa(index){
@@ -1740,6 +1834,80 @@
           adjustePassagemTotais();
         }
 
+        document.getElementById("formTipoCompradorPF").addEventListener("change", function(e){
+          e.preventDefault();
+          if(document.getElementById("formTipoCompradorPF").checked){
+            document.getElementById("formCPF").disabled = false;
+            document.getElementById("formCNPJ").disabled = true;
+            document.getElementById("formTipoContrICMSNaoContribuinte").disabled = true;
+            document.getElementById("formTipoContrICMSContribuinte").disabled = true;
+            document.getElementById("formTipoContrICMSIsento").disabled = true;       
+            document.getElementById("formTipoContrICMSNaoContribuinte").checked = false;
+            document.getElementById("formTipoContrICMSContribuinte").checked = false;
+            document.getElementById("formTipoContrICMSIsento").checked = false;
+            document.getElementById("formIE").disabled = true;
+            document.getElementById("formIE").value = "";
+          }
+        });
+
+        document.getElementById("formTipoCompradorPJ").addEventListener("change", function(e){
+          e.preventDefault();
+          if(document.getElementById("formTipoCompradorPJ").checked){
+            document.getElementById("formCNPJ").disabled = false;
+            document.getElementById("formCPF").disabled = true;
+            document.getElementById("formTipoContrICMSNaoContribuinte").disabled = false;
+            document.getElementById("formTipoContrICMSContribuinte").disabled = false;
+            document.getElementById("formTipoContrICMSIsento").disabled = false;
+            document.getElementById("formIE").disabled = false;
+          }
+        });
+
+
+        document.getElementById("formNacionalidadeBrasileira").addEventListener("change", function(e){
+          e.preventDefault();
+          if(document.getElementById("formNacionalidadeBrasileira").checked){
+            document.getElementById("formIdEstrangeiro").disabled = true;
+          }
+        });
+
+        document.getElementById("formNacionalidadeEstrangeira").addEventListener("change", function(e){
+          e.preventDefault();
+          if(document.getElementById("formNacionalidadeEstrangeira").checked){
+            document.getElementById("formIdEstrangeiro").disabled = false;
+          }
+        });
+        
+        document.getElementById("formTipoContrICMSNaoContribuinte").addEventListener("change", function(e){
+          e.preventDefault();
+          if(document.getElementById("formTipoContrICMSNaoContribuinte").checked){
+            document.getElementById("formIE").disabled = true;
+            document.getElementById("formIE").value = "";
+          }
+        });        
+
+        document.getElementById("formTipoContrICMSContribuinte").addEventListener("change", function(e){
+          e.preventDefault();
+          if(document.getElementById("formTipoContrICMSContribuinte").checked){
+            document.getElementById("formIE").disabled = false;
+            document.getElementById("formIE").value = "";
+            document.getElementById("formIE").focus();
+          }
+        });        
+
+        document.getElementById("formTipoContrICMSIsento").addEventListener("change", function(e){
+          e.preventDefault();
+          if(document.getElementById("formTipoContrICMSIsento").checked){
+            document.getElementById("formIE").disabled = true;
+            document.getElementById("formIE").value = "ISENTO";
+          }
+        });       
+        
+        document.getElementById("formCidade").addEventListener("change", function(e){
+          e.preventDefault();
+          var el = document.getElementById("formCidade");
+          document.getElementById("formUF").value = el.options[el.selectedIndex].attributes["uf"].value;
+        });       
+
         document.getElementById("butSavePassageiro").addEventListener("click", function(e){
           e.preventDefault();
 
@@ -1760,9 +1928,7 @@
             comprador.cidade = el.value;
             comprador.nomeCidade = el.options[el.selectedIndex].attributes["cidade"].value;
             comprador.municipioIBGE = el.options[el.selectedIndex].attributes["ibge"].value;
-
-            el = document.getElementById("formUF");
-            comprador.uf = el.options[el.selectedIndex].text;
+            comprador.uf = document.getElementById("formUF").value;
 
             comprador.observacao = document.getElementById("formObservacao").value;              
 
@@ -1775,6 +1941,26 @@
             comprador.idEstrangeiro = document.getElementById("formIdEstrangeiro").value;
             comprador.tipoDocumento = document.getElementById("formTipoDocumento").value;
             comprador.numeroDocumento = document.getElementById("formNumeroDocumento").value;
+            if(document.getElementById("formTipoCompradorPF").checked){
+              comprador.tipoComprador = 0; // pessoa física
+            } else {
+              comprador.tipoComprador = 1; // pessoa jurídica
+            }
+
+            if(document.getElementById("formNacionalidadeBrasileira").checked){
+              comprador.nacionalidade = 0; // brasileira
+            } else {
+              comprador.nacionalidade = 1; // estrangeira
+            }
+
+            if(document.getElementById("formTipoContrICMSNaoContribuinte").checked){
+              comprador.tipoContribuicaoICMS = 1;
+            } else if(document.getElementById("formTipoContrICMSContribuinte").checked) {
+              comprador.tipoContribuicaoICMS = 2;
+            } else if(document.getElementById("formTipoContrICMSIsento").checked){
+              comprador.tipoContribuicaoICMS = 3;
+            }
+
           } else { // passageiro
             var index = document.getElementById("poltronaIndex").value;
             poltronas.forEach(item => {
@@ -1795,9 +1981,7 @@
                 item.passageiro.cidade = el.value;
                 item.passageiro.nomeCidade = el.options[el.selectedIndex].attributes["cidade"].value;
                 item.passageiro.municipioIBGE = el.options[el.selectedIndex].attributes["ibge"].value;
-
-                el = document.getElementById("formUF");
-                item.passageiro.uf = el.options[el.selectedIndex].text;
+                item.passageiro.uf = document.getElementById("formUF").value;
 
                 item.passageiro.observacao = document.getElementById("formObservacao").value;              
 
@@ -1810,6 +1994,13 @@
                 item.passageiro.idEstrangeiro = document.getElementById("formIdEstrangeiro").value;
                 item.passageiro.tipoDocumento = document.getElementById("formTipoDocumento").value;
                 item.passageiro.numeroDocumento = document.getElementById("formNumeroDocumento").value;
+                
+                if(document.getElementById("formNacionalidadeBrasileira").checked){
+                  item.passageiro.nacionalidade = 0; // brasileira
+                } else {
+                  item.passageiro.nacionalidade = 1; // estrangeira
+                }
+
               }              
             });  
           }

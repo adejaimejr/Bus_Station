@@ -176,7 +176,7 @@ try {
     Log::debug(LogLevel::Info, "--- mysql setting");
     mysqli_autocommit($conn, TRUE);
 
-    /*Valida os dados do comprador*/
+    /*VALIDA OS DADOS DO COMPRADOR*/
 
     // Valida o nome - obrigatório
     $comprador["nome"] = trim($comprador["nome"]);
@@ -191,47 +191,70 @@ try {
     }
 
     // Valida o CNPJ - obrigatório
-    $comprador["cnpj"] = trim($comprador["cnpj"]);    
-    if($comprador["cnpj"] == ""){
-        throw new EmitirPassagemException("CNPJ do comprador é obrigatório");
+    if($comprador["tipoComprador"] == "1"){ // 0 - pessoa física; 1 - pessoa jurídica
+        $comprador["cnpj"] = trim($comprador["cnpj"]);    
+        if($comprador["cnpj"] == ""){
+            throw new EmitirPassagemException("CNPJ do comprador é obrigatório");
+        }
+        $comprador["cnpj"] = str_replace(".", "", $comprador["cnpj"]);
+        $comprador["cnpj"] = str_replace("/", "", $comprador["cnpj"]);
+        $comprador["cnpj"] = str_replace("-", "", $comprador["cnpj"]);
+        if(!is_numeric($comprador["cnpj"])){
+            throw new EmitirPassagemException("CNPJ do comprador aceita apenas números");
+        }
+        $comprador["cnpj"] = str_pad($comprador["cnpj"], 14, "0", STR_PAD_LEFT);
+        if(strlen($comprador["cnpj"]) != 14){
+            throw new EmitirPassagemException("O CNPJ do comprador precisa ter 14 caracteres numéricos - tamanho: " . strlen($comprador["cnpj"]));
+        }
+    } else { // pessoa física
+        $comprador["cnpj"] = str_repeat("0", 14); // preenche com zeros para pessoa física
     }
-    $comprador["cnpj"] = str_replace(".", "", $comprador["cnpj"]);
-    $comprador["cnpj"] = str_replace("/", "", $comprador["cnpj"]);
-    $comprador["cnpj"] = str_replace("-", "", $comprador["cnpj"]);
-    if(!is_numeric($comprador["cnpj"])){
-        throw new EmitirPassagemException("CNPJ do comprador aceita apenas números");
-    }
-    $comprador["cnpj"] = str_pad($comprador["cnpj"], 14, "0", STR_PAD_LEFT);
-    if(strlen($comprador["cnpj"]) != 14){
-        throw new EmitirPassagemException("O CNPJ do comprador precisa ter 14 caracteres numéricos - tamanho: " . strlen($comprador["cnpj"]));
-    }
-              
 
     // Valida o CPF - obrigatório
     $comprador["cpf"] = trim($comprador["cpf"]);
-    if($comprador["cpf"] == ""){
-        throw new EmitirPassagemException("CPF do comprador é obrigatório");
-    }
-    $comprador["cpf"] = str_replace(".", "", $comprador["cpf"]);
-    $comprador["cpf"] = str_replace("-", "", $comprador["cpf"]);
-    if(!is_numeric($comprador["cpf"])){
-        throw new EmitirPassagemException("CPF do comprador aceita apenas números");
-    }
-    $comprador["cpf"] = str_pad($comprador["cpf"], 11, "0", STR_PAD_LEFT);
-    if(strlen($comprador["cpf"]) != 11){
-        throw new EmitirPassagemException("O CPF do comprador precisa ter 11 caracteres numéricos - tamanho: " . strlen($comprador["cpf"]));
+    if($comprador["tipoComprador"] == "0"){ // 0 - pessoa física; 1 - pessoa jurídica
+        if($comprador["cpf"] == ""){
+            throw new EmitirPassagemException("CPF do comprador é obrigatório");
+        }
+        $comprador["cpf"] = str_replace(".", "", $comprador["cpf"]);
+        $comprador["cpf"] = str_replace("-", "", $comprador["cpf"]);
+        if(!is_numeric($comprador["cpf"])){
+            throw new EmitirPassagemException("CPF do comprador aceita apenas números");
+        }
+        $comprador["cpf"] = str_pad($comprador["cpf"], 11, "0", STR_PAD_LEFT);
+        if(strlen($comprador["cpf"]) != 11){
+            throw new EmitirPassagemException("O CPF do comprador precisa ter 11 caracteres numéricos - tamanho: " . strlen($comprador["cpf"]));
+        }
     }
 
     // Valida o IdEstrangeiro - é obrigatório somente se for estrangeiro
     $comprador["idEstrangeiro"] = trim($comprador["idEstrangeiro"]);
-    if(strlen($comprador["idEstrangeiro"]) > 60){
-        throw new EmitirPassagemException("A identificação de estrangeiro do comprador tem o tamanho máximo de 60 caracteres");
+    if($comprador["nacionalidade"] == "1"){ // 0 - brasileira; 1 - estrangeira
+        if($comprador["idEstrangeiro"] == ""){
+            throw new EmitirPassagemException("A identificação de estrangeiro do comprador é obrigatória");
+        }        
+        if(strlen($comprador["idEstrangeiro"]) > 60){
+            throw new EmitirPassagemException("A identificação de estrangeiro do comprador tem o tamanho máximo de 60 caracteres");
+        }
     }
 
     // Valida a Inscrição Estadual - opcional
     $comprador["ie"] = trim($comprador["ie"]);
     if(strlen($comprador["ie"]) > 60){
         throw new EmitirPassagemException("A inscrição estadual do comprador tem o tamanho máximo de 14 caracteres");
+    }
+    if($comprador["tipoComprador"] == "1"){ // 0 - pessoa física; 1 - pessoa jurídica
+        if($comprador["tipoContribuicaoICMS"] == "1"){ // 1 - Não é contribuinte do ICMS
+            $comprador["ie"] = "";
+        } else if($comprador["tipoContribuicaoICMS"] == "2"){ // 2 - Contribuinte do ICMS
+            if($comprador["idEstrangeiro"] == ""){
+                throw new EmitirPassagemException("A inscrição estadual é obrigatória para o tipo de contribuição de ICMS informada");
+            }            
+        } else if($comprador["tipoContribuicaoICMS"] == "3"){ // 3 - É contribuinte do ICMS Isento de inscrição no cadastro de contribuintes do ICMS
+            $comprador["ie"] = "ISENTO";
+        } else {
+            throw new EmitirPassagemException("Tipo de contribuição do ICMS inválida. Verifique com o administrador.");
+        }
     }
 
     // Valida o Logradouro - obrigatório
@@ -323,14 +346,14 @@ try {
             throw new EmitirPassagemException("O e-mail do comprador precisa ter no máximo 60 caracteres.");
         }    
     }
-
+    
     /*Registro do comprador na base*/
 
     $stmt = mysqli_prepare($conn, 'insert into tbpassagens_comprador (nome, cnpj, cpf, IdEstrangeiro, InscricaoEstadual, logradouro, ' . 
-        'numero, complemento, bairro, cidade, cep, pais, telefone, email) values( ' .
-        '?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)') or die(mysqli_error($conn)); 
-
-    if(!mysqli_stmt_bind_param($stmt, 'sssssssssisiss', 
+        'numero, complemento, bairro, cidade, cep, pais, telefone, email, tipoComprador, estrangeiro, tipoContribuicaoICMS) values( ' .
+        '?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)') or die(mysqli_error($conn)); 
+        
+    if(!mysqli_stmt_bind_param($stmt, 'sssssssssisissiii', 
             $comprador["nome"], 
             $comprador["cnpj"], 
             $comprador["cpf"], 
@@ -344,7 +367,10 @@ try {
             $comprador["cep"], 
             $comprador["pais"], 
             $comprador["fone"], 
-            $comprador["email"])){
+            $comprador["email"],
+            $comprador["tipoComprador"],
+            $comprador["nacionalidade"],
+            $comprador["tipoContribuicaoICMS"])){
         $error = mysqli_error($conn);
         Log::debug(LogLevel::Error, " bind error: ".$error);        
         throw new EmitirPassagemException("Erro no servidor, tente novamente ou saia do sistema e entre novamente.");
@@ -435,7 +461,7 @@ try {
             'nome,  ' .
             'icmsAliquota ' .
             'from tbviagens_tributacao ' .
-            'where CST = "00" and viagem = ' . $viagem;
+            'where CST = "00" and viagem = ' . $viagem["id"];
 
         Log::debug(LogLevel::Info, "select: ".$select);
 

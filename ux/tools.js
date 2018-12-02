@@ -128,7 +128,7 @@ function getMunicipios(isRoot, success, failure){
             var estadosHTML = "<option value='-1'>Selecione o Estado</option>";
             index = 0;
             municipios.forEach(municipio => {
-                municipiosHTML = municipiosHTML + "<option id='municipio" + index + "' value='" + municipio.id + "' ibge='" + municipio.municipioIBGE + "' cidade='" + municipio.cidade + "'>" + 
+                municipiosHTML = municipiosHTML + "<option id='municipio" + index + "' value='" + municipio.id + "' ibge='" + municipio.municipioIBGE + "' cidade='" + municipio.cidade + "' uf='" + municipio.uf + "'>" + 
                     municipio.cidade + " (" +
                     municipio.municipioIBGE +  ")"
                     "</option>";
@@ -140,16 +140,16 @@ function getMunicipios(isRoot, success, failure){
                 index++;
             });
 
-            var elUF = document.getElementById("formUF");
-            elUF.innerHTML = estadosHTML;
+            //var elUF = document.getElementById("formUF");
+            //elUF.innerHTML = estadosHTML;
             
             var elMunicipio = document.getElementById("formCidade");
             elMunicipio.innerHTML = municipiosHTML;
     
-            elMunicipio.addEventListener("change", function(e){
+            /*elMunicipio.addEventListener("change", function(e){
                 e.preventDefault();
                 elUF.selectedIndex = elMunicipio.selectedIndex;         
-            });      
+            });      */
 
         }
         if(success){
