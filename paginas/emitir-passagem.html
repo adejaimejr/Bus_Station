@@ -2281,9 +2281,28 @@
             index++;
           });*/
 
+          /*
+          * This is the plugin
+          */
+          (function(a){a.createModal=function(b){defaults={title:"",message:"Passagem Emitida",closeButton:true,scrollable:false};var b=a.extend({},defaults,b);var c=(b.scrollable===true)?'style="max-height: 400px;overflow-y: auto;"':"";html='<div class="modal fade" id="myModal">';html+='<div class="modal-dialog">';html+='<div class="modal-content">';html+='<div class="modal-header">';html+='<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>';if(b.title.length>0){html+='<h4 class="modal-title">'+b.title+"</h4>"}html+="</div>";html+='<div class="modal-body" '+c+">";html+=b.message;html+="</div>";html+='<div class="modal-footer">';if(b.closeButton===true){html+='<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>'}html+="</div>";html+="</div>";html+="</div>";html+="</div>";a("body").prepend(html);a("#myModal").modal().on("hidden.bs.modal",function(){a(this).remove()})}})(jQuery);
+
           emitirPassagem(false, passagem, function(result){
-            if(result.success){
-              
+            if(result.result){
+              if(result.pdfBilhete){
+                //var myWindow = window.open("", "MsgWindow", "width=200,height=100");
+                //myWindow.document.write('<iframe src="data:application/pdf;base64,' + result.pdfBilhete + '" frameborder="1" scrolling="auto" height="1100" width="850" ></iframe>');
+
+
+                //var iframe = '<div style="height: 600px; width: 480px;"><iframe src="data:application/pdf;base64,' + result.pdfBilhete + '" frameborder="1" scrolling="auto" height="100%" width="100%" ></iframe></div>';
+                var iframe = '<div style="height: 400px; width: 500px;"><iframe src="data:application/pdf;base64,' + result.pdfBilhete + '" scrolling="none" height="400" width="500"></iframe></div>';
+                $.createModal({
+                  title:'Passagem Emitida',
+                  message: iframe,
+                  closeButton:true,
+                  scrollable:false
+                });
+
+              }
             } else {
               if(result.serverMsg){
                 alert(result.serverMsg);

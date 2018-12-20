@@ -59,7 +59,7 @@
                 'passagem' => $logDataset["passagem"],
                 'numero' =>  utf8_encode($logDataset["numero"]),
                 'disponivel' => $logDataset["disponivel"] == "1",
-                'tipoServico' => $logDataset["tipoServicoBPe"]
+                'tipoServicoBPe' => $logDataset["tipoServicoBPe"]
             );
             
             array_push($poltronas, $newRow);              

@@ -3,15 +3,15 @@
     require 'utils.php';
     require 'sefaz.php';
 
-    date_default_timezone_set('America/Manaus');
+    date_default_timezone_set('America/Manaus');    
 
     Log::$phpFile = "emitirPassagem.php";
     Log::$logLevel = LogLevel::Info;
 
     // Verifica a sessão
-    if (!isSessionOK()) {
+    /*if (!isSessionOK()) {
         return false;
-    }
+    }*/
 
     $config = parse_ini_file("config.ini", true);
 
@@ -30,6 +30,43 @@
     // BPe Config
     $bpeConfig = $config["BPeConfig"];
     $bpeConfig_TAR = $bpeConfig["TAR"];
+
+
+    $passagemTeste = $bpeConfig["PassagemTeste"];    
+
+    /* teste */
+    $_POST["viagem"] = '{"id":"65","origemCidade":"Boa Vista","origemUF":"AM","origemMunicipioIBGE":"1302603","destinoCidade":"Manaus","destinoUF":"AM","destinoMunicipioIBGE":"1302603","horariopartida":"08:00:00","meiapassagem":"90.00","normal":"180.00","pedagio":"0.00","promocional":"140.00","seguro":"0.00","dataviagem":"2018-12-21"}';
+    $_POST["poltronas"] = '[{"poltrona":10,' .
+        '"passagem":"' . $passagemTeste . '","tipoServicoBPe":"3","polContainer":"3","passageiro":{"cpf":"11111111111","cnpj":"","tipoDocumento":"1","numeroDocumento":"teste","ie":"","idEstrangeiro":"","dtNasc":"2018-10-01","nome":"teste","email":"teste@teste.com","fone":"999999999","emergencia":"999999999","logradouro":"teste","numero":"100","complemento":"teste","cep":"99999999","bairro":"teste","cidade":"2","uf":"RR","observacao":"teste","tarifa":1,"valorTarifa":180,"dataviagem":"2018-01-26","horario":"08:00:00","nacionalidade":0,"nomeCidade":"Boa Vista","municipioIBGE":"1400100","pais":"1058","nomePais":"Brasil","tarifaDescr":"Tarifa Normal","descontoporc":"0","tpDesconto":"0","valDesconto":0}}]';
+    $_POST["pagamentos"] = '[{"pagamentoIndex":1,"formaPag":"0","prazo":"0","bandeira":"01","valorParcela":"180","valParTotal":"180","valTroco":0}]';
+    $_POST["comprador"] = '{"cpf":"11111111111","cnpj":"","tipoDocumento":"","numeroDocumento":"","ie":"","idEstrangeiro":"","dtNasc":"","nome":"teste","email":"teste@teste.com","fone":"999999999","emergencia":"","logradouro":"teste","numero":"100","complemento":"teste","cep":"99999999","bairro":"teste","cidade":"2","uf":"RR","observacao":"","tarifa":0,"valorTarifa":0,"dataviagem":"","horario":"","tipoComprador":0,"nacionalidade":0,"tipoContribuicaoICMS":0,"nomeCidade":"Boa Vista","municipioIBGE":"1400100","pais":"1058","nomePais":"Brasil"}';
+
+
+    //$viagem["origemUF"] = "AM"; // UF de início da viagem deve ser igual a UF do emitente do BP-e // teste
+    //$viagem["origemMunicipioIBGE"] = "1302603"; // teste
+    // Data/hora de emissao do BP-e posterior a data/hora de recebimento
+
+    /* fim do teste */
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     Log::debug(LogLevel::Info, "<<< ".json_encode($_POST));
     /*
@@ -100,7 +137,6 @@
 
 /**** TOKEN: UyBBIEluZm9ybeF0aWNhajJCTUs= *****/
 
-
 /* TRATAMENTO DE PACOTE */
 $poltronas = json_decode($_POST["poltronas"], false);
 Log::debug(LogLevel::Info, "<<< --- poltronas: ".json_encode($poltronas));
@@ -139,6 +175,9 @@ $dt = strtotime('+ 1 year', strtotime($dataEmissao));
 $dataValidade = date('c', $dt);
 
 
+//$dataEmissao = "2018-12-13T20:44:00-03:00"; // TESTE quando manda 13/12/2018 está gerando erro no servidor
+
+
 /*
 FORMA DE PAGAMENTO
 "pagamentos":"[{\"pagamentoIndex\":1,\"formaPag\":\"2\",\"prazo\":\"0\",\"valorParcela\":\"10\",\"valParTotal\":\"10\"},
@@ -158,6 +197,10 @@ FORMA DE PAGAMENTO
 
 class EmitirPassagemException extends Exception {    
 }
+
+$serverMsg = "";
+$result = false;
+$pdfBilhete = "";
 
 try {
 
@@ -390,6 +433,8 @@ try {
 
     $bpePagtos = [];
 
+    $valTroco = 0;
+
     $i = 0;
     while(array_key_exists($i, $pagamentos)){
         $pagamento = json_encode($pagamentos[$i], true);
@@ -397,6 +442,7 @@ try {
         $formaPag = $pagamento["formaPag"];    
         if($formaPag == "0"){ // 0 - dinheiro
             $bpeFormaPag = "01"; // 01 - dinheiro
+            $valTroco += $pagamento["valTroco"];
         } else if($formaPag == "1"){ // 1 - cartão de débito
             $bpeFormaPag = "04"; // 04 - cartão de débito
         } else if($formaPag == "2"){ // 2 - cartão de crédito
@@ -421,22 +467,25 @@ try {
         $i++;   
     }
 
+    // FORMATA valTroco
+    $valTrocoStr = number_format($valTroco, 2, '.', '');
+
     // geração do cBP - Código numérico que compõe a Chave de Acesso. - Código aleatório gerado pelo emitente, com o objetivo de evitar acessos indevidos ao documento.
     // GERA O CÓDIGO ALEATÓRIO DE 8 POSICOES (cBP)
     $cBP = mt_rand(11111111, 99999999);
     $valor = $cBP;
     $peso = 2; // COMEÇA COM PESO 2 E VAI ATÉ 9
-    $result = 0;
+    $resultCalc = 0;
     for($i = 0; $i < 8; $i++){
         $rest = $valor % 10;
-        $result += ($rest * $peso); 
+        $resultCalc += ($rest * $peso); 
         $valor = $valor - $rest;
         $valor = $valor / 10;
         $peso++;
     }
 
     // CALCULA O DIGITO VERIFICADOR (DV)
-    $resto = $result % 11;
+    $resto = $resultCalc % 11;
     $dv = 11 - $resto;
     if($dv == 0 || $dv == 1){
         $dv = 0;
@@ -466,7 +515,7 @@ try {
         Log::debug(LogLevel::Info, "select: ".$select);
 
         $query = mysqli_query($conn, $select);
-        if (!$logQuery) {
+        if (!$query) {
             Log::debug(LogLevel::Error, "mysqli_query - ".mysqli_error($conn));
             header("location:login.html");
             // destroy a sessão
@@ -476,7 +525,9 @@ try {
 
         $dataset = mysqli_fetch_array($query, MYSQLI_BOTH);
 
-        $icmsAliquota = $dataset["icmsAliquota"];    
+        $icmsAliquota = $dataset["icmsAliquota"];   
+        
+        Log::debug(LogLevel::Info, "montando o BPe...");
 
         // monta o BPe pra transmitir
         $i = 0;
@@ -484,11 +535,29 @@ try {
             $poltrona = json_encode($poltronas[$i], true);
             $poltrona = json_decode($poltrona, true);
 
-            $valorPago = $poltrona["viagem"]["normal"] - $poltrona["passageiro"]["valDesconto"];
+            $valorPago = $viagem["normal"] - $poltrona["passageiro"]["valDesconto"];
 
             // Cálculo do ICMS
             $vBC = $valorPago;
             $vICMS = $valorPago * $icmsAliquota / 100;
+
+            // FORMATA O valorTarifa
+            $valorTarifa = number_format($poltrona["passageiro"]["valorTarifa"], 2, '.', '');
+
+            // FORMATA O valorPago
+            $valorPago = number_format($valorPago, 2, '.', '');
+
+            // FORMATA O tpDesconto
+            $tpDesconto = str_pad($poltrona["passageiro"]["tpDesconto"], 2, "0", STR_PAD_LEFT);
+
+            // FORMATA O vDesconto
+            $vDesconto = number_format($poltrona["passageiro"]["valDesconto"], 2, '.', '');
+
+            // FORMATA O vICMS
+            $vICMS = number_format($vICMS, 2, '.', '');
+
+            // FORMATA O pICMS
+            $pICMS = number_format($icmsAliquota, 2, '.', '');
 
             // Montagem do pacote BPe
             $BPe = [
@@ -616,29 +685,25 @@ try {
                         "sitVeiculo" => "" // Situação do veículo transportado
                     ]*/,
                     "infValorBPe" =>  [ // Informações dos valores do Bilhete de Passagem
-                        "vBP" => $poltrona["passageiro"]["valorTarifa"], // Valor do Bilhete de Passagem (ex: 1.00)
-                        "vDesconto" => $poltrona["passageiro"]["valDesconto"], // Valor do desconto concedido ao comprador
+                        "vBP" => $valorTarifa, // Valor do Bilhete de Passagem (ex: 1.00)
+                        "vDesconto" => $vDesconto, // Valor do desconto concedido ao comprador
                         "vPgto" => $valorPago, // Valor pago pelo BP-e (vBP - vDesconto)
-                        "vTroco" => $poltrona["passageiro"]["valTroco"], // Valor do troco
-                        "tpDesconto" => $poltrona["passageiro"]["tpDesconto"], // Tipo de desconto/benefício para o BP-e
-                        "xDesconto" => $poltrona["passageiro"]["tarifaDescr"] /*, // Descrição do tipo de desconto/benefício concedido
+                        "vTroco" => $valTrocoStr, // Valor do troco
+                        //"tpDesconto" => $tpDesconto, // Tipo de desconto/benefício para o BP-e (SERÁ PROCESSADO LOGO ABAIXO)
+                        //"xDesconto" => $poltrona["passageiro"]["tarifaDescr"], // Descrição do tipo de desconto/benefício concedido
                         "Comp" =>  [ // Componentes do Valor do Bilhete
                             [
                             "tpComp" => "01", // Tipo do Componente
-                            "vComp" => "0.50" // Valor do componente
-                            ],
-                            [
-                            "tpComp" => "02", // Tipo do Componente
-                            "vComp" => "0.50" // Valor do componente
+                            "vComp" => $valorTarifa // Valor do componente
                             ]
-                        ]*/
+                        ]
                     ],
                     "imp" =>  [ // Informações relativas aos Impostos
                         "ICMS" =>  [ // Informações relativas ao ICMS
                             "ICMS00" =>  [ // Prestação sujeito à tributação normal do ICMS
                                 "CST" => "00", // OK FIXO - classificação Tributária do Serviço
                                 "vBC" => $valorPago, // OK VARIAVEL - Valor da BC do ICMS
-                                "pICMS" => $icmsAliquota, // OK VARIAVEL - Alíquota do ICMS - Exemplo: 12.00
+                                "pICMS" => $pICMS, // OK VARIAVEL - Alíquota do ICMS - Exemplo: 12.00
                                 "vICMS" => $vICMS // OK CALCULADO - Valor do ICMS - Exemplo 12.00
                             ]/*,
                             "ICMS20" =>  [ // Prestação sujeito à tributação com redução de BC do ICMS
@@ -700,6 +765,13 @@ try {
                 ]
             ];
 
+            // Trata o tpDesconto
+            if($tpDesconto != "00"){
+                $BPe["infBPe"]["infValorBPe"]["tpDesconto"] = $tpDesconto;
+                $BPe["infBPe"]["infValorBPe"]["xDesconto"] = $poltrona["passageiro"]["tarifaDescr"];
+            }
+
+            // Monta o conteudo BPe pra transmitir
             $conteudo = [
                 "BPe" => $BPe
             ];
@@ -712,14 +784,87 @@ try {
             /************************/
 
             $conteudo = json_encode($conteudo);
-            var_dump($conteudo);
-            Log::debug(LogLevel::Info, "xml saída: " . $conteudo);
+            //var_dump($conteudo);
+            Log::debug(LogLevel::Info, "xml BPe de saída: " . $conteudo);
 
+            // Transmite o XML do BPe
             $sefaz = new Sefaz();
             $retorno = $sefaz->emitirNFe($token, $conteudo, $tpConteudo);
-            echo $retorno;
+            //echo $retorno;
             //var_dump($retorno);
-            //Log::debug(LogLevel::Info, "curl executado: " + $retorno);
+            Log::debug(LogLevel::Info, "resposta do BPe: " . $retorno);
+
+            $resp = json_decode($retorno);
+
+            Log::debug(LogLevel::Info, "resposta do BPe Status: " . $resp->status);
+
+            // {"status":200,"motivo":"BP-e enviado para Sefaz","nsNRec":71}
+
+
+            // Verifica o status
+            // Verifica o status da passagem 
+
+            if($resp->status == 200){
+                while(true){
+                    $nsNRec = $resp->nsNRec; 
+
+                    
+                    
+                    //$nsNRec = 68; // APENAS TESTE
+
+
+
+
+                    $CNPJ = "63679351000190";
+                    $retorno = $sefaz->consultarStatusProcessamento($token, $CNPJ, $nsNRec);
+                    Log::debug(LogLevel::Info, "resposta da verificação do BPe: " . $retorno);
+                    $respVer = json_decode($retorno);
+                    Log::debug(LogLevel::Info, "resposta do BPe Status: " . $respVer->status);
+
+                    // {"status":200,"motivo":"Consulta realizada com sucesso","chBPe":"13181263679351000190630010000000261941679690","cStat":"0","xMotivo":"Documento em Processamento","nProt":"","dhRecbto":"2018-12-20T12:42:24-02:00"}
+
+                    if($respVer->status == 200){
+                        // {"status":200,"motivo":"Consulta realizada com sucesso","chBPe":"13181263679351000190630010000000261941679690","cStat":"539","xMotivo":"Rejeição: Duplicidade de BP-e, com diferença na Chave de Acesso [chBPe:13181263679351000190630010000000261937711348][nProt:313180000000251][dhAut:2018-12-17T14:59:21-02:00]"}
+                        if($respVer->cStat == 100){
+                            Log::debug(LogLevel::Info, "resposta da verificação do BPe OK");
+
+                            // Download da passagem 
+                            $tpDown = "XP"; // X - XML; P - PDF; XP - XML E PDF
+                            $chBPe = $respVer->chBPe;
+                            $tpAmb = "2"; // 2 - homologação; 1 - produção
+                            $retorno = $sefaz->downloadBPe($token, $chBPe, $tpDown, $tpAmb);                            
+
+                            Log::debug(LogLevel::Info, "resposta do download do BPe: " . $retorno);
+
+                            $respDownload = json_decode($retorno);
+
+                            if($respDownload->status == 200){
+                                Log::debug(LogLevel::Info, "download do BPe OK");
+                                $pdfBilhete = $respDownload->pdf;
+                                $result = true;
+                            } else {
+                                $serverMsg = $respVer->xMotivo;
+                            }
+                            break;
+                        } else if($respVer->cStat == 0){
+                            Log::debug(LogLevel::Info, "resposta da verificação do BPe: " . $respVer->xMotivo);
+                        } else {
+                            $serverMsg = $respVer->xMotivo;
+                            break;
+                        }                    
+                    } else {                    
+                        $serverMsg = $respVer->motivo;
+                        break;
+                    }
+                }
+                if($result){
+                    break;
+                }
+            } else {
+                $serverMsg = $resp->motivo;
+                break;
+            }
+
 
             $i++;    
         }
@@ -739,7 +884,8 @@ try {
 
 $data = [
     'result' => $result,
-    'serverMsg' => $serverMsg
+    'serverMsg' => $serverMsg,
+    'pdfBilhete' => $pdfBilhete
 ];
 
 header('Content-Type: application/json');
