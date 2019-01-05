@@ -35,7 +35,8 @@
     $passagemTeste = $bpeConfig["PassagemTeste"];    
 
     /* teste */
-    $_POST["viagem"] = '{"id":"65","origemCidade":"Boa Vista","origemUF":"AM","origemMunicipioIBGE":"1302603","destinoCidade":"Manaus","destinoUF":"AM","destinoMunicipioIBGE":"1302603","horariopartida":"08:00:00","meiapassagem":"90.00","normal":"180.00","pedagio":"0.00","promocional":"140.00","seguro":"0.00","dataviagem":"2018-12-21"}';
+    $_POST["viagem"] = '{"id":"65","origemCidade":"Boa Vista","origemUF":"AM","origemMunicipioIBGE":"1302603","destinoCidade":"Manaus","destinoUF":"AM","destinoMunicipioIBGE":"1302603","horariopartida":"08:00:00","meiapassagem":"90.00","normal":"180.00","pedagio":"0.00","promocional":"140.00","seguro":"0.00",
+        "dataviagem":"2018-06-01"}';
     $_POST["poltronas"] = '[{"poltrona":10,' .
         '"passagem":"' . $passagemTeste . '","tipoServicoBPe":"3","polContainer":"3","passageiro":{"cpf":"11111111111","cnpj":"","tipoDocumento":"1","numeroDocumento":"teste","ie":"","idEstrangeiro":"","dtNasc":"2018-10-01","nome":"teste","email":"teste@teste.com","fone":"999999999","emergencia":"999999999","logradouro":"teste","numero":"100","complemento":"teste","cep":"99999999","bairro":"teste","cidade":"2","uf":"RR","observacao":"teste","tarifa":1,"valorTarifa":180,"dataviagem":"2018-01-26","horario":"08:00:00","nacionalidade":0,"nomeCidade":"Boa Vista","municipioIBGE":"1400100","pais":"1058","nomePais":"Brasil","tarifaDescr":"Tarifa Normal","descontoporc":"0","tpDesconto":"0","valDesconto":0}}]';
     $_POST["pagamentos"] = '[{"pagamentoIndex":1,"formaPag":"0","prazo":"0","bandeira":"01","valorParcela":"180","valParTotal":"180","valTroco":0}]';
@@ -170,10 +171,21 @@ $dataEmissao = date("c");
 $dt = DateTime::createFromFormat("Y-m-d h:i:s", $viagem["dataviagem"] . " " . $viagem["horariopartida"]);
 $dataEmbarque = $dt->format("c");
 
+
+
+
+
+$dataEmbarque = $dataEmissao; // TESTE
+
+
+
+
+
+
+
 // formata a data de validade - adiciona um ano
 $dt = strtotime('+ 1 year', strtotime($dataEmissao));
 $dataValidade = date('c', $dt);
-
 
 //$dataEmissao = "2018-12-13T20:44:00-03:00"; // TESTE quando manda 13/12/2018 está gerando erro no servidor
 
