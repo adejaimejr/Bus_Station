@@ -3,7 +3,7 @@
     require 'utils.php';
     require 'sefaz.php';
 
-    date_default_timezone_set('America/Manaus');    
+    date_default_timezone_set('America/Manaus');
 
     Log::$phpFile = "emitirPassagem.php";
     Log::$logLevel = LogLevel::Info;
@@ -24,31 +24,54 @@
 
     // General Config
     $generalCfg = $config["GeneralConfig"];
-    $applicationVersion = $generalCfg["applicationVersion"]; 
+    $applicationVersion = $generalCfg["applicationVersion"];
     $mysqlDateFormat = $generalCfg["mysqlDateFormat"];
 
     // BPe Config
     $bpeConfig = $config["BPeConfig"];
     $bpeConfig_TAR = $bpeConfig["TAR"];
 
+    // EmitenteBPe Config
+    $EmitenteBPeConfig = $config["EmitenteBPeConfig"];
+    $emitCfg_CNPJ = $EmitenteBPeConfig["CNPJ"];
+    $emitCfg_IE = $EmitenteBPeConfig["IE"];
+    $emitCfg_xNome = $EmitenteBPeConfig["xNome"];
+    $emitCfg_xFant = $EmitenteBPeConfig["xFant"];
+    $emitCfg_IM = $EmitenteBPeConfig["IM"];
+    $emitCfg_CNAE = $EmitenteBPeConfig["CNAE"];
+    $emitCfg_CRT = $EmitenteBPeConfig["CRT"];
 
-    $passagemTeste = $bpeConfig["PassagemTeste"];    
+    // enderEmitConfig Config
+    $enderEmitConfig = $config["enderEmitConfig"];
+    $enderEmitCfg_xLgr = $enderEmitConfig["xLgr"];
+    $enderEmitCfg_nro = $enderEmitConfig["nro"];
+    $enderEmitCfg_xCpl = $enderEmitConfig["xCpl"];
+    $enderEmitCfg_xBairro = $enderEmitConfig["xBairro"];
+    $enderEmitCfg_cMun = $enderEmitConfig["cMun"];
+    $enderEmitCfg_xMun = $enderEmitConfig["xMun"];
+    $enderEmitCfg_CEP = $enderEmitConfig["CEP"];
+    $enderEmitCfg_UF = $enderEmitConfig["UF"];
+    $enderEmitCfg_Fone = $enderEmitConfig["Fone"];
+    $enderEmitCfg_Email = $enderEmitConfig["Email"];
+
+
+    $passagemTeste = $bpeConfig["PassagemTeste"];
 
     /* teste */
-    $_POST["viagem"] = '{"id":"65","origemCidade":"Boa Vista","origemUF":"AM","origemMunicipioIBGE":"1302603","destinoCidade":"Manaus","destinoUF":"AM","destinoMunicipioIBGE":"1302603","horariopartida":"08:00:00","meiapassagem":"90.00","normal":"180.00","pedagio":"0.00","promocional":"140.00","seguro":"0.00",
+    /*$_POST["viagem"] = '{"id":"65","origemCidade":"Boa Vista","origemUF":"AM","origemMunicipioIBGE":"1302603","destinoCidade":"Manaus","destinoUF":"AM","destinoMunicipioIBGE":"1302603","horariopartida":"08:00:00","meiapassagem":"90.00","normal":"180.00","pedagio":"0.00","promocional":"140.00","seguro":"0.00",
         "dataviagem":"2018-06-01"}';
     $_POST["poltronas"] = '[{"poltrona":10,' .
         '"passagem":"' . $passagemTeste . '","tipoServicoBPe":"3","polContainer":"3","passageiro":{"cpf":"11111111111","cnpj":"","tipoDocumento":"1","numeroDocumento":"teste","ie":"","idEstrangeiro":"","dtNasc":"2018-10-01","nome":"teste","email":"teste@teste.com","fone":"999999999","emergencia":"999999999","logradouro":"teste","numero":"100","complemento":"teste","cep":"99999999","bairro":"teste","cidade":"2","uf":"RR","observacao":"teste","tarifa":1,"valorTarifa":180,"dataviagem":"2018-01-26","horario":"08:00:00","nacionalidade":0,"nomeCidade":"Boa Vista","municipioIBGE":"1400100","pais":"1058","nomePais":"Brasil","tarifaDescr":"Tarifa Normal","descontoporc":"0","tpDesconto":"0","valDesconto":0}}]';
     $_POST["pagamentos"] = '[{"pagamentoIndex":1,"formaPag":"0","prazo":"0","bandeira":"01","valorParcela":"180","valParTotal":"180","valTroco":0}]';
-    $_POST["comprador"] = '{"cpf":"11111111111","cnpj":"","tipoDocumento":"","numeroDocumento":"","ie":"","idEstrangeiro":"","dtNasc":"","nome":"teste","email":"teste@teste.com","fone":"999999999","emergencia":"","logradouro":"teste","numero":"100","complemento":"teste","cep":"99999999","bairro":"teste","cidade":"2","uf":"RR","observacao":"","tarifa":0,"valorTarifa":0,"dataviagem":"","horario":"","tipoComprador":0,"nacionalidade":0,"tipoContribuicaoICMS":0,"nomeCidade":"Boa Vista","municipioIBGE":"1400100","pais":"1058","nomePais":"Brasil"}';
-
+    $_POST["comprador"] = '{"compradorPassageiro":"1","cpf":"11111111111","cnpj":"","tipoDocumento":"","numeroDocumento":"","ie":"","idEstrangeiro":"","dtNasc":"","nome":"teste","email":"teste@teste.com","fone":"999999999","emergencia":"","logradouro":"teste","numero":"100","complemento":"teste","cep":"99999999","bairro":"teste","cidade":"2","uf":"RR","observacao":"","tarifa":0,"valorTarifa":0,"dataviagem":"","horario":"","tipoComprador":0,"nacionalidade":0,"tipoContribuicaoICMS":0,"nomeCidade":"Boa Vista","municipioIBGE":"1400100","pais":"1058","nomePais":"Brasil"}';
+*/
 
     //$viagem["origemUF"] = "AM"; // UF de início da viagem deve ser igual a UF do emitente do BP-e // teste
     //$viagem["origemMunicipioIBGE"] = "1302603"; // teste
     // Data/hora de emissao do BP-e posterior a data/hora de recebimento
 
     /* fim do teste */
-    
+
 
 
 
@@ -74,7 +97,7 @@
     $poltronas = json_decode($_POST["poltronas"], false);
     Log::debug(LogLevel::Info, "<<< --- poltronas: ".json_encode($poltronas));
     Log::debug(LogLevel::Info, "<<< poltrona0: ".json_encode($poltronas[0]));
-    
+
     $poltrona0 = json_encode($poltronas[0], true);
     $poltrona0 = json_decode($poltrona0, true);
 
@@ -84,7 +107,7 @@
     $poltrona2 = json_encode($poltronas[2], true);
     $poltrona2 = json_decode($poltrona2, true);
 
-    
+
     Log::debug(LogLevel::Info, "<<< poltrona0.poltrona: ".$poltrona0["poltrona"]);
     Log::debug(LogLevel::Info, "<<< poltrona1.poltrona: ".$poltrona1["poltrona"]);
     Log::debug(LogLevel::Info, "<<< poltrona2.poltrona: ".$poltrona2["poltrona"]);
@@ -104,7 +127,7 @@
     $pagamentos = json_decode($_POST["pagamentos"], false);
     Log::debug(LogLevel::Info, "<<< --- pagamentos: ".json_encode($pagamentos));
     Log::debug(LogLevel::Info, "<<< pagamento0: ".json_encode($pagamentos[0]));
-    
+
     $pagamento0 = json_encode($pagamentos[0], true);
     $pagamento0 = json_decode($pagamento0, true);
 
@@ -114,7 +137,7 @@
     $pagamento2 = json_encode($pagamentos[2], true);
     $pagamento2 = json_decode($pagamento2, true);
 
-    
+
     Log::debug(LogLevel::Info, "<<< pagamento0.pagamentoIndex: ".$pagamento0["pagamentoIndex"]);
     Log::debug(LogLevel::Info, "<<< pagamento1.pagamentoIndex: ".$pagamento1["pagamentoIndex"]);
     Log::debug(LogLevel::Info, "<<< pagamento2.pagamentoIndex: ".$pagamento2["pagamentoIndex"]);
@@ -130,7 +153,7 @@
 
 
 
-*/  
+*/
 
 
 /***************** TESTE EMISSÃO DE PASSAGEM ************************************/
@@ -165,7 +188,7 @@ $token = "UyBBIEluZm9ybeF0aWNhajJCTUs=";
 $tpConteudo = "json";
 
 // data da emissão
-$dataEmissao = date("c");  
+$dataEmissao = date("c");
 
 // formata a data do embarque
 $dt = DateTime::createFromFormat("Y-m-d h:i:s", $viagem["dataviagem"] . " " . $viagem["horariopartida"]);
@@ -207,7 +230,7 @@ FORMA DE PAGAMENTO
 99 - Outros
 */
 
-class EmitirPassagemException extends Exception {    
+class EmitirPassagemException extends Exception {
 }
 
 $serverMsg = "";
@@ -226,12 +249,51 @@ try {
     if (mysqli_connect_errno()) {
         Log::debug(LogLevel::Error, "MySQL Connect Log failed: ".mysqli_connect_error());
         throw new EmitirPassagemException("Erro no servidor, verifique com o Administrador.");
-    }      
+    }
 
     Log::debug(LogLevel::Info, "--- mysql setting");
     mysqli_autocommit($conn, TRUE);
 
     /*VALIDA OS DADOS DO COMPRADOR*/
+
+    // PEGA O NÚMERO DA PRIMEIRA PASSAGEM
+    $i = 0;
+    $numeroPassagem = 0;
+    while(array_key_exists($i, $poltronas)){
+        $poltrona = json_encode($poltronas[$i], true);
+        $poltrona = json_decode($poltrona, true);
+        $numeroPassagem = $poltrona["passagem"];
+        break;
+    }
+
+    // VERIFICA SE O COMPRADOR É O PRÓPRIO PASSAGEIRO, SE FOR COPIA OS DADOS DO PRIMEIRO PASSAGEIRO PARA O COMPRADOR
+    if($comprador["compradorPassageiro"] == "1"){
+      $i = 0;
+      while(array_key_exists($i, $poltronas)){
+          $poltrona = json_encode($poltronas[$i], true);
+          $poltrona = json_decode($poltrona, true);
+
+          $comprador["nome"] = $poltrona["passageiro"]["nome"];
+          $comprador["tipoComprador"] = "0"; // 0 - pessoa física; 1 - pessoa jurídica
+          $comprador["cnpj"] = "";
+          $comprador["cpf"] = $poltrona["passageiro"]["cpf"];
+          $comprador["idEstrangeiro"] = $poltrona["passageiro"]["idEstrangeiro"];
+          $comprador["nacionalidade"] = $poltrona["passageiro"]["nacionalidade"];
+          $comprador["ie"] = "";
+          $comprador["tipoContribuicaoICMS"] = "";
+          $comprador["logradouro"] = $poltrona["passageiro"]["logradouro"];
+          $comprador["numero"] = $poltrona["passageiro"]["numero"];
+          $comprador["complemento"] = $poltrona["passageiro"]["complemento"];
+          $comprador["bairro"] = $poltrona["passageiro"]["bairro"];
+          $comprador["municipioIBGE"] = $poltrona["passageiro"]["municipioIBGE"];
+          $comprador["cep"] = $poltrona["passageiro"]["cep"];
+          $comprador["pais"] = $poltrona["passageiro"]["pais"];
+          $comprador["fone"] = $poltrona["passageiro"]["fone"];
+          $comprador["email"] = $poltrona["passageiro"]["email"];
+
+          break;
+      };
+    }
 
     // Valida o nome - obrigatório
     $comprador["nome"] = trim($comprador["nome"]);
@@ -247,7 +309,7 @@ try {
 
     // Valida o CNPJ - obrigatório
     if($comprador["tipoComprador"] == "1"){ // 0 - pessoa física; 1 - pessoa jurídica
-        $comprador["cnpj"] = trim($comprador["cnpj"]);    
+        $comprador["cnpj"] = trim($comprador["cnpj"]);
         if($comprador["cnpj"] == ""){
             throw new EmitirPassagemException("CNPJ do comprador é obrigatório");
         }
@@ -287,7 +349,7 @@ try {
     if($comprador["nacionalidade"] == "1"){ // 0 - brasileira; 1 - estrangeira
         if($comprador["idEstrangeiro"] == ""){
             throw new EmitirPassagemException("A identificação de estrangeiro do comprador é obrigatória");
-        }        
+        }
         if(strlen($comprador["idEstrangeiro"]) > 60){
             throw new EmitirPassagemException("A identificação de estrangeiro do comprador tem o tamanho máximo de 60 caracteres");
         }
@@ -304,7 +366,7 @@ try {
         } else if($comprador["tipoContribuicaoICMS"] == "2"){ // 2 - Contribuinte do ICMS
             if($comprador["idEstrangeiro"] == ""){
                 throw new EmitirPassagemException("A inscrição estadual é obrigatória para o tipo de contribuição de ICMS informada");
-            }            
+            }
         } else if($comprador["tipoContribuicaoICMS"] == "3"){ // 3 - É contribuinte do ICMS Isento de inscrição no cadastro de contribuintes do ICMS
             $comprador["ie"] = "ISENTO";
         } else {
@@ -363,7 +425,7 @@ try {
     if(strlen($comprador["cep"]) > 8){
         throw new EmitirPassagemException("O cep do comprador precisa ter 8 números.");
     }
-    if(strlen($comprador["cep"]) > 0){    
+    if(strlen($comprador["cep"]) > 0){
         $comprador["cep"] = str_pad($comprador["cep"], 8, "0", STR_PAD_LEFT);
     }
 
@@ -385,13 +447,13 @@ try {
         $comprador["fone"] = str_replace(")", "", $comprador["fone"]);
         if(!is_numeric($comprador["fone"])){
             throw new EmitirPassagemException("O telefone do comprador aceita apenas números");
-        }   
+        }
         if(strlen($comprador["fone"]) < 7){
             throw new EmitirPassagemException("O telefone do comprador precisa ter no mínimo 7 números.");
-        }    
+        }
         if(strlen($comprador["fone"]) > 12){
             throw new EmitirPassagemException("O telefone do comprador precisa ter no máximo 12 números.");
-        }    
+        }
     }
 
     // Valida o email - opcional
@@ -399,37 +461,38 @@ try {
     if($comprador["email"] != ""){
         if(strlen($comprador["email"]) > 60){
             throw new EmitirPassagemException("O e-mail do comprador precisa ter no máximo 60 caracteres.");
-        }    
+        }
     }
-    
+
     /*Registro do comprador na base*/
 
-    $stmt = mysqli_prepare($conn, 'insert into tbpassagens_comprador (nome, cnpj, cpf, IdEstrangeiro, InscricaoEstadual, logradouro, ' . 
+    $stmt = mysqli_prepare($conn, 'insert into tbpassagens_comprador (passagem, nome, cnpj, cpf, IdEstrangeiro, InscricaoEstadual, logradouro, ' .
         'numero, complemento, bairro, cidade, cep, pais, telefone, email, tipoComprador, estrangeiro, tipoContribuicaoICMS) values( ' .
-        '?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)') or die(mysqli_error($conn)); 
-        
-    if(!mysqli_stmt_bind_param($stmt, 'sssssssssisissiii', 
-            $comprador["nome"], 
-            $comprador["cnpj"], 
-            $comprador["cpf"], 
-            $comprador["idEstrangeiro"], 
-            $comprador["ie"], 
-            $comprador["logradouro"], 
-            $comprador["numero"], 
-            $comprador["complemento"], 
-            $comprador["bairro"], 
-            $comprador["municipioIBGE"], 
-            $comprador["cep"], 
-            $comprador["pais"], 
-            $comprador["fone"], 
+        '?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)') or die(mysqli_error($conn));
+
+    if(!mysqli_stmt_bind_param($stmt, 'isssssssssisissiii',
+            $numeroPassagem,
+            $comprador["nome"],
+            $comprador["cnpj"],
+            $comprador["cpf"],
+            $comprador["idEstrangeiro"],
+            $comprador["ie"],
+            $comprador["logradouro"],
+            $comprador["numero"],
+            $comprador["complemento"],
+            $comprador["bairro"],
+            $comprador["municipioIBGE"],
+            $comprador["cep"],
+            $comprador["pais"],
+            $comprador["fone"],
             $comprador["email"],
             $comprador["tipoComprador"],
             $comprador["nacionalidade"],
             $comprador["tipoContribuicaoICMS"])){
         $error = mysqli_error($conn);
-        Log::debug(LogLevel::Error, " bind error: ".$error);        
+        Log::debug(LogLevel::Error, " bind error: ".$error);
         throw new EmitirPassagemException("Erro no servidor, tente novamente ou saia do sistema e entre novamente.");
-    }    
+    }
 
     if(!mysqli_stmt_execute($stmt)){
         $error = mysqli_error($conn);
@@ -437,9 +500,7 @@ try {
         throw new EmitirPassagemException("Erro no servidor, tente novamente ou saia do sistema e entre novamente.");
     }
 
-
     /***************************************************************************************************************************/
-
 
     /* GERAÇÃO DAS PASSAGENS */
 
@@ -451,7 +512,7 @@ try {
     while(array_key_exists($i, $pagamentos)){
         $pagamento = json_encode($pagamentos[$i], true);
         $pagamento = json_decode($pagamento, true);
-        $formaPag = $pagamento["formaPag"];    
+        $formaPag = $pagamento["formaPag"];
         if($formaPag == "0"){ // 0 - dinheiro
             $bpeFormaPag = "01"; // 01 - dinheiro
             $valTroco += $pagamento["valTroco"];
@@ -464,7 +525,7 @@ try {
             throw new EmitirPassagemException("Forma de pagamento inválida");
         }
 
-        $newItem = array(  
+        $newItem = array(
             "tPag" => $bpeFormaPag, // Forma de Pagamento:01-Dinheiro;02-Cheque;03-Cartão de Crédito;04-Cartão de Débito;05-Vale Transportel;99 - Outros
             "vPag" => number_format($pagamento["valParTotal"], 2), // Valor do Pagamento
             "card" =>  [ // Grupo de Cartões
@@ -472,11 +533,11 @@ try {
                 //"CNPJ" => "", // CNPJ da credenciadora de cartão de crédito/débito - para tpIntegra=2 não informar o CNPJ
                 "tBand" => $pagamento["bandeira"] // Bandeira da operadora de cartão de crédito/débito:01–Visa; 02–Mastercard; 03–American Express; 04–Sorocred; 05 - Elo; 06 - Diners;99–Outros
                 //"cAut" => "" // Número de autorização da operação cartão de crédito/débito - para tpIntegra=2 não informar o cAut
-            ]                
+            ]
         );
-        
+
         array_push($bpePagtos, $newItem);
-        $i++;   
+        $i++;
     }
 
     // FORMATA valTroco
@@ -490,7 +551,7 @@ try {
     $resultCalc = 0;
     for($i = 0; $i < 8; $i++){
         $rest = $valor % 10;
-        $resultCalc += ($rest * $peso); 
+        $resultCalc += ($rest * $peso);
         $valor = $valor - $rest;
         $valor = $valor / 10;
         $peso++;
@@ -537,8 +598,8 @@ try {
 
         $dataset = mysqli_fetch_array($query, MYSQLI_BOTH);
 
-        $icmsAliquota = $dataset["icmsAliquota"];   
-        
+        $icmsAliquota = $dataset["icmsAliquota"];
+
         Log::debug(LogLevel::Info, "montando o BPe...");
 
         // monta o BPe pra transmitir
@@ -598,25 +659,25 @@ try {
                         //"xJust" => "" // Justificativa da entrada em contingência
                     ],
                     "emit" =>  [ // Identificação do Emitente do BP-e
-                        "CNPJ" => "63679351000190", // OK FIXO - CNPJ do emitente - 63679351000190 - DANTAS TRANSPORTES E INSTALACOES LTDA
-                        "IE" => "54021588", // OK FIXO - Inscrição Estadual do emitemte
+                        "CNPJ" => $emitCfg_CNPJ, // OK FIXO - CNPJ do emitente - 63679351000190 - DANTAS TRANSPORTES E INSTALACOES LTDA
+                        "IE" => $emitCfg_IE, // OK FIXO - Inscrição Estadual do emitemte - Ex: 54021588
                         //"IEST" => "", // OK FIXO - Inscrição Estadual do Substituto Tributário
-                        "xNome" => "DANTAS TRANSPORTES E INSTALACOES LTDA", // OK FIXO - Razão social ou Nome do emitente
-                        "xFant" => "A DANTAS TRANSPORTES", // OK FIXO - Nome fantasia do emitente
-                        "IM" => "4420601", // OK FIXO - Inscrição Municipal
-                        "CNAE" => "4929902", // OK FIXO - CNAE Fiscal
-                        "CRT" => "3", // OK FIXO - Código de Regime Tributário. - 1 – Simples Nacional; 2 – Simples Nacional – excesso de sublimite de receita bruta; 3 – Regime Normal
+                        "xNome" => $emitCfg_xNome, // OK FIXO - Razão social ou Nome do emitente - Ex: "DANTAS TRANSPORTES E INSTALACOES LTDA"
+                        "xFant" => $emitCfg_xFant, // OK FIXO - Nome fantasia do emitente - Ex: "A DANTAS TRANSPORTES"
+                        "IM" => $emitCfg_IM, // OK FIXO - Inscrição Municipal - Ex: 4420601
+                        "CNAE" => $emitCfg_CNAE, // OK FIXO - CNAE Fiscal - Ex: 4929902
+                        "CRT" => $emitCfg_CRT, // OK FIXO - Código de Regime Tributário. - 1 – Simples Nacional; 2 – Simples Nacional – excesso de sublimite de receita bruta; 3 – Regime Normal - Ex: 3
                         "enderEmit" =>  [ // Endereço do emitente
-                            "xLgr" => "RUA UTINGA", // OK FIXO - Logradouro
-                            "nro" => "310", // OK FIXO - Número
-                            //"xCpl" => "", // OK FIXO - Complemento
-                            "xBairro" => "LIRIO DO VALE", // OK FIXO - Bairro
-                            "cMun" => "1302603", // OK FIXO - Código do município (utilizar a tabela do IBGE)
-                            "xMun" => "MANAUS", // OK FIXO - Nome do município
-                            "CEP" => "69038286", // OK FIXO - CEP
-                            "UF" => "AM", // DOMINIO D6 - OK FIXO - Sigla da UF
-                            "Fone" => "92 33062903", // OK FIXO - Telefone
-                            "Email" => "dantast@argo.com.br" // OK FIXO - Endereço de E-mail
+                            "xLgr" => $enderEmitCfg_xLgr, // OK FIXO - Logradouro - Ex: RUA UTINGA
+                            "nro" => $enderEmitCfg_nro, // OK FIXO - Número - Ex: 310
+                            "xCpl" => $enderEmitCfg_xCpl, // OK FIXO - Complemento - Ex: ""
+                            "xBairro" => $enderEmitCfg_xBairro, // OK FIXO - Bairro - Ex: LIRIO DO VALE
+                            "cMun" => $enderEmitCfg_cMun, // OK FIXO - Código do município (utilizar a tabela do IBGE) - Ex: 1302603
+                            "xMun" => $enderEmitCfg_xMun, // OK FIXO - Nome do município - Ex: MANAUS
+                            "CEP" => $enderEmitCfg_CEP, // OK FIXO - CEP - Ex: 69038286
+                            "UF" => $enderEmitCfg_UF, // DOMINIO D6 - OK FIXO - Sigla da UF - Ex: AM
+                            "Fone" => $enderEmitCfg_Fone, // OK FIXO - Telefone - Ex: 92 33062903
+                            "Email" => $enderEmitCfg_Email, // OK FIXO - Endereço de E-mail - Ex: dantast@argo.com.br
                         ],
                         "TAR" => $bpeConfig_TAR // Termo de Autorização de Serviço Regular - emitente do BP-e junto à ANTT para exercer a atividade
                     ],
@@ -639,7 +700,7 @@ try {
                             "xPais" => $comprador["nomePais"], // Nome do país
                             "Fone" => $comprador["fone"], // Telefone
                             "Email" => $comprador["email"] // Endereço de E-mail
-                        ]                
+                        ]
                     ]/*,
                     "agencia" =>  [ // Identificação da agência/preposto/terceiro que comercializou o BP-e
                         "xNome" => "", // Razão social ou Nome da Agência
@@ -652,7 +713,7 @@ try {
                             "xBairro" => "", // Bairro
                             "cMun" => "", // município (utilizar a tabela do IBGE)
                             "xMun" => "", // Nome do município
-                            "CEP" => "", // CEP 
+                            "CEP" => "", // CEP
                             "UF" => "", // Sigla da UF
                             "Fone" => "", // Telefone
                             "Email" => "" // Endereço de E-mail
@@ -796,9 +857,55 @@ try {
             /************************/
 
             $conteudo = json_encode($conteudo);
+
             //var_dump($conteudo);
             Log::debug(LogLevel::Info, "xml BPe de saída: " . $conteudo);
 
+            /******* INSERE NA TABELA TBPASSAGENS_BPE A REQUISIÇÃO BPE *************/
+            $select = 'select id from TBPASSAGENS_BPE where passagem = '.$numeroPassagem;
+
+            $query = mysqli_query($conn, $select);
+            if (!$query) {
+                Log::debug(LogLevel::Error, "mysqli_query - ".mysqli_error($conn));
+                throw new EmitirPassagemException("Erro no servidor, tente novamente ou saia do sistema e entre novamente.");
+            }
+
+            $num_rows = mysqli_num_rows($query);
+
+            if($num_rows > 0){
+              $stmt = mysqli_prepare($conn, 'update TBPASSAGENS_BPE set xmlBPeRequest = ?' .
+                ' where passagem = '.$numeroPassagem) or die(mysqli_error($conn));
+
+              if(!mysqli_stmt_bind_param($stmt, 's',
+                      $conteudo
+                    )){
+                  $error = mysqli_error($conn);
+                  Log::debug(LogLevel::Error, " bind error: ".$error);
+                  throw new EmitirPassagemException("Erro no servidor, tente novamente ou saia do sistema e entre novamente.");
+              }
+            } else {
+              $stmt = mysqli_prepare($conn, 'insert into TBPASSAGENS_BPE (passagem, xmlBPeRequest) values( ' .
+                  '?, ?)') or die(mysqli_error($conn));
+
+              if(!mysqli_stmt_bind_param($stmt, 'is',
+                      $numeroPassagem,
+                      $conteudo
+                    )){
+                  $error = mysqli_error($conn);
+                  Log::debug(LogLevel::Error, " bind error: ".$error);
+                  throw new EmitirPassagemException("Erro no servidor, tente novamente ou saia do sistema e entre novamente.");
+              }
+            }
+
+            if(!mysqli_stmt_execute($stmt)){
+                $error = mysqli_error($conn);
+                Log::debug(LogLevel::Error, " error: ".$error);
+                throw new EmitirPassagemException("Erro no servidor, tente novamente ou saia do sistema e entre novamente.");
+            }
+            /***********************************************************************/
+
+
+            /******* TRANSMITE A REQUISIÇÃO BPE *************/
             // Transmite o XML do BPe
             $sefaz = new Sefaz();
             $retorno = $sefaz->emitirNFe($token, $conteudo, $tpConteudo);
@@ -809,44 +916,110 @@ try {
             $resp = json_decode($retorno);
 
             Log::debug(LogLevel::Info, "resposta do BPe Status: " . $resp->status);
+            /***********************************************************************/
+
+
+
+            /******* REGISTRA NA TABELA TBPASSAGENS_BPE A RESPOSTA BPE *************/
+            $stmt = mysqli_prepare($conn, 'update TBPASSAGENS_BPE set nsNRec = ?, xmlBPeResponse = ?, xmlBPeResponseMotivo = ?, xmlBPeResponseStatus = ?' .
+              ' where passagem = '.$numeroPassagem) or die(mysqli_error($conn));
+
+            if(!mysqli_stmt_bind_param($stmt, 'issi',
+                    $resp->nsNRec,
+                    $retorno,
+                    $resp->motivo,
+                    $resp->status
+                  )){
+                $error = mysqli_error($conn);
+                Log::debug(LogLevel::Error, " bind error: ".$error);
+                throw new EmitirPassagemException("Erro no servidor, tente novamente ou saia do sistema e entre novamente.");
+            }
+
+            if(!mysqli_stmt_execute($stmt)){
+                $error = mysqli_error($conn);
+                Log::debug(LogLevel::Error, " error: ".$error);
+                throw new EmitirPassagemException("Erro no servidor, tente novamente ou saia do sistema e entre novamente.");
+            }
+            /***********************************************************************/
+
 
             // {"status":200,"motivo":"BP-e enviado para Sefaz","nsNRec":71}
 
 
             // Verifica o status
-            // Verifica o status da passagem 
+            // Verifica o status da passagem
 
             if($resp->status == 200){
                 while(true){
-                    $nsNRec = $resp->nsNRec; 
+                    $nsNRec = $resp->nsNRec;
 
-                    
-                    
                     //$nsNRec = 68; // APENAS TESTE
 
-
-
-
-                    $CNPJ = "63679351000190";
-                    $retorno = $sefaz->consultarStatusProcessamento($token, $CNPJ, $nsNRec);
+                    $retorno = $sefaz->consultarStatusProcessamento($token, $emitCfg_CNPJ, $nsNRec);
                     Log::debug(LogLevel::Info, "resposta da verificação do BPe: " . $retorno);
                     $respVer = json_decode($retorno);
                     Log::debug(LogLevel::Info, "resposta do BPe Status: " . $respVer->status);
 
                     // {"status":200,"motivo":"Consulta realizada com sucesso","chBPe":"13181263679351000190630010000000261941679690","cStat":"0","xMotivo":"Documento em Processamento","nProt":"","dhRecbto":"2018-12-20T12:42:24-02:00"}
 
+                    /******* REGISTRA NA TABELA TBPASSAGENS_BPE O STATUS DO PROCESSAMENTO *************/
+                    $stmt = mysqli_prepare($conn, 'update TBPASSAGENS_BPE set statusProcessamento = ?, statusProcessamentoMotivo = ?, statusProcessamentoResponse = ?, cStatProcessamento = ?, cStatProcessamentoMotivo = ?' .
+                      ' where passagem = '.$numeroPassagem) or die(mysqli_error($conn));
+
+                    if(!mysqli_stmt_bind_param($stmt, 'iissis',
+                            $respVer->status,
+                            $respVer->motivo,
+                            $retorno,
+                            $respVer->cStat,
+                            $respVer->xMotivo
+                          )){
+                        $error = mysqli_error($conn);
+                        Log::debug(LogLevel::Error, " bind error: ".$error);
+                        throw new EmitirPassagemException("Erro no servidor, tente novamente ou saia do sistema e entre novamente.");
+                    }
+
+                    if(!mysqli_stmt_execute($stmt)){
+                        $error = mysqli_error($conn);
+                        Log::debug(LogLevel::Error, " error: ".$error);
+                        throw new EmitirPassagemException("Erro no servidor, tente novamente ou saia do sistema e entre novamente.");
+                    }
+                    /***********************************************************************/
+
+
                     if($respVer->status == 200){
                         // {"status":200,"motivo":"Consulta realizada com sucesso","chBPe":"13181263679351000190630010000000261941679690","cStat":"539","xMotivo":"Rejeição: Duplicidade de BP-e, com diferença na Chave de Acesso [chBPe:13181263679351000190630010000000261937711348][nProt:313180000000251][dhAut:2018-12-17T14:59:21-02:00]"}
                         if($respVer->cStat == 100){
                             Log::debug(LogLevel::Info, "resposta da verificação do BPe OK");
 
-                            // Download da passagem 
+                            // Download da passagem
                             $tpDown = "XP"; // X - XML; P - PDF; XP - XML E PDF
                             $chBPe = $respVer->chBPe;
                             $tpAmb = "2"; // 2 - homologação; 1 - produção
-                            $retorno = $sefaz->downloadBPe($token, $chBPe, $tpDown, $tpAmb);                            
+                            $retorno = $sefaz->downloadBPe($token, $chBPe, $tpDown, $tpAmb);
 
                             Log::debug(LogLevel::Info, "resposta do download do BPe: " . $retorno);
+
+                            /******* REGISTRA NA TABELA TBPASSAGENS_BPE O RETORNO DO PDF *************/
+                            $stmt = mysqli_prepare($conn, 'update TBPASSAGENS_BPE set downloadRetorno, downloadStatus, downloadStatusMotivo, downloadPDF' .
+                              ' where passagem = '.$numeroPassagem) or die(mysqli_error($conn));
+
+                            if(!mysqli_stmt_bind_param($stmt, 'siss',
+                                    $retorno,
+                                    $respDownload->status,
+                                    $respDownload->xMotivo,
+                                    $respDownload->pdf
+                                  )){
+                                $error = mysqli_error($conn);
+                                Log::debug(LogLevel::Error, " bind error: ".$error);
+                                throw new EmitirPassagemException("Erro no servidor, tente novamente ou saia do sistema e entre novamente.");
+                            }
+
+                            if(!mysqli_stmt_execute($stmt)){
+                                $error = mysqli_error($conn);
+                                Log::debug(LogLevel::Error, " error: ".$error);
+                                throw new EmitirPassagemException("Erro no servidor, tente novamente ou saia do sistema e entre novamente.");
+                            }
+                            /***********************************************************************/
 
                             $respDownload = json_decode($retorno);
 
@@ -855,7 +1028,7 @@ try {
                                 $pdfBilhete = $respDownload->pdf;
                                 $result = true;
                             } else {
-                                $serverMsg = $respVer->xMotivo;
+                                $serverMsg = $respDownload->xMotivo;
                             }
                             break;
                         } else if($respVer->cStat == 0){
@@ -863,8 +1036,8 @@ try {
                         } else {
                             $serverMsg = $respVer->xMotivo;
                             break;
-                        }                    
-                    } else {                    
+                        }
+                    } else {
                         $serverMsg = $respVer->motivo;
                         break;
                     }
@@ -878,7 +1051,7 @@ try {
             }
 
 
-            $i++;    
+            $i++;
         }
 
 

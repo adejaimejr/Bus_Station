@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.7.4
+-- version 4.8.4
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: 02-Dez-2018 às 16:59
--- Versão do servidor: 10.1.29-MariaDB
--- PHP Version: 7.2.0
+-- Generation Time: 11-Fev-2019 às 00:47
+-- Versão do servidor: 10.1.37-MariaDB
+-- versão do PHP: 7.3.0
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -217,11 +217,46 @@ CREATE TABLE `tbpassageiro` (
 -- --------------------------------------------------------
 
 --
+-- Estrutura da tabela `tbpassagens_bpe`
+--
+
+CREATE TABLE `tbpassagens_bpe` (
+  `id` int(11) NOT NULL,
+  `xmlBPeRequest` varchar(4096) NOT NULL,
+  `xmlBPeResponse` varchar(4096) NOT NULL,
+  `xmlBPeResponseStatus` int(11) NOT NULL,
+  `xmlBPeResponseMotivo` varchar(4096) NOT NULL,
+  `nsNRec` int(11) NOT NULL,
+  `statusProcessamento` int(11) NOT NULL,
+  `statusProcessamentoResponse` varchar(4096) NOT NULL,
+  `cStatProcessamento` int(11) NOT NULL,
+  `statusProcessamentoMotivo` varchar(4096) NOT NULL,
+  `cStatProcessamentoMotivo` varchar(4096) NOT NULL,
+  `chBPe` varchar(255) NOT NULL,
+  `downloadStatus` int(11) NOT NULL,
+  `downloadStatusMotivo` int(11) NOT NULL,
+  `downloadRetorno` varchar(4096) NOT NULL,
+  `downloadPDF` varchar(4096) NOT NULL,
+  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `passagem` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Extraindo dados da tabela `tbpassagens_bpe`
+--
+
+INSERT INTO `tbpassagens_bpe` (`id`, `xmlBPeRequest`, `xmlBPeResponse`, `xmlBPeResponseStatus`, `xmlBPeResponseMotivo`, `nsNRec`, `statusProcessamento`, `statusProcessamentoResponse`, `cStatProcessamento`, `statusProcessamentoMotivo`, `cStatProcessamentoMotivo`, `chBPe`, `downloadStatus`, `downloadStatusMotivo`, `downloadRetorno`, `downloadPDF`, `updated`, `passagem`) VALUES
+(9, '{\"BPe\":{\"infBPe\":{\"versao\":\"1.00\",\"ide\":{\"cUF\":\"13\",\"tpAmb\":\"2\",\"mod\":\"63\",\"serie\":\"1\",\"nBP\":\"19\",\"cBP\":30619773,\"cDV\":0,\"modal\":\"1\",\"dhEmi\":\"2019-02-10T19:45:39-04:00\",\"tpEmis\":\"1\",\"verProc\":\"1.0.0.0\",\"tpBPe\":\"0\",\"indPres\":\"1\",\"UFIni\":\"RR\",\"cMunIni\":\"1400100\",\"UFFim\":\"AM\",\"cMunFim\":\"1302603\"},\"emit\":{\"CNPJ\":\"63679351000190\",\"IE\":\"54021588\",\"xNome\":\"DANTAS TRANSPORTES E INSTALACOES LTDA\",\"xFant\":\"A DANTAS TRANSPORTES\",\"IM\":\"4420601\",\"CNAE\":\"4929902\",\"CRT\":\"3\",\"enderEmit\":{\"xLgr\":\"RUA UTINGA\",\"nro\":\"310\",\"xCpl\":\"\",\"xBairro\":\"LIRIO DO VALE\",\"cMun\":\"1302603\",\"xMun\":\"MANAUS\",\"CEP\":\"69038286\",\"UF\":\"AM\",\"Fone\":\"92 33062903\",\"Email\":\"dantast@argo.com.br\"},\"TAR\":\"0\"},\"Comp\":{\"xNome\":\"Teste\",\"CNPJ\":\"00000000000000\",\"CPF\":\"11111111111\",\"idEstrangeiro\":\"\",\"IE\":\"\",\"enderComp\":{\"xLgr\":\"rua teste\",\"nro\":\"100\",\"xCpl\":\"teste\",\"xBairro\":\"teste\",\"cMun\":\"1400100\",\"xMun\":\"\",\"CEP\":\"11111111\",\"UF\":\"\",\"cPais\":\"1058\",\"xPais\":\"\",\"Fone\":\"11999999999\",\"Email\":\"teste@teste.com\"}},\"infPassagem\":{\"cLocOrig\":\"RR\",\"xLocOrig\":\"1400100\",\"cLocDest\":\"AM\",\"xLocDest\":\"1302603\",\"dhEmb\":\"2019-02-10T19:45:39-04:00\",\"dhValidade\":\"2020-02-10T19:45:39-04:00\",\"infPassageiro\":{\"xNome\":\"Teste\",\"CPF\":\"11111111111\",\"tpDoc\":\"1\",\"nDoc\":\"11111\",\"dNasc\":\"2000-02-10\",\"Fone\":\"11999999999\",\"Email\":\"teste@teste.com\"}},\"infViagem\":{\"cPercurso\":\"0\",\"xPercurso\":\"teste\",\"tpViagem\":\"00\",\"tpServ\":\"3\",\"tpAcomodacao\":\"1\",\"tpTrecho\":\"1\",\"Poltrona\":3,\"dhViagem\":\"2019-02-10T19:45:39-04:00\"},\"infValorBPe\":{\"vBP\":\"180.00\",\"vDesconto\":\"0.00\",\"vPgto\":\"180.00\",\"vTroco\":\"0.00\",\"Comp\":[{\"tpComp\":\"01\",\"vComp\":\"180.00\"}]},\"imp\":{\"ICMS\":{\"ICMS00\":{\"CST\":\"00\",\"vBC\":\"180.00\",\"pICMS\":\"0.00\",\"vICMS\":\"0.00\"}}},\"pag\":[{\"tPag\":\"01\",\"vPag\":\"180.00\",\"card\":{\"tpIntegra\":\"2\",\"tBand\":\"01\"}}]}}}', '{\"status\":-2,\"motivo\":\"BPe invalido de acordo com a validacao contra schema\",\"erros\":[\"O campo \'xCpl\' foi preenchido incorretamente com o valor \' \'. Este campo deve ser preenchido com letras ou numeros e conter no minimo 1 e no maximo 60 caracteres. (cvc-pattern-valid: Value \'\' is not facet-valid with respect to pattern \'[!-ÿ]{1}[ -ÿ]{0,}[!-ÿ]{1}|[!-ÿ]{1}\' for type \'#AnonType_xCplTEndeEmi\'.)\"]}', -2, 'BPe invalido de acordo com a validacao contra schema', 0, 0, '', 0, '', '', '', 0, 0, '', '', '2019-02-10 23:45:39', 19);
+
+-- --------------------------------------------------------
+
+--
 -- Estrutura da tabela `tbpassagens_comprador`
 --
 
 CREATE TABLE `tbpassagens_comprador` (
   `id` int(11) NOT NULL,
+  `passagem` int(11) NOT NULL,
   `nome` varchar(60) NOT NULL,
   `cnpj` varchar(14) NOT NULL,
   `cpf` varchar(11) NOT NULL,
@@ -245,11 +280,26 @@ CREATE TABLE `tbpassagens_comprador` (
 -- Extraindo dados da tabela `tbpassagens_comprador`
 --
 
-INSERT INTO `tbpassagens_comprador` (`id`, `nome`, `cnpj`, `cpf`, `IdEstrangeiro`, `InscricaoEstadual`, `logradouro`, `numero`, `complemento`, `bairro`, `cidade`, `cep`, `pais`, `telefone`, `email`, `estrangeiro`, `tipoComprador`, `tipoContribuicaoICMS`) VALUES
-(2, 'teste', '00000000000010', '', '', '', '', '', '', '', 1400100, '', 1058, '', '', 0, 0, 0),
-(3, 'dfasf', '00000000000000', '11111111111', '', 'fafdasdf', '45235', '345235', '23452', 'fasa', 1302603, '00345235', 1058, '333333333', 'asdfasf', 0, 0, 0),
-(4, 'teste', '11111111111111', '', '35345345', 'ISENTO', 'afsdfasd', '352354', 'sdfasf', 'fadsfasdf', 1400100, '55345345', 1058, '1234567', 'asdfadsfa', 1, 1, 3),
-(5, 'dfasdf', '11111111111111', '11111111111', '', 'ISENTO', 'dfasdfa', 'sdfasdf', 'asdfasdf', 'fasdf', 1400100, '22345354', 1058, '12342341', 'asdfasdf', 0, 1, 3);
+INSERT INTO `tbpassagens_comprador` (`id`, `passagem`, `nome`, `cnpj`, `cpf`, `IdEstrangeiro`, `InscricaoEstadual`, `logradouro`, `numero`, `complemento`, `bairro`, `cidade`, `cep`, `pais`, `telefone`, `email`, `estrangeiro`, `tipoComprador`, `tipoContribuicaoICMS`) VALUES
+(106, 58, 'teste', '00000000000000', '11111111111', '', '', 'teste', '100', 'teste', 'teste', 1400100, '99999999', 1058, '999999999', 'teste@teste.com', 0, 0, 0),
+(107, 58, 'teste', '00000000000000', '11111111111', '', '', 'teste', '100', 'teste', 'teste', 1400100, '99999999', 1058, '999999999', 'teste@teste.com', 0, 0, 0),
+(108, 58, 'teste', '00000000000000', '11111111111', '', '', 'teste', '100', 'teste', 'teste', 1400100, '99999999', 1058, '999999999', 'teste@teste.com', 0, 0, 0),
+(109, 58, 'teste', '00000000000000', '11111111111', '', '', 'teste', '100', 'teste', 'teste', 1400100, '99999999', 1058, '999999999', 'teste@teste.com', 0, 0, 0),
+(110, 58, 'teste', '00000000000000', '11111111111', '', '', 'teste', '100', 'teste', 'teste', 1400100, '99999999', 1058, '999999999', 'teste@teste.com', 0, 0, 0),
+(111, 58, 'teste', '00000000000000', '11111111111', '', '', 'teste', '100', 'teste', 'teste', 1400100, '99999999', 1058, '999999999', 'teste@teste.com', 0, 0, 0),
+(112, 58, 'teste', '00000000000000', '11111111111', '', '', 'teste', '100', 'teste', 'teste', 1400100, '99999999', 1058, '999999999', 'teste@teste.com', 0, 0, 0),
+(113, 58, 'teste', '00000000000000', '11111111111', '', '', 'teste', '100', 'teste', 'teste', 1400100, '99999999', 1058, '999999999', 'teste@teste.com', 0, 0, 0),
+(114, 58, 'teste', '00000000000000', '11111111111', '', '', 'teste', '100', 'teste', 'teste', 1400100, '99999999', 1058, '999999999', 'teste@teste.com', 0, 0, 0),
+(115, 58, 'teste', '00000000000000', '11111111111', '', '', 'teste', '100', 'teste', 'teste', 1400100, '99999999', 1058, '999999999', 'teste@teste.com', 0, 0, 0),
+(116, 58, 'teste', '00000000000000', '11111111111', '', '', 'teste', '100', 'teste', 'teste', 1400100, '99999999', 1058, '999999999', 'teste@teste.com', 0, 0, 0),
+(117, 58, 'teste', '00000000000000', '11111111111', '', '', 'teste', '100', 'teste', 'teste', 1400100, '99999999', 1058, '999999999', 'teste@teste.com', 0, 0, 0),
+(118, 58, 'teste', '00000000000000', '11111111111', '', '', 'teste', '100', 'teste', 'teste', 1400100, '99999999', 1058, '999999999', 'teste@teste.com', 0, 0, 0),
+(119, 59, 'teste', '00000000000000', '11111111111', '', '', 'teste', '100', 'teste', 'teste', 1400100, '99999999', 1058, '999999999', 'teste@teste.com', 0, 0, 0),
+(120, 60, 'teste', '00000000000000', '11111111111', '', '', 'teste', '100', 'teste', 'teste', 1400100, '99999999', 1058, '999999999', 'teste@teste.com', 0, 0, 0),
+(121, 61, 'teste', '00000000000000', '11111111111', '', '', 'teste', '100', 'teste', 'teste', 1400100, '99999999', 1058, '999999999', 'teste@teste.com', 0, 0, 0),
+(122, 70, 'teste', '00000000000000', '11111111111', '', '', 'teste', '100', 'teste', 'teste', 1400100, '99999999', 1058, '999999999', 'teste@teste.com', 0, 0, 0),
+(123, 19, 'Teste', '00000000000000', '11111111111', '', '', 'rua teste', '100', 'teste', 'teste', 1400100, '11111111', 1058, '11999999999', 'teste@teste.com', 0, 0, 0),
+(124, 19, 'Teste', '00000000000000', '11111111111', '', '', 'rua teste', '100', 'teste', 'teste', 1400100, '11111111', 1058, '11999999999', 'teste@teste.com', 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -1680,11 +1730,19 @@ ALTER TABLE `tbpassageiro`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `tbpassagens_bpe`
+--
+ALTER TABLE `tbpassagens_bpe`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `passagem` (`passagem`);
+
+--
 -- Indexes for table `tbpassagens_comprador`
 --
 ALTER TABLE `tbpassagens_comprador`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `tipoContribuicaoICMS` (`tipoContribuicaoICMS`);
+  ADD KEY `tipoContribuicaoICMS` (`tipoContribuicaoICMS`),
+  ADD KEY `passagem` (`passagem`);
 
 --
 -- Indexes for table `tbperfil`
@@ -1836,10 +1894,16 @@ ALTER TABLE `tbpassageiro`
   MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `tbpassagens_bpe`
+--
+ALTER TABLE `tbpassagens_bpe`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
 -- AUTO_INCREMENT for table `tbpassagens_comprador`
 --
 ALTER TABLE `tbpassagens_comprador`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=125;
 
 --
 -- AUTO_INCREMENT for table `tbperfil`
@@ -1936,10 +2000,17 @@ ALTER TABLE `tbviagens_tributacao`
 --
 
 --
+-- Limitadores para a tabela `tbpassagens_bpe`
+--
+ALTER TABLE `tbpassagens_bpe`
+  ADD CONSTRAINT `tbpassagens_bpe_ibfk_1` FOREIGN KEY (`passagem`) REFERENCES `tbviagens_passagens` (`id`);
+
+--
 -- Limitadores para a tabela `tbpassagens_comprador`
 --
 ALTER TABLE `tbpassagens_comprador`
-  ADD CONSTRAINT `tbpassagens_comprador_ibfk_1` FOREIGN KEY (`tipoContribuicaoICMS`) REFERENCES `tptiposcontribuicaoicms` (`id`);
+  ADD CONSTRAINT `tbpassagens_comprador_ibfk_1` FOREIGN KEY (`tipoContribuicaoICMS`) REFERENCES `tptiposcontribuicaoicms` (`id`),
+  ADD CONSTRAINT `tbpassagens_comprador_ibfk_2` FOREIGN KEY (`passagem`) REFERENCES `tbviagens_passagens` (`id`);
 
 --
 -- Limitadores para a tabela `tbpoltronas`
