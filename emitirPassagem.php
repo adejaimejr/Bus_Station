@@ -290,7 +290,7 @@ try {
           $comprador["pais"] = $poltrona["passageiro"]["pais"];
           $comprador["fone"] = $poltrona["passageiro"]["fone"];
           $comprador["email"] = $poltrona["passageiro"]["email"];
-
+          $comprador["uf"] = $poltrona["passageiro"]["uf"];
           break;
       };
     }
@@ -670,7 +670,7 @@ try {
                         "enderEmit" =>  [ // Endereço do emitente
                             "xLgr" => $enderEmitCfg_xLgr, // OK FIXO - Logradouro - Ex: RUA UTINGA
                             "nro" => $enderEmitCfg_nro, // OK FIXO - Número - Ex: 310
-                            "xCpl" => $enderEmitCfg_xCpl, // OK FIXO - Complemento - Ex: ""
+                            //"xCpl" => $enderEmitCfg_xCpl, // OK FIXO - Complemento - Ex: ""
                             "xBairro" => $enderEmitCfg_xBairro, // OK FIXO - Bairro - Ex: LIRIO DO VALE
                             "cMun" => $enderEmitCfg_cMun, // OK FIXO - Código do município (utilizar a tabela do IBGE) - Ex: 1302603
                             "xMun" => $enderEmitCfg_xMun, // OK FIXO - Nome do município - Ex: MANAUS
@@ -844,6 +844,10 @@ try {
                 $BPe["infBPe"]["infValorBPe"]["xDesconto"] = $poltrona["passageiro"]["tarifaDescr"];
             }
 
+            if($enderEmitCfg_xCpl != ""){
+                $BPe["infBPe"]["emit"]["enderEmit"]["xCpl"] = $enderEmitCfg_xCpl;
+            }
+
             // Monta o conteudo BPe pra transmitir
             $conteudo = [
                 "BPe" => $BPe
@@ -966,7 +970,7 @@ try {
                     $stmt = mysqli_prepare($conn, 'update TBPASSAGENS_BPE set statusProcessamento = ?, statusProcessamentoMotivo = ?, statusProcessamentoResponse = ?, cStatProcessamento = ?, cStatProcessamentoMotivo = ?' .
                       ' where passagem = '.$numeroPassagem) or die(mysqli_error($conn));
 
-                    if(!mysqli_stmt_bind_param($stmt, 'iissis',
+                    if(!mysqli_stmt_bind_param($stmt, 'issis',
                             $respVer->status,
                             $respVer->motivo,
                             $retorno,
@@ -1000,7 +1004,7 @@ try {
                             Log::debug(LogLevel::Info, "resposta do download do BPe: " . $retorno);
 
                             /******* REGISTRA NA TABELA TBPASSAGENS_BPE O RETORNO DO PDF *************/
-                            $stmt = mysqli_prepare($conn, 'update TBPASSAGENS_BPE set downloadRetorno, downloadStatus, downloadStatusMotivo, downloadPDF' .
+                            $stmt = mysqli_prepare($conn, 'update TBPASSAGENS_BPE set downloadRetorno = ?, downloadStatus = ?, downloadStatusMotivo = ?, downloadPDF = ?' .
                               ' where passagem = '.$numeroPassagem) or die(mysqli_error($conn));
 
                             if(!mysqli_stmt_bind_param($stmt, 'siss',

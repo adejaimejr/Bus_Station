@@ -1,0 +1,1379 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Bus Station</title>
+    <meta charset="utf-8">
+    <meta content="ie=edge" http-equiv="x-ua-compatible">
+    <meta content="template language" name="keywords">
+    <meta content="Tamerlan Soziev" name="author">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <!-- Inicio favicon "> -->
+    <link rel="apple-touch-icon" sizes="57x57" href="../img/bus_station-ico/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="../img/bus_station-ico/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="../img/bus_station-ico/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="../img/bus_station-ico/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="../img/bus_station-ico/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="../img/bus_station-ico/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="../img/bus_station-ico/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="../img/bus_station-ico/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="../img/bus_station-ico/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="../img/bus_station-ico/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../img/bus_station-ico/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="../img/bus_station-ico/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../img/bus_station-ico/favicon-16x16.png">
+    <link rel="manifest" href="../img/bus_station-ico/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="../img/bus_station-ico/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+    <!-- ! favicon "> -->
+    <link href="../css/fonts-google-api.css" rel="stylesheet" type="text/css">
+    <link href="../bower_components/select2/dist/css/select2.min.css" rel="stylesheet">
+    <link href="../bower_components/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+    <link href="../bower_components/dropzone/dist/dropzone.css" rel="stylesheet">
+    <link href="../bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+    <link href="../bower_components/fullcalendar/dist/fullcalendar.min.css" rel="stylesheet">
+    <link href="../bower_components/perfect-scrollbar/css/perfect-scrollbar.min.css" rel="stylesheet">
+    <link href="../bower_components/slick-carousel/slick/slick.css" rel="stylesheet">
+    <link href="../css/main.css?version=4.4.0" rel="stylesheet">
+    <link href="../icon_fonts_assets/simple-line-icons/css/simple-line-icons.css" rel="stylesheet" type="text/css">
+    <link href="../icon_fonts_assets/fonte-pro/css/all.css" rel="stylesheet" type="text/css">
+    <link href="../css/icon-google.css"rel="stylesheet">
+
+
+    <link rel="stylesheet" type="text/css" href="../dataTables/emitir-passagem/css/comum/dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="../dataTables/emitir-passagem/css/generator-base.css">
+    <link rel="stylesheet" type="text/css" href="../dataTables/emitir-passagem/css/editor.bootstrap4.min.css">
+    <link rel="stylesheet" type="text/css" href="../dataTables/emitir-passagem/css/comum/buttons.dataTables.min.css">
+
+
+    <!-- TESTE -->
+    <link href="../onibus/jquery/amz/css/layout-pt-old.css" rel="stylesheet" type="text/css" media="all">
+    <link href="../onibus/jquery/amz/css/layout-480-pt.css" rel="stylesheet" type="text/css" media="all and (max-width: 767px)">
+    <link href="../onibus/jquery/amz/css/layout-1024-pt.css" rel="stylesheet" type="text/css" media="all and (min-width: 768px) and (max-width: 1024px)">
+    <!-- CSS Onibus -->
+    <link href="../onibus/jquery/amz/css/bus.css" rel="stylesheet" type="text/css" media="screen">
+
+    <!-- DATA PICKER-->
+    <link rel="stylesheet" type="text/css" href="../datepicker-1.6.4/css/bootstrap-datepicker.css" />
+
+    <script type="text/javascript" charset="utf-8" src="../dataTables/emitir-passagem/js/comum/datatables-add.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="../dataTables/emitir-passagem/js/dataTables.editor.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="../dataTables/emitir-passagem/js/editor.bootstrap4.min.js"></script>
+    <!--   ARQUIVO DA TABELA   -->
+    <!--<script type="text/javascript" charset="utf-8" src="../dataTables/emitir-passagem/js/table.tbFilial.js"></script>-->
+
+
+    <script src="../dataTables/emitir-passagem/js/comum/jszip.min.js"></script>
+    <script src="../dataTables/emitir-passagem/js/comum/pdfmake.min.js"></script>
+    <script src="../dataTables/emitir-passagem/js/comum/vfs_fonts.js"></script>
+    <script src="../dataTables/emitir-passagem/js/comum/buttons.html5.min.js"></script>
+    <script src="../dataTables/emitir-passagem/js/comum/buttons.print.min.js"></script>
+    <!--   MASK CAMPOS   -->
+    <script type="text/javascript" src="../Mask-Plugin/dist/jquery.mask.min.js"></script>
+
+    <!-- DATA PICKER-->
+    <script type="text/javascript" src="../datepicker-1.6.4/js/bootstrap-datepicker.js"></script>
+    <script type="text/javascript" src="../datepicker-1.6.4/js/bootstrap-datepicker.min.js"></script>
+
+  </head>
+
+<!--    <body class="with-content-panel menu-position-side menu-side-left" style="overflow-y: hidden;overflow-x: hidden;">    -->
+      <body class="with-content-panel menu-position-side menu-side-left"style="overflow-y: hidden;overflow-x: hidden;"> <!--full-screen-->
+        <div class="all-wrapper with-side-panel solid-bg-all" style="width:  1240px;min-width: 1240px;max-width:  1240px;">
+          <div class="layout-w" style="height: 820px;">
+          <!--------------------
+          START - Mobile Menu
+          -------------------->
+          <div class="menu-mobile menu-activated-on-click color-scheme-dark">
+            <div class="mm-logo-buttons-w">
+              <a class="mm-logo" href="#"><img src="../img/logo.png"><span>Bus Station</span></a>
+              <div class="mm-buttons">
+                <div class="mobile-menu-trigger">
+                  <div class="os-icon os-icon-hamburger-menu-1"></div>
+                </div>
+              </div>
+            </div>
+            <div class="menu-and-user">
+              <div class="logged-user-w">
+                <div class="avatar-w">
+                  <img alt="" src="../img/avatar1.jpg">
+                </div>
+                <div class="logged-user-info-w">
+                  <div class="logged-user-name">
+                    Maria Gomez
+                  </div>
+                  <div class="logged-user-role">
+                    Administrator
+                  </div>
+                </div>
+              </div>
+              <!--------------------
+              START - Mobile Menu List
+              -------------------->
+              <ul class="main-menu">
+                <li class="selected" id="mbMenuDashboard">
+                  <a href="#">
+                    <div class="icon-w">
+                      <div class="os-icon os-icon-layout"></div>
+                    </div>
+                    <span>Dashboard</span></a>
+                </li>
+                <li class="selected" id="mbMenuEmpresa">
+                  <a href="empresa.html">
+                    <div class="icon-w">
+                      <div class="far fa-building"></div>
+                    </div>
+                    <span>Empresa</span></a>
+                </li>
+                <li class="has-sub-menu" id="mbMenuUsuario">
+                  <a href="#">
+                    <div class="icon-w">
+                      <div class="icon-people"></div>
+                    </div>
+                    <span>Usuários</span></a>
+                  <ul class="sub-menu">
+                    <li>
+                      <a href="usuarios.html"><i class="fas fa-user-plus"></i>&nbsp Usuários</a>
+                    </li>
+                    <li>
+                      <a href="permissoes-usuarios.html"><i class="material-icons" style="font-size: 16px;">lock</i>&nbsp Permissão de Acesso</a>
+                    </li>
+                  </ul>
+                </li>
+                <li class="selected" id="mbMenuTributacao">
+                  <a href="tributacao.html">
+                    <div class="icon-w">
+                      <div class="far fa-university"></div>
+                    </div>
+                    <span>Tributação</span></a>
+                </li>
+                <li class="has-sub-menu" id="mbMnOnibus">
+                  <a href="#">
+                    <div class="icon-w">
+                      <div class="fas fa-bus"></div>
+                    </div>
+                    <span>Ônibus</span></a>
+                  <ul class="sub-menu">
+                    <li id="mbMenuOnibus">
+                      <a href="onibus.html"><i class="fas fa-bus"></i>&nbsp Ônibus</a>
+                    </li>
+                    <li id="mbMenuRotas">
+                      <a href="rotas.html"><i class="icon-map"></i>&nbsp Rotas</a>
+                    </li>
+                    <li id="mbMenuTarifas">
+                      <a href="tarifas.html"><i class="fas fa-usd-circle"></i>&nbsp Tarifas</a>
+                    </li>
+                    <li id="mbMenuMotorista">
+                      <a href="motorista.html"><i class="far fa-address-card"></i>&nbsp Motorista</a>
+                    </li>
+                  </ul>
+                </li>
+                <li class="selected" id="mbMenuPassageiro">
+                  <a href="passageiros.html">
+                    <div class="icon-w">
+                      <i class="far fa-male"></i>
+                    </div>
+                    <span>Passageiros</span></a>
+                </li>
+                <li class="selected" id="mbMenuPagamento">
+                  <a href="forma-pagamento.html">
+                    <div class="icon-w">
+                      <div class="icon-wallet"></div>
+                    </div>
+                    <span>Forma de Pagamento</span></a>
+                </li>
+                <li class="selected" id="mbMenuPassagem">
+                  <a href="emitir-passagem.html">
+                    <div class="icon-w">
+                      <i class="far fa-ticket"></i>
+                    </div>
+                    <span>Emitir Passagem</span></a>
+                </li>
+                <li class="selected" id="mbMenuRelatorios">
+                  <a href="relatorios.html">
+                    <div class="icon-w">
+                      <i class="os-icon os-icon-layers"></i>
+                    </div>
+                    <span>Relatórios</span></a>
+                </li>
+                <li class="selected">
+                  <a href="logout.php">
+                    <div class="icon-w">
+                      <i class="fas fa-power-off"></i>
+                    </div>
+                    <span>Sair</span></a>
+                </li>
+              </ul>
+              <!--------------------
+              END - Mobile Menu List
+              -------------------->
+            </div>
+          </div>
+          <!--------------------
+          END - Mobile Menu
+          --------------------><!--------------------
+          START - Main Menu
+          -------------------->
+          <div class="menu-w selected-menu-color-light menu-activated-on-click color-scheme-dark color-style-bright sub-menu-color-light menu-position-side menu-side-left menu-layout-compact sub-menu-style-inside" style="min-height: 820px;max-height:  820px;">
+            <div class="logo-w">
+              <a class="logo" href="#"> <img src="../img/logo-Bus-Station.png" alt="" style=" width: 165px; padding-left: 2-; padding-left: 45px;">
+              <!--                <div class="logo-element"></div>
+                <div class="logo-label">
+                  Bus Station
+                </div>  -->
+              </a>
+            </div>
+            <div class="logged-user-w avatar-inline">
+              <div class="logged-user-i">
+                <div class="avatar-w">
+                  <img alt="" src="../img/avatar1.jpg">
+                </div>
+                <div class="logged-user-info-w">
+                  <div class="logged-user-name">
+                    Maria Gomez
+                  </div>
+                  <div class="logged-user-role">
+                    Administrator
+                  </div>
+                </div>
+                <!--------------------
+                Inicio - Botao opcoes do usuario
+                -------------------->
+                <div class="top-icon top-settings os-dropdown-trigger os-dropdown-position-right">
+                  <a class="clear" href="#" style="color: #f7f5f5;"><i class="os-icon os-icon-ui-46"></i></a>
+                  <!--------------------
+                  <div class="os-dropdown">
+                    <div class="icon-w">
+                      <i class="os-icon os-icon-ui-46"></i>
+                    </div>
+                    <ul>
+                      <li>
+                          <a href="users_profile_small.html"><i class="os-icon os-icon-ui-49"></i><span>Profile Settings</span></a>
+                      </li>
+                      <li>
+                        <a href="users_profile_small.html"><i class="os-icon os-icon-grid-10"></i><span>Billing Info</span></a>
+                      </li>
+                      <li>
+                        <a href="users_profile_small.html"><i class="os-icon os-icon-ui-44"></i><span>My Invoices</span></a>
+                      </li>
+                      <li>
+                        <a href="users_profile_small.html"><i class="os-icon os-icon-ui-15"></i><span>Cancel Account</span></a>
+                      </li>
+                    </ul>
+                  </div>
+                  -------------------->
+                </div>
+                <!--------------------
+                Fim - Botao opcoes do usuario
+                -------------------->
+              </div>
+            </div>
+            <!--------------------
+            ###### Busca
+            <div class="element-search autosuggest-search-activator">
+              <input placeholder="Comece a digitar para pesquisar..." type="text">
+            </div>
+            -------------------->
+            <h1 class="menu-page-header">
+              Page Header
+            </h1>
+            <ul class="main-menu">
+              <li class="sub-header" id="menuPrincipal">
+                <span>Principal</span>
+              </li>
+              <li class="selected" id="menuDashboard">
+                <a href="#">
+                  <div class="icon-w">
+                    <div class="os-icon os-icon-layout"></div>
+                  </div>
+                  <span>Dashboard</span></a>
+                </li><li class="sub-header" id="menuCadastros">
+                <span>Cadastros</span>
+              </li>
+              <li class="selected" id="menuEmpresa">
+                  <a href="empresa.html">
+                    <div class="icon-w">
+                      <div class="far fa-building"></div>
+                    </div>
+                    <span>Empresa</span></a>
+                  </li>
+                  <li class="has-sub-menu" id="menuUsuario">
+                    <a href="#">
+                      <div class="icon-w">
+                        <div class="icon-people"></div>
+                      </div>
+                      <span>Usuários</span></a>
+                    <div class="sub-menu-w">
+                      <div class="sub-menu-icon">
+                        <i class="os-icon os-icon-users"></i>
+                      </div>
+                      <div class="sub-menu-i">
+                        <ul class="sub-menu">
+                          <li>
+                            <a href="usuarios.html"><i class="fas fa-user-plus"></i>&nbsp Usuários</a>
+                          </li>
+                          <li>
+                            <a href="permissoes-usuarios.html"><i class="material-icons" style="font-size: 16px;">lock</i>&nbsp Permissão de Acesso</a>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="selected" id="menuTributacao">
+                      <a href="tributacao.html">
+                        <div class="icon-w">
+                          <div class="far fa-university"></div>
+                        </div>
+                        <span>Tributação</span></a>
+                  </li>
+                  <li class="has-sub-menu" id="mnOnibus">
+                    <a href="#">
+                      <div class="icon-w">
+                        <div class="fas fa-bus"></div>
+                      </div>
+                      <span>Ônibus</span></a>
+                    <div class="sub-menu-w">
+                        <div class="sub-menu-i">
+                        <ul class="sub-menu">
+                          <li id="menuOnibus">
+                            <a href="onibus.html"><i class="fas fa-bus"></i>&nbsp Ônibus</a>
+                          </li>
+                          <li id="menuRotas">
+                            <a href="rotas.html"><i class="icon-map"></i>&nbsp Rotas</a>
+                          </li>
+                          <li id="menuTarifas">
+                            <a href="tarifas.html"><i class="fas fa-usd-circle"></i>&nbsp Tarifas</a>
+                          </li>
+                          <li id="menuMotorista">
+                            <a href="motorista.html"><i class="far fa-address-card"></i>&nbsp Motorista</a>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="selected" id="menuViagem">
+                      <a href="viagem.html">
+                        <div class="icon-w">
+                          <i class="far fa-road"></i>
+                        </div>
+                        <span>Viagens</span></a>
+                  </li>
+                  <li class="selected" id="menuPassageiro">
+                      <a href="passageiros.html">
+                        <div class="icon-w">
+                          <i class="far fa-male"></i>
+                        </div>
+                        <span>Passageiros</span></a>
+                  </li>
+                  <li class="selected" id="menuPagamento">
+                      <a href="forma-pagamento.html">
+                        <div class="icon-w">
+                          <div class="icon-wallet"></div>
+                        </div>
+                        <span>Forma de Pagamento</span></a>
+                  </li>
+              <li class="sub-header" id="menuVendas">
+                <span>Vendas</span>
+              </li>
+              <li class="selected" id="menuPassagem">
+                  <a href="emitir-passagem.html">
+                    <div class="icon-w">
+                      <i class="far fa-ticket"></i>
+                    </div>
+                    <span>Emitir Passagem</span></a>
+              </li>
+              <li class="selected" id="menuRelatorios">
+                  <a href="relatorios.html">
+                    <div class="icon-w">
+                      <i class="os-icon os-icon-layers"></i>
+                    </div>
+                    <span>Relatórios</span></a>
+              </li>
+              <li class="selected">
+                  <a href="logout.php">
+                    <div class="icon-w">
+                      <i class="fas fa-power-off"></i>
+                    </div>
+                    <span>Sair</span></a>
+              </li>
+            </li>
+            </ul>
+          </div>
+          <!--------------------
+          END - Main Menu
+          -------------------->
+          <div class="content-w">
+            <!--------------------
+            START - Top Bar
+            -------------------->
+            <div class="top-bar d-none color-scheme-light">
+              <!--------------------
+              START - Top Menu Controls
+              -------------------->
+              <div class="top-menu-controls">
+                <div class="element-search autosuggest-search-activator">
+                  <input placeholder="Start typing to search..." type="text">
+                </div>
+              </div>
+              <!--------------------
+              END - Top Menu Controls
+              -------------------->
+            </div>
+            <!--------------------
+            END - Top Bar
+            --------------------><!--------------------
+            Inicio - Arvore Diretorio
+            -------------------->
+            <ul class="breadcrumb" style="margin-bottom: 10px;">
+              <li class="breadcrumb-item">
+                <a href="#">Home</a>
+              </li>
+              <li class="breadcrumb-item" id="dashboard">
+                <a href="#">Dashboard</a>
+              </li>
+              <li class="breadcrumb-item">
+                <span>Tela principal do sistema</span>
+              </li>
+            </ul>
+
+
+
+            <!--------------------
+            Fim - Arvore Diretorio
+            ----------------------->
+            <div class="content-i">
+              <div class="content-box" style="padding-top: 0px;">
+              <div class="element-wrapper compact pt-4">
+                <div class="element-actions">
+
+                </div>
+                <h6 class="element-header">
+                  Emitir Passagem
+                </h6>
+              </div>
+
+                <div class="row">
+                <div class="col-lg-7">
+                <!--  <div class="padded-lg" style="padding-top: 0px;padding-bottom: 0px;text-align:  right;padding-right: 0px;padding-left: 0px;/* -webkit-box-align: center; */display: -webkit-box;"> -->
+                <div class="padded-lg" style="padding-left: 0px;padding-right: 0px;padding-top: 0px;padding-bottom: 5px;height: 39px;">
+                <!--START - Onibus-->
+                <div class="row">
+                  <div class="col-sm-2">
+                    <div class="form-group" style="margin-bottom: 0px;">
+                      <a class="btn btn-primary btn-sm" href="#"><i class="icon-calendar"></i></a>
+                    </div>
+                  </div>
+                  <div class="col-sm-3">
+                    <div class="form-group" style="margin-bottom: 0px;">
+                      <select class="form-control">
+                        <option>
+                          08:00
+                        </option>
+                        <option>
+                          20:00
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-sm-7">
+                    <div class="form-group" style="margin-bottom: 0px;">
+                      <select class="form-control">
+                        <option>
+                          Manaus-AM - Boa Vista-RR
+                        </option>
+                        <option>
+                          Boa Vista-RR - Manaus-AM
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                          <!-- Inicio Onibus Semi Leito -->
+                          <a id="current-trips" class="col-5" style="display: flex;justify-content: center;width: 200px;margin-right: 25px;margin-left: 35px;margin-top: 0px;border-left-width: 5px;">
+                            <div id="going" class="available-trips" style="width: 200px;margin-left: 25px;margin-right: 25px;">
+                            <div class="onibus-title-rota">MAO - BVB</div>
+                            <div class="onibus-title-data">11/08/2018</div>
+                            <div class="onibus-title-hora">20:00</div>
+                            <div class="onibus-title-hora" style="top: 520px;left: 7px;text-align:  center;">1º Andar</div>
+                              <div id="onibus-frente"></div>
+                              <div id="onibus-bg">
+                                <center style="width: 200px;">
+                                  <table class="cpo1" border="0" cellpadding="2" cellspacing="2">
+
+                                      <tbody><tr>
+                                        <td id="ida_01" class="livre" onclick="mudaClass(01,this,'ida')">01</td>
+                                        <td id="ida_02" class="livre" onclick="mudaClass(02,this,'ida')">02</td>
+
+                                        <td>&nbsp;&nbsp;</td>
+
+                                        <td id="ida_" class="vazia" onclick="mudaClass(,this,'ida')"></td>
+
+                                        <td>&nbsp;&nbsp;</td>
+
+                                        <td id="ida_04" class="livre" onclick="mudaClass(04,this,'ida')">04</td>
+                                        <td id="ida_03" class="livre" onclick="mudaClass(03,this,'ida')">03</td>
+                                      </tr>
+
+                                      <tr>
+                                        <td id="ida_05" class="livre" onclick="mudaClass(05,this,'ida')">05</td>
+                                        <td id="ida_06" class="livre" onclick="mudaClass(06,this,'ida')">06</td>
+
+                                        <td>&nbsp;&nbsp;</td>
+
+                                        <td id="ida_" class="vazia" onclick="mudaClass(,this,'ida')"></td>
+
+                                        <td>&nbsp;&nbsp;</td>
+
+                                        <td id="ida_08" class="livre" onclick="mudaClass(08,this,'ida')">08</td>
+                                        <td id="ida_07" class="livre" onclick="mudaClass(07,this,'ida')">07</td>
+                                      </tr>
+
+                                      <tr>
+                                        <td id="ida_09" class="livre" onclick="mudaClass(09,this,'ida')">09</td>
+                                        <td id="ida_10" class="livre" onclick="mudaClass(10,this,'ida')">10</td>
+
+                                        <td>&nbsp;&nbsp;</td>
+
+                                        <td id="ida_" class="vazia" onclick="mudaClass(,this,'ida')"></td>
+
+                                        <td>&nbsp;&nbsp;</td>
+
+                                        <td id="ida_" class="vazia" onclick="mudaClass(12,this,'ida')"></td>
+                                        <td id="ida_" class="vazia" onclick="mudaClass(11,this,'ida')"></td>
+                                      </tr>
+
+                                      <tr>
+                                        <td id="ida_11" class="livre" onclick="mudaClass(13,this,'ida')">11</td>
+                                        <td id="ida_12" class="livre" onclick="mudaClass(14,this,'ida')">12</td>
+
+                                        <td>&nbsp;&nbsp;</td>
+
+                                        <td id="ida_" class="vazia" onclick="mudaClass(,this,'ida')"></td>
+
+                                        <td>&nbsp;&nbsp;</td>
+
+                                        <td id="ida_" class="vazia" onclick="mudaClass(16,this,'ida')"></td>
+                                        <td id="ida_" class="vazia" onclick="mudaClass(15,this,'ida')"></td>
+                                      </tr>
+
+                                      <tr>
+                                        <td id="ida_13" class="livre" onclick="mudaClass(17,this,'ida')">13</td>
+                                        <td id="ida_14" class="livre" onclick="mudaClass(18,this,'ida')">14</td>
+
+                                        <td>&nbsp;&nbsp;</td>
+
+                                        <td id="ida_" class="vazia" onclick="mudaClass(,this,'ida')"></td>
+
+                                        <td>&nbsp;&nbsp;</td>
+
+                                        <td id="ida_" class="vazia" onclick="mudaClass(20,this,'ida')"></td>
+                                        <td id="ida" class="vazia" onclick="mudaClass(19,this,'ida')"></td>
+                                      </tr>
+
+                                      <tr>
+                                        <td id="ida_15" class="livre" onclick="mudaClass(21,this,'ida')">15</td>
+                                        <td id="ida_16" class="livre" onclick="mudaClass(22,this,'ida')">16</td>
+
+                                        <td>&nbsp;&nbsp;</td>
+
+                                        <td id="ida_" class="vazia" onclick="mudaClass(,this,'ida')"></td>
+
+                                        <td>&nbsp;&nbsp;</td>
+
+                                        <td id="ida_20" class="livre" onclick="mudaClass(24,this,'ida')">20</td>
+                                        <td id="ida_19" class="ocupada" onclick="mudaClass(23,this,'ida')">19</td>
+                                      </tr>
+
+                                      <tr>
+                                        <td id="ida_17" class="livre" onclick="mudaClass(25,this,'ida')">17</td>
+                                        <td id="ida_18" class="livre" onclick="mudaClass(26,this,'ida')">18</td>
+
+                                        <td>&nbsp;&nbsp;</td>
+
+                                        <td id="ida_" class="vazia" onclick="mudaClass(,this,'ida')"></td>
+
+                                        <td>&nbsp;&nbsp;</td>
+
+                                        <td id="ida_24" class="livre" onclick="mudaClass(28,this,'ida')">24</td>
+                                        <td id="ida_23" class="livre" onclick="mudaClass(27,this,'ida')">23</td>
+                                      </tr>
+
+                                      <tr>
+                                        <td id="ida_21" class="ocupada" onclick="mudaClass(29,this,'ida')">21</td>
+                                        <td id="ida_22" class="ocupada" onclick="mudaClass(30,this,'ida')">22</td>
+
+                                        <td>&nbsp;&nbsp;</td>
+
+                                        <td id="ida_" class="vazia" onclick="mudaClass(,this,'ida')"></td>
+
+                                        <td>&nbsp;&nbsp;</td>
+
+                                        <td id="ida_28" class="livre" onclick="mudaClass(32,this,'ida')">28</td>
+                                        <td id="ida_27" class="livre" onclick="mudaClass(31,this,'ida')">27</td>
+                                      </tr>
+
+                                      <tr>
+                                        <td id="ida_25" class="livre" onclick="mudaClass(33,this,'ida')">25</td>
+                                        <td id="ida_26" class="livre" onclick="mudaClass(34,this,'ida')">26</td>
+
+                                        <td>&nbsp;&nbsp;</td>
+
+                                        <td id="ida_" class="vazia" onclick="mudaClass(,this,'ida')"></td>
+
+                                        <td>&nbsp;&nbsp;</td>
+
+                                        <td id="ida_32" class="selecionada" onclick="mudaClass(36,this,'ida')">32</td>
+                                        <td id="ida_31" class="selecionada" onclick="mudaClass(35,this,'ida')">31</td>
+                                      </tr>
+
+                                      <tr>
+                                        <td id="ida_29" class="livre" onclick="mudaClass(37,this,'ida')">29</td>
+                                        <td id="ida_30" class="livre" onclick="mudaClass(38,this,'ida')">30</td>
+
+                                        <td>&nbsp;&nbsp;</td>
+
+                                        <td id="ida_" class="vazia" onclick="mudaClass(,this,'ida')"></td>
+
+                                        <td>&nbsp;&nbsp;</td>
+
+                                        <td id="ida_36" class="livre" onclick="mudaClass(40,this,'ida')">36</td>
+                                        <td id="ida_35" class="livre" onclick="mudaClass(39,this,'ida')">35</td>
+                                      </tr>
+
+                                      <tr>
+                                        <td id="ida_33" class="livre" onclick="mudaClass(41,this,'ida')">33</td>
+                                        <td id="ida_34" class="livre" onclick="mudaClass(42,this,'ida')">34</td>
+
+                                        <td>&nbsp;&nbsp;</td>
+
+                                        <td id="ida_" class="vazia" onclick="mudaClass(,this,'ida')"></td>
+
+                                        <td>&nbsp;&nbsp;</td>
+
+                                        <td id="ida_40" class="ocupada" onclick="mudaClass(44,this,'ida')">40</td>
+                                        <td id="ida_39" class="ocupada" onclick="mudaClass(43,this,'ida')">39</td>
+                                      </tr>
+
+                                      <tr>
+                                        <td id="ida_37" class="livre" onclick="mudaClass(45,this,'ida')">37</td>
+                                        <td id="ida_38" class="livre" onclick="mudaClass(46,this,'ida')">38</td>
+
+                                        <td>&nbsp;&nbsp;</td>
+
+                                        <td id="ida_" class="vazia" onclick="mudaClass(,this,'ida')"></td>
+
+                                        <td>&nbsp;&nbsp;</td>
+
+                                        <td id="ida_44" class="livre" onclick="mudaClass(,this,'ida')">44</td>
+                                        <td id="ida_43" class="livre" onclick="mudaClass(,this,'ida')">43</td>
+                                      </tr>
+
+                                      <tr>
+                                        <td id="ida_41" class="ocupada" onclick="mudaClass(45,this,'ida')">41</td>
+                                        <td id="ida_42" class="livre" onclick="mudaClass(46,this,'ida')">42</td>
+
+                                        <td>&nbsp;&nbsp;</td>
+
+                                        <td id="ida_" class="vazia" onclick="mudaClass(,this,'ida')"></td>
+
+                                        <td>&nbsp;&nbsp;</td>
+
+                                        <td id="ida_" class="vazia" onclick="mudaClass(,this,'ida')"></td>
+                                        <td id="ida_" class="vazia" onclick="mudaClass(,this,'ida')"></td>
+                                      </tr>
+
+                                  </tbody></table>
+                                </center>
+                              </div>
+                              <div id="onibus-traseira"></div>
+                          </div>
+                        </a>
+                           <!-- Fim Onibus Semi Leito-->
+
+                          <!-- Inicio Onibus Leito -->
+                          <a id="current-trips" class="col-5" style="display: flex;justify-content: center;width: 200px;margin-right: 25px;margin-left: 25px;margin-top: 30%;border-left-width: 5px;top: auto;">                            <div id="going" class="available-trips" style="width: 200px;margin-left: 25px;margin-right: 25px;">
+                            <div class="onibus-title-rota">MAO - BVB</div>
+                            <div class="onibus-title-data">11/08/2018</div>
+                            <div class="onibus-title-hora">20:00</div>
+                            <div class="onibus-title-hora" style="top: 190px;left: 7px;text-align:  center;">Térreo</div>
+                              <div id="onibus-frente"></div>
+                              <div id="onibus-bg">
+                                <center style="width: 200px;">
+                                  <table class="cpo1" border="0" cellpadding="2" cellspacing="2">
+
+                                      <tbody>
+                                        <tr>
+                                        <td id="ida_45" class="ocupada" onclick="mudaClass(01,this,'ida')">45</td>
+                                        <td id="ida_46" class="ocupada" onclick="mudaClass(02,this,'ida')">46</td>
+
+                                        <td>&nbsp;&nbsp;</td>
+
+                                        <td id="ida_" class="vazia" onclick="mudaClass(,this,'ida')"></td>
+
+                                        <td>&nbsp;&nbsp;</td>
+
+                                        <td id="ida_" class="vazia" onclick="mudaClass(04,this,'ida')"></td>
+                                        <td id="ida_47" class="livre" onclick="mudaClass(03,this,'ida')">47</td>
+                                      </tr>
+
+                                      <tr>
+                                        <td id="ida_48" class="livre" onclick="mudaClass(05,this,'ida')">48</td>
+                                        <td id="ida_49" class="livre" onclick="mudaClass(06,this,'ida')">49</td>
+
+                                        <td>&nbsp;&nbsp;</td>
+
+                                        <td id="ida_" class="vazia" onclick="mudaClass(,this,'ida')"></td>
+
+                                        <td>&nbsp;&nbsp;</td>
+
+                                        <td id="ida_" class="vazia" onclick="mudaClass(08,this,'ida')"></td>
+                                        <td id="ida_50" class="livre" onclick="mudaClass(07,this,'ida')">50</td>
+                                      </tr>
+
+                                      <tr>
+                                        <td id="ida_51" class="livre" onclick="mudaClass(09,this,'ida')">51</td>
+                                        <td id="ida_52" class="livre" onclick="mudaClass(10,this,'ida')">52</td>
+
+                                        <td>&nbsp;&nbsp;</td>
+
+                                        <td id="ida_" class="vazia" onclick="mudaClass(,this,'ida')"></td>
+
+                                        <td>&nbsp;&nbsp;</td>
+
+                                        <td id="ida_" class="vazia" onclick="mudaClass(12,this,'ida')"></td>
+                                        <td id="ida_53" class="livre" onclick="mudaClass(11,this,'ida')">53</td>
+                                      </tr>
+
+                                      <tr>
+                                        <td id="ida_54" class="livre" onclick="mudaClass(13,this,'ida')">54</td>
+                                        <td id="ida_55" class="livre" onclick="mudaClass(14,this,'ida')">55</td>
+
+                                        <td>&nbsp;&nbsp;</td>
+
+                                        <td id="ida_" class="vazia" onclick="mudaClass(,this,'ida')"></td>
+
+                                        <td>&nbsp;&nbsp;</td>
+
+                                        <td id="ida_" class="vazia" onclick="mudaClass(16,this,'ida')"></td>
+                                        <td id="ida_56" class="ocupada" onclick="mudaClass(15,this,'ida')">56</td>
+                                      </tr>
+
+
+                                  </tbody>
+                                </table>
+                                </center>
+                              </div>
+                              <div id="onibus-traseira"></div>
+                          </div>
+                        </a>
+                          <!-- Fim Onibus Leito-->
+
+                    <!--END - Onibus-->
+                  </div>
+                </div>
+                <!--START - Onibus-->
+
+                <div class="col-lg-5 b-l-lg" style="height: 720px;">
+                  <div class="padded-lg" style="padding-left: 0px;padding-right: 0px;">
+                      <!--START - Emissor Passagem-->
+                            <div class="element-box" style="padding-left: 0px;padding-right: 0px;height: 700px;">
+                            <form>
+                              <div class="steps-w">
+                                <div class="step-triggers" style="margin-bottom: 20px;">
+                                  <a class="step-trigger active" href="#stepContent1">Passageiro</a><a class="step-trigger" href="#stepContent2">Pagamento</a><a class="step-trigger" href="#stepContent3">Emitir</a>
+                                </div>
+                                <div class="step-contents">
+                                  <!--Step 1-->
+                                  <div class="step-content active" id="stepContent1">
+                                    <div class="row">
+                                      <div class="element-box-tp col-sm-12">
+                                        <table class="table table-clean" style="margin-bottom: 0px;">
+                                          <tr>
+                                            <td>
+                                              <div class="value">
+                                                MAO - BVB
+                                              </div>
+                                              <span class="sub-value">11/08/2018 - 20:00</span>
+                                            </td>
+                                            <td class="text-right">
+                                              <div class="value text-success">
+                                                R$180,00
+                                              </div>
+                                              <span class="sub-value">Poltrona 31</span>
+                                            </td>
+                                          </tr>
+                                          <tr>
+                                            <td>
+                                              <div class="value">
+                                                MAO - BVB
+                                              </div>
+                                              <span class="sub-value">11/08/2018 - 20:00</span>
+                                            </td>
+                                            <td class="text-right">
+                                              <div class="value text-success">
+                                                R$180,00
+                                              </div>
+                                              <span class="sub-value">Poltrona 32</span>
+                                            </td>
+                                          </tr>
+                                        </table>
+                                        <div class="element-balances justify-content-between mobile-full-width" style="padding-top: 0px;padding-bottom: 0px;">
+                                        <div class="balance balance-v2">
+                                            <div class="balance-title">
+                                              Total:
+                                            </div>
+                                            <div class="balance-value" style="padding-left: 105px;color: #28a745;font-size: 2rem;">
+                                              <span class="d-xxl-none">R$360,00</span>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+
+
+
+
+
+                                      <div class="todo-app-w" style="padding-left: 5px;">
+                                        <!--START - To Do SIDEBAR-->
+                                        <div class="todo-sidebar" style="padding-top: 5px;padding-left: 25px;padding-right: 25px;padding-bottom: 5px;">
+
+
+                                          <div id="poltronaModel" class="todo-sidebar-section">
+                                            <h4 class="todo-sidebar-section-header">
+                                              <span>Poltronas</span><a class="todo-sidebar-section-toggle" href="#"><i class="os-icon os-icon-ui-23"></i></a>
+                                            </h4>
+                                            <div class="todo-sidebar-section-contents">
+
+                                              <!--Poltrona 1 - INICIO -->
+                                              <div id="poltronaContainer1" hidden class="todo-sidebar-section-sub-section">
+                                                <div class="todo-sidebar-section-sub-section-toggler">
+                                                  <i class="os-icon os-icon-ui-23"></i>
+                                                </div>
+                                                <div class="todo-sidebar-section-sub-header">
+                                                  <h6 id="poltronaCaption1">Poltrona 1</h6>
+                                                </div>
+                                                <div class="todo-sidebar-section-sub-section-content">
+                                                  <ul class="items-list">
+                                                    <li><a class="add-task-btn" data-target="#passageiro-poltrona" data-toggle="modal" href="#"><span>Add/Alterar Passageiro</span></a></li>
+                                                    <li><a class="add-task-btn" data-target="#passageiro-tarifa" data-toggle="modal" href="#"><span>Selecionar Tarifa</span></a></li>
+                                                  </ul>
+                                                </div>
+                                              </div>
+
+                                              <!--Poltrona 2 - INICIO -->
+                                              <div id="poltronaContainer2" hidden class="todo-sidebar-section-sub-section">
+                                                <div class="todo-sidebar-section-sub-section-toggler">
+                                                  <i class="os-icon os-icon-ui-23"></i>
+                                                </div>
+                                                <div class="todo-sidebar-section-sub-header">
+                                                  <h6 id="poltronaCaption1">Poltrona 2</h6>
+                                                </div>
+                                                <div class="todo-sidebar-section-sub-section-content">
+                                                  <ul class="items-list">
+                                                    <li><a class="add-task-btn" data-target="#passageiro-poltrona" data-toggle="modal" href="#"><span>Add/Alterar Passageiro</span></a></li>
+                                                    <li><a class="add-task-btn" data-target="#passageiro-tarifa" data-toggle="modal" href="#"><span>Selecionar Tarifa</span></a></li>
+                                                  </ul>
+                                                </div>
+                                              </div>
+                                              <!--Poltrona 3 - INICIO -->
+                                              <div id="poltronaContainer3" hidden class="todo-sidebar-section-sub-section">
+                                                <div class="todo-sidebar-section-sub-section-toggler">
+                                                  <i class="os-icon os-icon-ui-23"></i>
+                                                </div>
+                                                <div class="todo-sidebar-section-sub-header">
+                                                  <h6 id="poltronaCaption1">Poltrona 3</h6>
+                                                </div>
+                                                <div class="todo-sidebar-section-sub-section-content">
+                                                  <ul class="items-list">
+                                                    <li><a class="add-task-btn" data-target="#passageiro-poltrona" data-toggle="modal" href="#"><span>Add/Alterar Passageiro</span></a></li>
+                                                    <li><a class="add-task-btn" data-target="#passageiro-tarifa" data-toggle="modal" href="#"><span>Selecionar Tarifa</span></a></li>
+                                                  </ul>
+                                                </div>
+                                              </div>
+                                              <!--Poltrona 4 - INICIO -->
+                                              <div id="poltronaContainer4" hidden class="todo-sidebar-section-sub-section">
+                                                <div class="todo-sidebar-section-sub-section-toggler">
+                                                  <i class="os-icon os-icon-ui-23"></i>
+                                                </div>
+                                                <div class="todo-sidebar-section-sub-header">
+                                                  <h6 id="poltronaCaption1">Poltrona 4</h6>
+                                                </div>
+                                                <div class="todo-sidebar-section-sub-section-content">
+                                                  <ul class="items-list">
+                                                    <li><a class="add-task-btn" data-target="#passageiro-poltrona" data-toggle="modal" href="#"><span>Add/Alterar Passageiro</span></a></li>
+                                                    <li><a class="add-task-btn" data-target="#passageiro-tarifa" data-toggle="modal" href="#"><span>Selecionar Tarifa</span></a></li>
+                                                  </ul>
+                                                </div>
+                                              </div>
+                                              <!--Poltrona 5 - INICIO -->
+                                              <div id="poltronaContainer5" hidden class="todo-sidebar-section-sub-section">
+                                                <div class="todo-sidebar-section-sub-section-toggler">
+                                                  <i class="os-icon os-icon-ui-23"></i>
+                                                </div>
+                                                <div class="todo-sidebar-section-sub-header">
+                                                  <h6 id="poltronaCaption1">Poltrona 5</h6>
+                                                </div>
+                                                <div class="todo-sidebar-section-sub-section-content">
+                                                  <ul class="items-list">
+                                                    <li><a class="add-task-btn" data-target="#passageiro-poltrona" data-toggle="modal" href="#"><span>Add/Alterar Passageiro</span></a></li>
+                                                    <li><a class="add-task-btn" data-target="#passageiro-tarifa" data-toggle="modal" href="#"><span>Selecionar Tarifa</span></a></li>
+                                                  </ul>
+                                                </div>
+        
+                                                <!-- Selecionar tarifa -->
+                                                <div aria-hidden="true" class="modal fade" id="passageiro-tarifa" role="dialog" tabindex="-1">
+                                                  <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                      <div class="modal-header faded smaller">
+                                                        <div class="modal-title">
+                                                          <span>Selecione a Tarifa - </span><strong>Poltrona 31</strong>
+                                                        </div>
+                                                        <button aria-label="Close" class="close" data-dismiss="modal" type="button"><span aria-hidden="true"> &times;</span></button>
+                                                      </div>
+                                                      <div class="modal-body">
+                                                        <form>
+                                                          <div class="row">
+                                                            <div class="col-sm-6">
+                                                              <div class="form-group">
+                                                                <label for=""> Tarifa</label><select class="form-control">
+                                                                  <option>
+                                                                    Normal
+                                                                  </option>
+                                                                  <option>
+                                                                    Promocional
+                                                                  </option>
+                                                                  <option>
+                                                                    Meia Passagem
+                                                                  </option>
+                                                                  <option>
+                                                                    Gratuidade
+                                                                  </option>
+                                                                </select>
+                                                              </div>
+                                                            </div>
+                                                            <div class="col-sm-6">
+                                                              <div class="form-group">
+                                                                <label for="">Motivo Gratuidade</label><select class="form-control">
+                                                                  <option>
+                                                                    Idoso
+                                                                  </option>
+                                                                  <option>
+                                                                    Policial
+                                                                  </option>
+                                                                  <option>
+                                                                    Pessoa com deficiência
+                                                                  </option>
+                                                                  <option>
+                                                                    ID-Jovem
+                                                                  </option>
+                                                                </select>
+                                                              </div>
+                                                            </div>
+                                                          </div>
+
+                                                        </form>
+                                                      </div>
+                                                      <div class="modal-footer buttons-on-right">
+                                                        <button class="btn btn-link" data-dismiss="modal" type="button"> Cancelar</button><button class="btn btn-primary" type="button"> Salvar</button>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                                <!--  Fim Selecionar Tarifas  -->
+                                                <!-- Inicio Add passageiro  -->
+                                                <!--Modal-->
+                                                <div aria-hidden="true" class="modal fade" id="passageiro-poltrona" role="dialog" tabindex="-1">
+                                                  <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                      <div class="modal-header faded smaller">
+                                                        <div class="modal-title">
+                                                          <span>MAO - BVB</span><span>11/08/2018 - 20:00 </span><strong>Poltrona 31</strong>
+                                                        </div>
+                                                        <button aria-label="Close" class="close" data-dismiss="modal" type="button"><span aria-hidden="true"> &times;</span></button>
+                                                      </div>
+                                                      <div class="modal-body">
+                                                        <form>
+                                                          <div class="row">
+                                                          <div class="col-sm-6">
+                                                            <div class="form-group">
+                                                              <label for=""> CPF</label><input class="form-control" placeholder="000.000.000-00" type="text">
+                                                            </div>
+                                                          </div>
+                                                          <div class="col-sm-6">
+                                                            <div class="form-group">
+                                                              <label for="">Data nascimento</label><input class="form-control" placeholder="" type="date">
+                                                            </div>
+                                                          </div>
+                                                        </div>
+                                                          <div class="form-group">
+                                                            <label for="">Passageiro</label><input class="form-control" placeholder="Nome Completo" type="text">
+                                                          </div>
+                                                            <div class="form-group">
+                                                              <label for=""> Email</label><input class="form-control" placeholder="Digite o email" type="email">
+                                                            </div>
+                                                            <div class="row">
+                                                          <div class="col-sm-6" style="padding-right: 5px;">
+                                                              <div class="form-group">
+                                                                <label for=""> Telefone</label><input class="form-control" placeholder="(00) 00000-0000" type="text">
+                                                              </div>
+                                                            </div>
+                                                            <div class="col-sm-6" style="padding-left: 5px;">
+                                                              <div class="form-group">
+                                                                <label for=""> Emergência</label><input class="form-control" placeholder="(00) 00000-0000" type="text">
+                                                              </div>
+                                                            </div>
+                                                          </div>
+                                                          <div class="row">
+                                                            <div class="col-sm-5">
+                                                            <div class="form-group">
+                                                              <label for="">Logradouro</label><input class="form-control" placeholder="" type="text">
+                                                            </div>
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                            <div class="form-group">
+                                                              <label for="">Número</label><input class="form-control" placeholder="" type="text">
+                                                            </div>
+                                                            </div>
+                                                            <div class="col-sm-4">
+                                                              <div class="form-group">
+                                                                <label for="">CEP</label><input class="form-control" placeholder="00000-000" type="text">
+                                                              </div>
+                                                            </div>
+                                                          </div>
+                                                          <div class="row">
+                                                            <div class="col-sm-4">
+                                                              <div class="form-group">
+                                                                <label for=""> Bairro</label><input class="form-control" placeholder="" type="text">
+                                                              </div>
+                                                            </div>
+                                                            <div class="col-sm-5">
+                                                              <div class="form-group">
+                                                                <label for=""> Cidade</label><select class="form-control">
+                                                                  <option>
+                                                                    Manaus
+                                                                  </option>
+                                                                  <option>
+                                                                    Boa Vista
+                                                                  </option>
+                                                                </select>
+                                                              </div>
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                              <div class="form-group">
+                                                                <label for="">UF</label><select class="form-control">
+                                                                  <option>
+                                                                    AM
+                                                                  </option>
+                                                                  <option>
+                                                                    RR
+                                                                  </option>
+                                                                </select>
+                                                              </div>
+                                                            </div>
+                                                          </div>
+                                                          <div class="form-group">
+                                                            <label for="">Observação</label><textarea class="form-control" name="" rows="3"></textarea>
+                                                          </div>
+                                                        </form>
+                                                      </div>
+                                                      <div class="modal-footer buttons-on-right">
+                                                        <button class="btn btn-link" data-dismiss="modal" type="button"> Cancelar</button><button class="btn btn-primary" type="button"> Salvar</button>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                                <!--  Fim Add Passageiro  -->
+                                              </div>
+                                              <!--Poltrona 1 - FIM-->
+
+
+                                            </div>
+                                          </div>
+                                        </div>
+
+                                        <!--END - To Do SIDEBAR-->
+                                      </div>
+
+
+
+
+
+
+                                    </div>
+                                    <div class="form-buttons-w text-right" style="border-top: 1px solid rgba(0, 0, 0, 0);">
+                                      <a class="btn btn-primary step-trigger-btn" href="#stepContent2"> Próximo</a>
+                                    </div>
+                                  </div>
+                                  <!--Step 2-->
+                                  <div class="step-content" id="stepContent2">
+                                  <div class="element-wrapper">
+                                    <div class="element-actions actions-only">
+                                      <a class="element-action element-action-fold" href="#"><i class="os-icon os-icon-minus-circle"></i></a>
+                                    </div>
+                                    <h6 class="element-header">
+                                      Caixa
+                                    </h6>
+                                    <div class="element-box-tp">
+                                      <form action="">
+                                        <div class="row">
+                                          <div class="col-6">
+                                            <div class="form-group">
+                                              <label for="">Forma de pagamento</label><select class="form-control">
+                                                <option>
+                                                  Dinheiro
+                                                </option>
+                                                <option>
+                                                  Cartão de débito
+                                                </option>
+                                                <option>
+                                                  Cartão de credito
+                                                </option>
+                                              </select>
+                                            </div>
+                                          </div>
+                                          <div class="col-6">
+                                            <div class="form-group">
+                                              <label for="">Prazo</label><select class="form-control">
+                                                <option>
+                                                  Avista
+                                                </option>
+                                                <option>
+                                                  1x
+                                                </option>
+                                                <option>
+                                                  2x
+                                                </option>
+                                                <option>
+                                                  3x
+                                                </option>
+                                                <option>
+                                                  4x
+                                                </option>
+                                                <option>
+                                                  5x
+                                                </option>
+                                                <option>
+                                                  6x
+                                                </option>
+                                              </select>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div class="row">
+                                          <div class="col-6">
+                                            <div class="form-group">
+                                              <label for="">Valor</label>
+                                              <div class="input-group">
+                                                <input class="form-control" placeholder="Amount..." type="text" value="1.37">
+                                                <div class="input-group-append">
+                                                  <div class="input-group-text">
+                                                    R$
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+
+                                        </div>
+                                        <button class="btn btn-primary btn-block btn-lg"><span>Receber</span></button>
+                                      </form>
+                                    </div>
+                                  </div>
+                                  <div class="element-wrapper compact">
+                                    <div class="element-actions actions-only">
+                                      <a class="element-action element-action-fold" href="#"><i class="os-icon os-icon-minus-circle"></i></a>
+                                    </div>
+                                    <h6 class="element-header">
+                                      Pagamento Realizados
+                                    </h6>
+                                    <div class="element-box-tp">
+                                      <table class="table table-compact smaller text-faded mb-0">
+                                        <thead>
+                                          <tr>
+                                            <th>
+                                              Forma de pagamento
+                                            </th>
+                                            <th class="text-center">
+                                              Prazo
+                                            </th>
+                                            <th class="text-right">
+                                              R$
+                                            </th>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                          <tr>
+                                            <td class="text-left text-bright">
+                                              Dinheiro
+                                            </td>
+                                            <td class="text-center text-bright">
+                                              Avista
+                                            </td>
+                                            <td class="text-right text-danger">
+                                              R$ 100,00
+                                            </td>
+                                          </tr>
+                                          <tr>
+                                            <td class="text-left text-bright">
+                                              Cartão de credito
+                                            </td>
+                                            <td class="text-center text-bright">
+                                              2x
+                                            </td>
+                                            <td class="text-right text-danger">
+                                              R$ 260,00
+                                            </td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                  </div>
+                                  <div class="form-buttons-w text-right">
+                                    <button class="btn btn-primary step-trigger-btn" href="#stepContent3">Próximo</button>
+                                  </div>
+                                  </div>
+                                  <div class="step-content" id="stepContent3">
+                                            <div style="background-color: #F4F4F4; margin: 20px 0px 40px;">
+                                                  <div style="padding: 20px; text-transform: uppercase; color: #8D929D; font-size: 11px; font-weight: bold; letter-spacing: 1px; text-align: center;">
+                                                    Finalizar emissão
+                                                  </div>
+                                                  <table style="border-collapse: collapse; width: 100%;">
+                                                    <tr>
+                                                      <td style="padding: 20px 40px; color: #111; border: 1px solid #e7e7e7; border-left: none; width: 50%;">
+                                                        <div style="text-transform: uppercase; letter-spacing: 1px; color: #B8B8B8; font-size: 10px; font-weight: bold; margin-bottom: 3px;">
+                                                          Data Emissão
+                                                        </div>
+                                                        <div style="font-weight: bold;">
+                                                          28/08/2018 16:00
+                                                        </div>
+                                                      </td>
+                                                    </tr>
+                                                    <tr>
+                                                      <td style="padding: 20px 40px; color: #111; width: 50%;">
+                                                        <div style="text-transform: uppercase; letter-spacing: 1px; color: #B8B8B8; font-size: 10px; font-weight: bold; margin-bottom: 3px;">
+                                                          Valor total
+                                                        </div>
+                                                        <div style="font-weight: bold; color: #D62525;">
+                                                          R$380,00
+                                                        </div>
+                                                      </td>
+                                                    </tr>
+                                                  </table>
+                                                  <div style="color: #B8B8B8; font-size: 12px; padding: 30px; border-top: 1px solid #e7e7e7;">
+                                                    Did you know that you can manage your payments online? Make an extra payment, pay off your loan, or change your due date right from your account. Simply log in to your Account Summary and click Manage Payments or <a href="#">contact us</a> for additional support.
+                                                  </div>
+                                                </div>
+                                              <div class="form-buttons-w text-right">
+                                                <button class="btn btn-primary"><i class="icon-printer"></i>  Emitir Passagem</button>
+                                              </div>
+                                  </div>
+                                </div>
+                                </div>
+                            </form>
+                          </div>
+                    <!--END - Emissor Passagem-->
+                  </div>
+                </div>
+
+
+              </div>
+
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="display-type"></div>
+      </div>
+
+      <script src="../bower_components/jquery/dist/jquery.min.js"></script>
+      <script src="../bower_components/popper.js/dist/umd/popper.min.js"></script>
+      <script src="../bower_components/moment/moment.js"></script>
+      <script src="../bower_components/chart.js/dist/Chart.min.js"></script>
+      <script src="../bower_components/select2/dist/js/select2.full.min.js"></script>
+      <script src="../bower_components/jquery-bar-rating/dist/jquery.barrating.min.js"></script>
+      <script src="../bower_components/ckeditor/ckeditor.js"></script>
+      <script src="../bower_components/bootstrap-validator/dist/validator.min.js"></script>
+      <script src="../bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
+      <script src="../bower_components/ion.rangeSlider/js/ion.rangeSlider.min.js"></script>
+      <script src="../bower_components/dropzone/dist/dropzone.js"></script>
+      <script src="../bower_components/editable-table/mindmup-editabletable.js"></script>
+      <script src="../bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+      <script src="../bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+      <script src="../bower_components/fullcalendar/dist/fullcalendar.min.js"></script>
+      <script src="../bower_components/perfect-scrollbar/js/perfect-scrollbar.jquery.min.js"></script>
+      <script src="../bower_components/tether/dist/js/tether.min.js"></script>
+      <script src="../bower_components/slick-carousel/slick/slick.min.js"></script>
+      <script src="../bower_components/bootstrap/js/dist/util.js"></script>
+      <script src="../bower_components/bootstrap/js/dist/alert.js"></script>
+      <script src="../bower_components/bootstrap/js/dist/button.js"></script>
+      <script src="../bower_components/bootstrap/js/dist/carousel.js"></script>
+      <script src="../bower_components/bootstrap/js/dist/collapse.js"></script>
+      <script src="../bower_components/bootstrap/js/dist/dropdown.js"></script>
+      <script src="../bower_components/bootstrap/js/dist/modal.js"></script>
+      <script src="../bower_components/bootstrap/js/dist/tab.js"></script>
+      <script src="../bower_components/bootstrap/js/dist/tooltip.js"></script>
+      <script src="../bower_components/bootstrap/js/dist/popover.js"></script>
+      <script src="../js/demo_customizer.js?version=4.4.0"></script>
+      <script src="../js/main.js?version=4.4.0"></script>
+      <script src="../ux/tools.js"></script>
+
+      <!-- verifica o perfil
+      <script>
+        applyPerfils(false);
+      </script> -->
+
+      <!-- atualiza as poltronas na tela -->
+      <script>
+        poltronas = [];
+        poltronasLivres = ["poltronaContainer1", "poltronaContainer2", "poltronaContainer3", "poltronaContainer4", "poltronaContainer5"];
+        poltronasOcupadas = [];        
+
+        function mudaClass(poltrona, el, texto){
+          var addPoltrona = false;
+          if(el.className == "livre"){
+            el.className = "ocupada";
+            addPoltrona = true;
+          } else {
+            el.className = "livre";
+          }
+
+          if(addPoltrona){
+            /*var elModel = document.getElementById("poltronaModel");
+            var newEl = elModel.cloneNode(true);
+            elModel.parentNode.appendChild(newEl);*/
+            var found = false;
+            poltronas.forEach(item => {
+              if(item.poltrona == poltrona){
+                found = true;
+              }              
+            });
+            if(!found){
+              var polContainer = poltronasLivres.pop();
+              poltronasOcupadas.push(polContainer);
+              document.getElementById(polContainer).hidden = false;
+              document.getElementById(polContainer).innerText = "Poltrona " + poltrona;
+              poltronas.push({
+                poltrona: poltrona,
+                polContainer: polContainer
+              });
+            }
+          } else {
+            poltronas.forEach(item => {
+              if(item.poltrona == poltrona){                
+                document.getElementById(item.polContainer).hidden = true;
+                var index = poltronas.indexOf(item);
+                poltronas.splice(index, 1);
+                index = poltronasOcupadas.indexOf(item.polContainer);
+                poltronasOcupadas = poltronasOcupadas.splice(index, 1);
+                poltronasLivres.push(item.polContainer);
+              }              
+            });
+          }
+        }
+      </script>      
+  </body>
+
+</html>

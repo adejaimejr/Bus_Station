@@ -1,0 +1,494 @@
+<?php
+    require 'session.php';
+    require 'utils.php';
+    require 'sefaz.php';
+
+    Log::$phpFile = "emitirPassagem.php";
+    Log::$logLevel = LogLevel::Info;
+
+    // Verifica a sessão
+    if (!isSessionOK()) {
+        return false;
+    }
+
+    $config = parse_ini_file("config.ini", true);
+
+    // Configuracao da base mysql
+    $dbLogConnectionConfig = $config["DBLogConnectionConfig"];
+    $dbLogServer = $dbLogConnectionConfig["DBServer"];
+    $dbLogUser = $dbLogConnectionConfig["DBUser"];
+    $dbLogPassword = $dbLogConnectionConfig["DBPassword"];
+    $dbLogDatabase = $dbLogConnectionConfig["DBDatabase"];
+
+    Log::debug(LogLevel::Info, "<<< ".json_encode($_POST));
+    /*
+    $poltronas = json_decode($_POST["poltronas"], false);
+    Log::debug(LogLevel::Info, "<<< --- poltronas: ".json_encode($poltronas));
+    Log::debug(LogLevel::Info, "<<< poltrona0: ".json_encode($poltronas[0]));
+    
+    $poltrona0 = json_encode($poltronas[0], true);
+    $poltrona0 = json_decode($poltrona0, true);
+
+    $poltrona1 = json_encode($poltronas[1], true);
+    $poltrona1 = json_decode($poltrona1, true);
+
+    $poltrona2 = json_encode($poltronas[2], true);
+    $poltrona2 = json_decode($poltrona2, true);
+
+    
+    Log::debug(LogLevel::Info, "<<< poltrona0.poltrona: ".$poltrona0["poltrona"]);
+    Log::debug(LogLevel::Info, "<<< poltrona1.poltrona: ".$poltrona1["poltrona"]);
+    Log::debug(LogLevel::Info, "<<< poltrona2.poltrona: ".$poltrona2["poltrona"]);
+
+    Log::debug(LogLevel::Info, "<<< poltrona0.passageiro: ".json_encode($poltrona0["passageiro"]));
+    Log::debug(LogLevel::Info, "<<< poltrona1.passageiro: ".json_encode($poltrona1["passageiro"]));
+    Log::debug(LogLevel::Info, "<<< poltrona2.passageiro: ".json_encode($poltrona2["passageiro"]));
+
+    Log::debug(LogLevel::Info, "<<< poltrona0.valorTarifa: ".json_encode($poltrona0["passageiro"]["valorTarifa"]));
+    Log::debug(LogLevel::Info, "<<< poltrona1.valorTarifa: ".json_encode($poltrona1["passageiro"]["valorTarifa"]));
+    Log::debug(LogLevel::Info, "<<< poltrona2.valorTarifa: ".json_encode($poltrona2["passageiro"]["valorTarifa"]));
+
+
+
+
+
+    $pagamentos = json_decode($_POST["pagamentos"], false);
+    Log::debug(LogLevel::Info, "<<< --- pagamentos: ".json_encode($pagamentos));
+    Log::debug(LogLevel::Info, "<<< pagamento0: ".json_encode($pagamentos[0]));
+    
+    $pagamento0 = json_encode($pagamentos[0], true);
+    $pagamento0 = json_decode($pagamento0, true);
+
+    $pagamento1 = json_encode($pagamentos[1], true);
+    $pagamento1 = json_decode($pagamento1, true);
+
+    $pagamento2 = json_encode($pagamentos[2], true);
+    $pagamento2 = json_decode($pagamento2, true);
+
+    
+    Log::debug(LogLevel::Info, "<<< pagamento0.pagamentoIndex: ".$pagamento0["pagamentoIndex"]);
+    Log::debug(LogLevel::Info, "<<< pagamento1.pagamentoIndex: ".$pagamento1["pagamentoIndex"]);
+    Log::debug(LogLevel::Info, "<<< pagamento2.pagamentoIndex: ".$pagamento2["pagamentoIndex"]);
+
+    Log::debug(LogLevel::Info, "<<< pagamento0.valorParcela: ".json_encode($pagamento0["valorParcela"]));
+    Log::debug(LogLevel::Info, "<<< pagamento1.valorParcela: ".json_encode($pagamento1["valorParcela"]));
+    Log::debug(LogLevel::Info, "<<< pagamento2.valorParcela: ".json_encode($pagamento2["valorParcela"]));
+
+    Log::debug(LogLevel::Info, "<<< pagamento0.valParTotal: ".json_encode($pagamento0["valParTotal"]));
+    Log::debug(LogLevel::Info, "<<< pagamento1.valParTotal: ".json_encode($pagamento1["valParTotal"]));
+    Log::debug(LogLevel::Info, "<<< pagamento2.valParTotal: ".json_encode($pagamento2["valParTotal"]));
+
+
+
+
+*/  
+
+
+/***************** TESTE EMISSÃO DE PASSAGEM ************************************/
+/******* PRIMEIRA ETAPA: MANDAR O DOCUMENTO E RECEBER O NUMERO DO RECIBO NSNREC */
+
+/**** TOKEN: UyBBIEluZm9ybeF0aWNhajJCTUs= *****/
+
+
+/* TRATAMENTO DE PACOTE */
+$poltronas = json_decode($_POST["poltronas"], false);
+Log::debug(LogLevel::Info, "<<< --- poltronas: ".json_encode($poltronas));
+Log::debug(LogLevel::Info, "<<< poltrona0: ".json_encode($poltronas[0]));
+
+//for($i = 0; $i < $poltronas.length; $i++){
+    $i = 0; // teste
+
+    $poltrona = json_encode($poltronas[$i], true);
+    $poltrona = json_decode($poltrona, true);
+//}
+
+Log::debug(LogLevel::Info, "Passageiro: ".json_encode($poltrona["passageiro"]));
+Log::debug(LogLevel::Info, "CPF: ".$poltrona["passageiro"]["cpf"]);
+
+/* FIM DO TRATAMENTO DE PACOTE */
+
+
+
+Log::debug(LogLevel::Info, "Executando curl");
+
+$token = "UyBBIEluZm9ybeF0aWNhajJCTUs=";
+$tpConteudo = "json";
+
+$ide = [
+    "cUF" => "43", // Código da UF do emitente do BP-e - Código da UF do emitente do Documento Fiscal. Utilizar a Tabela do IBGE de código de unidades da federação.
+    "tpAmb" => "2", //, // 1 - Produção 2 - Homologação
+    "tpBPe" => "0",
+];
+
+$infValorBPe = [
+    "vBP" => "85.00",
+    "vDesconto" => "0.00",
+    "vPgto" => "85.00",
+    "vTroco" => "0.00",
+    "Comp" => [
+       [
+          "tpComp" => "01",
+          "vComp" => "65.00"
+       ],
+       [
+          "tpComp" => "02",
+          "vComp" => "20.00"
+       ]
+    ]
+];
+
+
+$infBPe = [
+    "versão" => "1.00", // Versão do leiaute - todo: precisa verificar
+    "ide" => $ide, // Identificação do BP-e
+    "infValorBPe" => $infValorBPe,
+];
+
+$BPe = [
+    "infBPe" =>  [
+        "versao" => "1.00", // Versão do leiaute
+        //"id"   => "BPe...", // Identificador da tag a ser assina. do BP-e e precedida do literal "BPe" [NAO PRECISA PORQUE A API vai inserir automaticamente]
+        "ide" =>  [ // Identificação do BP-e
+            "cUF" => "13", // Código da UF do emitente do BP-e
+            "tpAmb" => "2", // Tipo do Ambiente (1-Producao; 2-Homologacao)
+            "mod" => "63", // OK FIXO - Modelo do Bilhete de Passagem - Utilizar o código 63 para identificação do BP-e
+            "serie" => "1", // Série do documento fiscal
+            "nBP" => "1", // Número do bilhete de passagem - Número que identifica o bilhete 1 a 999999999.
+            "cBP" => "", // Código numérico que compõe a Chave de Acesso. - Código aleatório gerado pelo emitente, com o objetivo de evitar acessos indevidos ao documento.
+            "cDV" => "", // Digito verificador da chave de acesso
+            "modal" => "1", // OK FIXO - Modalidade de transporte - 1 - Rodoviário; 3 - Aquaviário; 4 - Ferroviário.
+            "dhEmi" => "2010-08-19T13:00:15-03:00", // Data e hora de emissão do Bilhete de Passagem - Formato AAAA-MMDDTHH:MM:DD TZD
+            "tpEmis" => "1", // OK FIXO - Forma de emissão do Bilhete (Normal ou Contingência Off-Line) - 1 - Normal; 2 - Contingência Off-Line
+            "verProc" => "1", // Versão do processo de emissão - Informar a versão do aplicativo emissor de BP-e.
+            "tpBPe" => "0", // Tipo do BP-e - (0 - BP-e normal; 3 - BP-e substituição)
+            "indPres" => "1", // Indicador de presença do comprador no estabelecimento comercial no momento da operação. 1=Operação presencial não embarcado; 2=Operação não presencial, pela Internet; 3=Operação não presencial, Teleatendimento; 4=BP-e em operação com entrega a domicílio; 5=Operação presencial embarcada; 9=Operação não presencial, outros.
+            "UFIni" => "13", // Sigla da UF Início da Viagem
+            "cMunIni" => "1302603", // Código do município do início da viagem - 1400100 Boa Vista - 1302603 Manaus
+            "UFFim" => "RR", // Sigla da UF do Fim da Viagem
+            "cMunFim" => "1400100" // Código do município do fim da viagem - 1400100 Boa Vista - 1302603 Manaus
+            //"dhCont" => "2010-08-19T13:00:15-03:00", // Data e Hora da entrada em contingência - Informar a data e hora no formato AAAA-MMDDTHH:MM:SS
+            //"xJust" => "" // Justificativa da entrada em contingência
+        ],
+        "emit" =>  [ // Identificação do Emitente do BP-e
+            "CNPJ" => "63679351000190", // OK FIXO - CNPJ do emitente - 63679351000190 - DANTAS TRANSPORTES E INSTALACOES LTDA
+            "IE" => "54021588", // OK FIXO - Inscrição Estadual do emitemte
+            "IEST" => "", // OK FIXO - Inscrição Estadual do Substituto Tributário
+            "xNome" => "DANTAS TRANSPORTES E INSTALACOES LTDA", // OK FIXO - Razão social ou Nome do emitente
+            "xFant" => "A DANTAS TRANSPORTES", // OK FIXO - Nome fantasia do emitente
+            "IM" => "4420601", // OK FIXO - Inscrição Municipal
+            "CNAE" => "4929901", // OK FIXO - CNAE Fiscal
+            "CRT" => "3", // OK FIXO - Código de Regime Tributário. - 1 – Simples Nacional; 2 – Simples Nacional – excesso de sublimite de receita bruta; 3 – Regime Normal
+            "enderEmit" =>  [ // Endereço do emitente
+                "xLgr" => "RUA UTINGA", // OK FIXO - Logradouro
+                "nro" => "310", // OK FIXO - Número
+                "xCpl" => "", // OK FIXO - Complemento
+                "xBairro" => "LIRIO DO VALE", // OK FIXO - Bairro
+                "cMun" => "1302603", // OK FIXO - Código do município (utilizar a tabela do IBGE)
+                "xMun" => "MANAUS", // OK FIXO - Nome do município
+                "CEP" => "69038286", // OK FIXO - CEP
+                "UF" => "AM", // OK FIXO - Sigla da UF
+                "Fone" => "92 33062903", // OK FIXO - Telefone
+                "Email" => "dantast@argo.com.br" // OK FIXO - Endereço de E-mail
+            ],
+            "TAR" => "0" // Termo de Autorização de Serviço Regular - emitente do BP-e junto à ANTT para exercer a atividade
+        ],
+        "Comp" =>  [ // Identificação do Comprador do BP-e
+            "xNome" => "", // Razão social ou Nome do comprado
+            "CNPJ" => "", // Número do CNPJ
+            "CPF" => "", // Número do CPF
+            "idEstrangeiro" => "", // Identificador do comprador em caso de comprador estrangeiro
+            "IE" => "", // Inscrição Estadual
+            "enderComp" =>  [ // Endereço do comprador
+                "xLgr" => "", // Logradouro
+                "nro" => "", // Número
+                "xCpl" => "", // Complemento
+                "xBairro" => "", // Bairro
+                "cMun" => "", // Código do município (utilizar a tabela do IBGE), informar 9999999 para operações com o exterior
+                "xMun" => "", // Nome do município, informar EXTERIOR para operações com o exterior.
+                "CEP" => "", // CEP
+                "UF" => "", // Sigla da UF, informar EX para operações com o exterior.
+                "cPais" => "1058", // Código do país
+                "xPais" => "Brasil", // Nome do país
+                "Fone" => "", // Telefone
+                "Email" => "" // Endereço de E-mail
+            ]
+        ]/*,
+        "agencia" =>  [ // Identificação da agência/preposto/terceiro que comercializou o BP-e
+            "xNome" => "", // Razão social ou Nome da Agência
+            "CNPJ" => "", // Número do CNPJ
+            "enderAgencia" =>  [ // Endereço da agência
+                "xLgr" => "", // Logradouro
+                //"nro" => "",
+                "Nro" => "", // Número
+                "xCpl" => "", // Complemento
+                "xBairro" => "", // Bairro
+                "cMun" => "", // município (utilizar a tabela do IBGE)
+                "xMun" => "", // Nome do município
+                "CEP" => "", // CEP 
+                "UF" => "", // Sigla da UF
+                "Fone" => "", // Telefone
+                "Email" => "" // Endereço de E-mail
+            ]
+        ],*/
+/*        "infBPeSub" =>  [ // Substituição para remarcação e/ou transferência
+            "chBPe" => "", // Chave do Bilhete de Passagem Substituido
+            "tpSub" => "" // Tipo de Substituição
+        ]*/,
+        "infPassagem" =>  [ // Informações do detalhamento da Passagem
+            "cLocOrig" => "0", // Código da Localidade de Origem
+            "xLocOrig" => "teste", // Descrição da Localidade de Origem
+            "cLocDest" => "0", // 
+            "xLocDest" => "teste", // Descrição da Localidade de Destino
+            "dhEmb" => "2010-08-19T13:00:15-03:00", // Data e hora de embarque
+            "infPassageiro" =>  [ // Informações do passageiro
+                "xNome" => "Teste", // Nome do Passageiro
+                "CPF" => "11111111111", // Número do CPF
+                "tpDoc" => "5", // Tipo do Documento de identificação
+                "nDoc" => "1234", // Número do Documento do passageiro
+                "dNasc" => "2010-08-19", // Data de Nascimento
+                "Fone" => "", // Telefone
+                "Email" => "" // Endereço de E-mail
+            ]
+        ],
+        "infViagem" =>  [ // Grupo de informações da viagem do BP-e
+            "cPercurso" => "0", // Código do percurso da viagem
+            "xPercurso" => "teste", // Descrição do Percurso da viagem
+            "tpViagem" => "00", // Tipo de Viagem - 00-regular, 01-extra
+            "tpServ" => "1", // Tipo de Serviço
+            "tpAcomodacao" => "1", // Tipo de Acomodação - 1-Assento/poltrona; 2-Rede; 3-Rede com ar-condicionado; 4-cabine; 5-outros
+            "tpTrecho" => "1", // Tipo de trecho da viagem - 1-Normal; 2-Trecho Inicial; 3-Conexão
+            //"dhConexao" => "", // Data e hora da conexão Informar se tpTrecho = 3
+            "Prefixo" => "", // Prefixo da linha
+            "Poltrona" => "", // Número da Poltrona / assento / cabine
+            "Plataforma" => "", // Plataforma/carro/barco de Embarque
+            "dhViagem" => "2010-08-19T13:00:15-03:00"
+        ]/*,
+        "infTravessia" =>  [ // Informações do transporte aquaviário de travessia
+            "tpVeiculo" => "3", // Tipo do veículo transportado - 1-Vazio; 2-Carregado; 3-Não se aplica
+            "sitVeiculo" => "" // Situação do veículo transportado
+        ]*/,
+        "infValorBPe" =>  [ // Informações dos valores do Bilhete de Passagem
+            "vBP" => "1.00", // Valor do Bilhete de Passagem
+            "vDesconto" => "0.00", // Valor do desconto concedido ao comprador
+            "vPgto" => "1.00", // Valor pago pelo BP-e (vBP - vDesconto)
+            "vTroco" => "0.00", // Valor do troco
+            "tpDesconto" => "99", // Tipo de desconto/benefício para o BP-e
+            "xDesconto" => "teste", // Descrição do tipo de desconto/benefício concedido
+            "Comp" =>  [ // Componentes do Valor do Bilhete
+                [
+                "tpComp" => "01", // Tipo do Componente
+                "vComp" => "0.50" // Valor do componente
+                ],
+                [
+                "tpComp" => "02", // Tipo do Componente
+                "vComp" => "0.50" // Valor do componente
+                ]
+            ]
+        ],
+        "imp" =>  [ // Informações relativas aos Impostos
+            "ICMS" =>  [ // Informações relativas ao ICMS
+                "ICMS00" =>  [ // Prestação sujeito à tributação normal do ICMS
+                    "CST" => "00", // OK FIXO - classificação Tributária do Serviço
+                    "vBC" => "100.00", // OK VARIAVEL - Valor da BC do ICMS
+                    "pICMS" => "12.00", // OK VARIAVEL - Alíquota do ICMS
+                    "vICMS" => "12.00" // OK CALCULADO - Valor do ICMS
+                ]/*,
+                "ICMS20" =>  [ // Prestação sujeito à tributação com redução de BC do ICMS
+                    "CST" => "", // Classificação Tributária do serviço
+                    "pRedBC" => "", // Percentual de redução da BC
+                    "vBC" => "", // Valor da BC do ICMS
+                    "pICMS" => "", // Alíquota do ICMS
+                    "vICMS" => "" // Valor do ICMS
+                ],
+                "ICMS45" =>  [ // ICMS Isento, não Tributado ou diferido
+                    "CST" => "40" // Classificação Tributária do Serviço
+                ],
+                "ICMS90" =>  [ // ICMS Outros
+                    "CST" => "", // Classificação Tributária do Serviço
+                    "pRedBC" => "", // Percentual de redução da BC
+                    "vBC" => "", // Valor da BC do ICMS
+                    "pICMS" => "", // Alíquota do ICMS
+                    "vICMS" => "", // Valor do ICMS
+                    "vCred" => "" // Valor do Crédito Outorgado/Presumido
+                ],
+                "ICMSOoutraUF" =>  [ // ICMS devido à UF de início da viagem, quando diferente da UF do emitente
+                    "CST" => "", // Classificação Tributária do Serviço
+                    "pRedBCOutraUF" => "", // Percentual de redução da BC
+                    "vBCOutraUF" => "", // Valor da BC do ICMS
+                    "pICMSOutraUF" => "", // Alíquota do ICMS
+                    "vICMSOutraUF" => "" // Valor do ICMS devido outra UF
+                ],
+                "ICMSSN" =>  [ // Simples Nacional
+                    "CST" => "", // Classificação Tributária do Serviço
+                    "indSN" => "" // Indica se o contribuinte é Simples Nacional 1=Sim
+                ],
+                "vTotTrib" => "", // Valor Total dos Tributos
+                "infAdFisco" => "", // Informações adicionais de interesse do Fisco
+                "ICMSUFFim" =>  [ // Informações do ICMS de partilha com a UF de término do serviço de transporte na operação interestadual
+                    "vBCUFFim" => "", // Valor da BC do ICMS na UF fim da viagem
+                    "pFCPUFFim" => "", // Percentual do ICMS relativo ao Fundo de Combate à pobreza (FCP) na UF fim da viagem
+                    "pICMSUFFim" => "", // Alíquota interna da UF fim da viagem
+                    "pICMSInter" => "", // Alíquota interestadual das UF envolvidas
+                    "pICMSInterPart" => "", // Percentual provisório de partilha entre os estados
+                    "vFCPUFim" => "", // Valor do ICMS relativo ao Fundo de Combate á Pobreza (FCP) da UF fim da viagem
+                    "vICMSUFFim" => "", // Valor do ICMS de partilha para a UF fim da viagem
+                    "vICMSUFIni" => "" // Valor do ICMS de partilha para a UF início da viagem
+                ]             */
+            ]
+        ],
+        "pag" =>  [ // Dados de Pagamento.
+            "tPag" => "01", // Forma de Pagamento:01-Dinheiro;02-Cheque;03-Cartão de Crédito;04-Cartão de Débito;05-Vale Transportel;99 - Outros
+            "vPag" => "1.00", // Valor do Pagamento
+            "card" =>  [ // Grupo de Cartões
+                "tpIntegra" => "2", // Tipo de Integração do processo de pagamento com o sistema de automação da empresa 1=Pagamento integrado com o sistema de automação da empresa Ex. equipamento TEF , Comercio Eletronico 2=Pagamento não integrado com o sistema de automação da empresa Ex: equipamento POS
+                "CNPJ" => "11111111111111", // CNPJ da credenciadora de cartão de crédito/débito
+                "tBand" => "01", // Bandeira da operadora de cartão de crédito/débito:01–Visa; 02–Mastercard; 03–American Express; 04–Sorocred; 05 - Elo; 06 - Diners;99–Outros
+                "cAut" => "0" // Número de autorização da operação cartão de crédito/débito
+            ]                
+        ]/*,
+        "autXML" =>  [ // Autorizados para download do XML do DF-e
+            "CNPJ" => "", // CNPJ do autorizado
+            "CPF" => "" // CPF do autorizado
+        ],
+        "infAdic" =>  [ // Informações Adicionais
+            "infAdFisco" => "", // Informações adicionais de interesse do Fisco
+            "infCpl" => "" // Informações complementares de interesse do Contribuinte
+    ]*//*,
+        "infBPeSupl" =>  [ // Informações suplementares do BP-e [NAO PRECISA PORQUE A API vai inserir automaticamente]
+            "qrCodBPe" => "", // Texto com o QR-Code impresso no DABPE
+            "boardPassBPe" => "" // Texto contendo o boarding Pass impresso no DABPE (padrão PDF417)
+        ]*/
+    ]
+];
+
+$conteudo = [
+    "BPe" => $BPe
+];
+
+
+
+/************************/
+// enviado: string(1621) "{"BPe":{"infBPe":{"versao":"1.00","ide":{"cUF":"13","tpAmb":"2","mod":"63","serie":"1","nBP":"1","cBP":"","cDV":"","modal":"1","dhEmi":"2010-08-19T13:00:15-03:00","tpEmis":"1","verProc":"1","tpBPe":"0","indPres":"1","UFIni":"13","cMunIni":"1302603","UFFim":"RR","cMunFim":"1400100"},"emit":{"CNPJ":"63679351000190","IE":"1234567890","IEST":"1234567890","xNome":"DANTAS TRANSPORTES E INSTALACOES LTDA","xFant":"A DANTAS TRANSPORTES","IM":"0123456789","CNAE":"1234567","CRT":"3","enderEmit":{"xLgr":"teste","nro":"0","xCpl":"0","xBairro":"Teste","cMun":"1302603","xMun":"Teste","CEP":"00000000","UF":"AM","Fone":"","Email":""},"TAR":"0"},"Comp":{"xNome":"","CNPJ":"","CPF":"","idEstrangeiro":"","IE":"","enderComp":{"xLgr":"","Nro":"","xCpl":"","xBairro":"","cMun":"","xMun":"","CEP":"","UF":"","cPais":"1058","xPais":"Brasil","Fone":"","Email":""}},"infPassagem":{"cLocOrig":"0","xLocOrig":"teste","cLocDest":"0","xLocDest":"teste","dhEmb":"2010-08-19T13:00:15-03:00","infPassageiro":{"xNome":"Teste","CPF":"11111111111","tpDoc":"5","nDoc":"1234","dNasc":"2010-08-19","Fone":"","Email":""}},"infViagem":{"cPercurso":"0","xPercurso":"teste","tpViagem":"00","tpServ":"1","tpAcomodacao":"1","tpTrecho":"1","Prefixo":"","Poltrona":"","Plataforma":"","dhViagem":"2010-08-19T13:00:15-03:00"},"infValorBPe":{"vBP":"1.00","vDesconto":"0.00","vPgto":"1.00","vTroco":"0.00","tpDesconto":"99","xDesconto":"teste","Comp":[{"tpComp":"01","vComp":"0.50"},{"tpComp":"02","vComp":"0.50"}]},"imp":{"ICMS":{"ICMS45":{"CST":"40"}}},"pag":{"tPag":"01","vPag":"1.00","card":{"tpIntegra":"2","CNPJ":"11111111111111","tBand":"01","cAut":"0"}}}}}"
+// recebido: {"status":200,"motivo":"BP-e enviado para Sefaz","nsNRec":4}
+/************************/
+
+
+
+$conteudo = json_encode($conteudo);
+var_dump($conteudo);
+
+$sefaz = new Sefaz();
+$retorno = $sefaz->emitirNFe($token, $conteudo, $tpConteudo);
+echo $retorno;
+//var_dump($retorno);
+//Log::debug(LogLevel::Info, "curl executado: " + $retorno);
+return;
+
+/********************************************************************************/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    $result = false;
+    $viagensDisponiveis = [];
+    try {
+        Log::debug(LogLevel::Info, "mysql connecting");
+
+        $logConn = mysqli_connect($dbLogServer, $dbLogUser, $dbLogPassword, $dbLogDatabase);
+        if (mysqli_connect_errno()) {
+            Log::debug(LogLevel::Error, "MySQL Connect Log failed: ".mysqli_connect_error());
+            return false;
+        }
+
+        mysqli_set_charset($logConn,"utf8");
+
+        Log::debug(LogLevel::Info, "mysql setting");
+        mysqli_autocommit($logConn, TRUE);
+
+        $select = 'select ' .
+            'r.id,  ' .
+            'o.cidade origemCidade,  ' .
+            'o.uf origemUF, ' .
+            'd.cidade destinoCidade,   ' .
+            'd.uf destinoUF, ' .
+            'horariopartida,  ' .
+            't.meiapassagem,  ' .
+            't.normal,  ' .
+            't.pedagio,  ' .
+            't.promocional,  ' .
+            't.seguro  ' .
+            'from tbviagens_rotas r ' .
+            'inner join location o on (o.id = origem) ' .
+            'inner join location d on (d.id = destino) ' .
+            'inner join tbviagem v on (v.rota = r.id) ' .
+            'inner join tbviagens_tarifas t on (t.id = v.tarifa) ';
+
+        Log::debug(LogLevel::Info, "select: ".$select);
+
+        $logQuery = mysqli_query($logConn, $select);
+        if (!$logQuery) {
+            Log::debug(LogLevel::Error, "mysqli_query - ".mysqli_error($logConn));
+            header("location:login.html");
+            // destroy a sessão
+            session_destroy();
+            return false;
+        }
+
+        while($logDataset = mysqli_fetch_array($logQuery, MYSQLI_BOTH)){
+            $newRow = array(  
+                'id' => $logDataset["id"],
+                'origemCidade' =>  utf8_encode($logDataset["origemCidade"]),
+                'origemUF' =>  utf8_encode($logDataset["origemUF"]),
+                'destinoCidade' =>  utf8_encode($logDataset["destinoCidade"]),
+                'destinoUF' =>  utf8_encode($logDataset["destinoUF"]),
+                'horariopartida' => $logDataset["horariopartida"],
+                'meiapassagem' => $logDataset["meiapassagem"],
+                'normal' => $logDataset["normal"],
+                'pedagio' => $logDataset["pedagio"],
+                'promocional' => $logDataset["promocional"],
+                'seguro' => $logDataset["seguro"]
+            );
+            
+            array_push($viagensDisponiveis, $newRow);              
+        }
+
+        $result = true;
+    } finally {
+        if($logConn){
+            mysqli_close($logConn);
+        }
+    }
+
+    $data = [
+        'result' => $result,
+        'viagensDisponiveis' => $viagensDisponiveis
+    ];
+
+    header('Content-Type: application/json');
+    Log::debug(LogLevel::Info, ">>> ".json_encode($data));
+
+    echo json_encode($data);
+    Log::debug(LogLevel::Info, "--- out");
+    return true;
+?>
